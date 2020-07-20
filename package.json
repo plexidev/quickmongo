@@ -1,6 +1,6 @@
 {
   "name": "quickmongo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Quick mongodb wrapper for beginners.",
   "main": "index.js",
   "scripts": {

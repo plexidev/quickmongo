@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#import">import</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -169,14 +169,12 @@ class db extends Base {
 
     /**
      * Returns everything from the database
-     * @returns {Array[]}
+     * @returns {Promise&lt;Array>}
      * @example let data = await db.all();
      * console.log(`There are total ${data.length} entries.`);
      */
     async all() {
-        let data = await this.schema.find().catch(e => {
-            return this.emit("error", e);
-        });
+        let data = await this.schema.find().catch(e => {});
         let comp = [];
         data.forEach(c => {
             comp.push({
@@ -192,9 +190,9 @@ class db extends Base {
      * @example db.deleteAll().then(() => console.log("Deleted everything"));
      */
     async deleteAll() {
-        return await this.schema.deleteMany().catch(e => {
-            return this.emit("error", e);
-        });
+        this.emit("debug", "Deleting everything from the database...");
+        await this.schema.deleteMany().catch(e => {});
+        return true;
     }
 
     /**
@@ -308,11 +306,47 @@ class db extends Base {
         if (typeof path !== "string") throw new Error("File path must be a string!");
 
         return new Promise((resolve, reject) => {
-            this.all().then(data => {
+            this.emit("debug", `Exporting database entries to ${path}${fileName}.json`);
+            this.all().then((data) => {
                 fs.writeFileSync(`${path}${fileName}.json`, JSON.stringify(data));
+                this.emit("debug", `Exported all data!`);
                 resolve(`${path}${fileName}.json`);
             }).catch(reject);
         });
+    }
+
+    /**
+     * Imports data from other source to quickmongo. 
+     * 
+     * Data type should be Array containing `ID` and `data` fields.
+     * Example: 
+     * ```js
+     * [{ ID: "foo", data: "bar" }, { ID: "hi", data: "hello" }]
+     * ```
+     * @param {Array} data Array of data
+     * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo
+     * QuickMongo.import(data);
+     * @returns {Promise&lt;Boolean>}
+     */
+    async import(data=[]) {
+        if (!Array.isArray(data)) throw new Error("Data type must be Array.");
+        if (data.length &lt; 1) return [];
+        let start = Date.now();
+        this.emit("debug", `Queued ${data.length} entries!`);
+        data.forEach((item, index) => {
+            if (!item.ID || typeof item.ID !== "string") {
+                this.emit("debug", `Found invalid entry at position ${index}, ignoring...`);
+                return;
+            };
+            if (typeof item.data === "undefined") {
+                this.emit("debug", `Found entry with data type "undefined", setting the value to "null"...`);
+                item.data = null;
+            };
+            this.set(item.ID, item.data);
+            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);        
+        });
+        this.emit("debug", `Successfully migrated ${data.length} entries to mongodb! Took ${Date.now() - start}ms!`);
+        return true;
     }
 
     /**
@@ -320,6 +354,7 @@ class db extends Base {
      * @example db.disconnect();
      */
     disconnect() {
+        this.emit("debug", "'database.disconnect()' was called, destroying the process...");
         return this._destroyDatabase();
     }
 
@@ -338,7 +373,7 @@ module.exports = db;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 15:06:15 GMT+0545 (Nepal Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 19:33:30 GMT+0545 (Nepal Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

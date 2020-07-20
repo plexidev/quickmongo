@@ -6,7 +6,6 @@ db.on("ready", () => {
 });
 
 db.on("error", console.error);
+db.on("debug", console.log);
 
-db.set("foo", "bar").then(() => {
-    db.disconnect();
-});
+db.set("foo", "bar").then(() => db.export());

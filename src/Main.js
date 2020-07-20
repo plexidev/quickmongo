@@ -121,14 +121,12 @@ class db extends Base {
 
     /**
      * Returns everything from the database
-     * @returns {Array[]}
+     * @returns {Promise<Array>}
      * @example let data = await db.all();
      * console.log(`There are total ${data.length} entries.`);
      */
     async all() {
-        let data = await this.schema.find().catch(e => {
-            return this.emit("error", e);
-        });
+        let data = await this.schema.find().catch(e => {});
         let comp = [];
         data.forEach(c => {
             comp.push({
@@ -144,9 +142,9 @@ class db extends Base {
      * @example db.deleteAll().then(() => console.log("Deleted everything"));
      */
     async deleteAll() {
-        return await this.schema.deleteMany().catch(e => {
-            return this.emit("error", e);
-        });
+        this.emit("debug", "Deleting everything from the database...");
+        await this.schema.deleteMany().catch(e => {});
+        return true;
     }
 
     /**
@@ -260,11 +258,47 @@ class db extends Base {
         if (typeof path !== "string") throw new Error("File path must be a string!");
 
         return new Promise((resolve, reject) => {
-            this.all().then(data => {
+            this.emit("debug", `Exporting database entries to ${path}${fileName}.json`);
+            this.all().then((data) => {
                 fs.writeFileSync(`${path}${fileName}.json`, JSON.stringify(data));
+                this.emit("debug", `Exported all data!`);
                 resolve(`${path}${fileName}.json`);
             }).catch(reject);
         });
+    }
+
+    /**
+     * Imports data from other source to quickmongo. 
+     * 
+     * Data type should be Array containing `ID` and `data` fields.
+     * Example: 
+     * ```js
+     * [{ ID: "foo", data: "bar" }, { ID: "hi", data: "hello" }]
+     * ```
+     * @param {Array} data Array of data
+     * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo
+     * QuickMongo.import(data);
+     * @returns {Promise<Boolean>}
+     */
+    async import(data=[]) {
+        if (!Array.isArray(data)) throw new Error("Data type must be Array.");
+        if (data.length < 1) return [];
+        let start = Date.now();
+        this.emit("debug", `Queued ${data.length} entries!`);
+        data.forEach((item, index) => {
+            if (!item.ID || typeof item.ID !== "string") {
+                this.emit("debug", `Found invalid entry at position ${index}, ignoring...`);
+                return;
+            };
+            if (typeof item.data === "undefined") {
+                this.emit("debug", `Found entry with data type "undefined", setting the value to "null"...`);
+                item.data = null;
+            };
+            this.set(item.ID, item.data);
+            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);        
+        });
+        this.emit("debug", `Successfully migrated ${data.length} entries to mongodb! Took ${Date.now() - start}ms!`);
+        return true;
     }
 
     /**
@@ -272,6 +306,7 @@ class db extends Base {
      * @example db.disconnect();
      */
     disconnect() {
+        this.emit("debug", "'database.disconnect()' was called, destroying the process...");
         return this._destroyDatabase();
     }
 
