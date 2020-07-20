@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Base.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Base.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const EventEmitter = require("events").EventEmitter;
+const mongoose = require("mongoose");
+const Error = require("./Error");
+
+class Base extends EventEmitter {
+
+    /**
+     * Instantiates the base database.
+     * This class is implemented by the main Database class.
+     * @param {String} mongodbURL Mongodb Database URL.
+     * @returns {Base}
+     * @example const db = new Base("mongodb://localhost/mydb");
+     */
+    constructor(mongodbURL, connectionOptions={}) {
+        super();
+        if (!mongodbURL || !mongodbURL.startsWith("mongodb")) throw new Error("No mongodb url was provided!");
+        if (typeof mongodbURL !== "string") throw new Error(`Expected a string for mongodbURL, received ${typeof mongodbURL}`);
+        if (typeof connectionOptions !== "object") throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
+
+        /**
+         * Current database url
+         * @type {String}
+         */
+        this.dbURL = mongodbURL;
+
+        /**
+         * Mongoose connection options
+         * @type {Object}
+         */
+        this.options = connectionOptions;
+
+        this._create();
+
+        mongoose.connection.on("error", (e) => {
+            this.emit("error", e);
+        });
+        mongoose.connection.on("open", () => {
+            /**
+             * Timestamp when database became ready
+             * @type {Date}
+             */
+            this.readyAt = new Date();
+            this.emit("ready");
+        });
+    }
+
+    /**
+     * Creates connection
+     * @private
+     */
+    _create() {
+        mongoose.connect(this.dbURL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    }
+
+    /**
+     * Destroys database
+     * @private
+     */
+    _destroyDatabase() {
+        mongoose.disconnect();
+        this.readyAt = undefined;
+    }
+}
+
+/**
+ * Emitted when database creates connection
+ * @event Base#ready
+ * @example db.on("ready", () => {
+ *     console.log("Successfully connected to the database!");
+ * });
+ */
+
+/**
+ * Emitted when database encounters error
+ * @event Base#error
+ * @param {Error} Error Error Message
+ * @example db.on("error", console.error);
+ */
+
+module.exports = Base;</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 15:06:15 GMT+0545 (Nepal Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

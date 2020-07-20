@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Main.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Main.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Base = require("./Base");
+const Schema = require("./Schema");
+const Error = require("./Error");
+const fs = require("fs");
+
+/**
+ * Quick mongodb wrapper
+ */
+class db extends Base {
+
+    /**
+     * Creates quickmongo instance
+     * @param {String} mongodbURL Mongodb database url
+     * @param {String} name Schema name
+     * @example const { Database } = require("quickmongo");
+     * const db = new Database("mongodb://localhost/quickmongo");
+     */
+    constructor(mongodbURL, name) {
+        super(mongodbURL);
+
+        /**
+         * Current Schema
+         * @type {Schema}
+         */
+        this.schema = Schema(name);
+    }
+
+    /**
+     * Sets the value to the database
+     * @param {String} key Key
+     * @param {*} value Data
+     * @example db.set("foo", "bar").then(() => console.log("Saved data"));
+     */
+    async set(key, value) {
+        if (!key) throw new Error("No key specified!", "KeyError");
+        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (value === Infinity || value === -Infinity) throw new Error("Value may not be Infinity.");
+        let raw = await this.schema.findOne({
+            ID: key
+        });
+        if (!raw) {
+            let data = new this.schema({
+                ID: key,
+                data: value
+            });
+            await data.save()
+                .catch(e => {
+                    return this.emit("error", e);
+                });
+            return data.data;
+        } else {
+            raw.data = value;
+            await raw.save()
+                .catch(e => {
+                    return this.emit("error", e);
+                });
+            return raw.data;
+        }
+    }
+
+    /**
+     * Deletes a data from the database
+     * @param {String} key Key
+     * @example db.delete("foo").then(() => console.log("Deleted data"));
+     */
+    async delete(key) {
+        if (!key) throw new Error("No key specified!", "KeyError");
+        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        let data = await this.schema.findOneAndDelete({ ID: key })
+            .catch(e => {
+                return this.emit("error", e);
+            });
+        return data;
+    }
+
+    /**
+     * Checks if there is a data stored with the given key
+     * @param {String} key Key
+     * @example db.exists("foo").then(console.log);
+     */
+    async exists(key) {
+        if (!key) throw new Error("No key specified!", "KeyError");
+        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        let get = await this.get(key);
+        return !!get;
+    }
+
+    /**
+     * Checks if there is a data stored with the given key
+     * @param {String} key Key
+     * @example db.has("foo").then(console.log);
+     */
+    async has(key) {
+        return await this.exists(key);
+    }
+
+    /**
+     * Fetches the data from database
+     * @param {String} key Key
+     * @example db.get("foo").then(console.log);
+     */
+    async get(key) {
+        if (!key) throw new Error("No key specified!", "KeyError");
+        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        let get = await this.schema.findOne({ ID: key })
+            .catch(e => {
+                return this.emit("error", e);
+            });
+        if (!get) return null;
+        return get.data;
+    }
+
+    /**
+     * Fetches the data from database
+     * @param {String} key Key
+     * @example db.fetch("foo").then(console.log);
+     */
+    async fetch(key) {
+        return this.get(key);
+    }
+
+    /**
+     * Returns everything from the database
+     * @returns {Array[]}
+     * @example let data = await db.all();
+     * console.log(`There are total ${data.length} entries.`);
+     */
+    async all() {
+        let data = await this.schema.find().catch(e => {
+            return this.emit("error", e);
+        });
+        let comp = [];
+        data.forEach(c => {
+            comp.push({
+                ID: c.ID,
+                data: c.data
+            });
+        });
+        return comp;
+    }
+
+    /**
+     * Deletes the entire schema
+     * @example db.deleteAll().then(() => console.log("Deleted everything"));
+     */
+    async deleteAll() {
+        return await this.schema.deleteMany().catch(e => {
+            return this.emit("error", e);
+        });
+    }
+
+    /**
+     * Math calculation
+     * @param {String} key Key of the data
+     * @param {String} operator One of +, -, * or /
+     * @param {Number} value Value
+     * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
+     */
+    async math(key, operator, value) {
+        if (!key) throw new Error("No key specified!", "KeyError");
+        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!operator) throw new Error("No operator was provided!");
+        if (!value) throw new Error("No value was provided!");
+        if (typeof value !== "number") throw new Error("Value must be a number.", "SyntaxError");
+
+        switch(operator) {
+            case "add":
+            case "+":
+                let add = await this.schema.findOne({ ID: key });
+                if (!add) {
+                    return this.set(key, value);
+                } else {
+                    if (typeof add.data !== "number") throw new Error("Target is not a number!");
+                    return this.set(key, add.data + value);
+                }
+                break;
+
+            case "subtract":
+            case "sub":
+            case "-":
+                let less = await this.schema.findOne({ ID: key });
+                if (!less) {
+                    return this.set(key, value);
+                } else {
+                    if (typeof less.data !== "number") throw new Error("Target is not a number!");
+                    return this.set(key, less.data - value);
+                }
+                break;
+
+            case "multiply":
+            case "mul":
+            case "*":
+                let mul = await this.schema.findOne({ ID: key });
+                if (!mul) {
+                    return this.set(key, value);
+                } else {
+                    if (typeof mul.data !== "number") throw new Error("Target is not a number!");
+                    return this.set(key, mul.data * value);
+                }
+                break;
+
+            case "divide":
+            case "div":
+            case "/":
+                let div = await this.schema.findOne({ ID: key });
+                if (!div) {
+                    return this.set(key, value);
+                } else {
+                    if (typeof div.data !== "number") throw new Error("Target is not a number!");
+                    return this.set(key, div.data / value);
+                }
+                break;
+            default:
+                throw new Error("Unknown operator");
+        }
+    }
+
+    /**
+     * Add
+     * @param {String} key key
+     * @param {Number} value value
+     * @example db.add("items", 200).then(() => console.log("Added 200 items"));
+     */
+    async add(key, value) {
+        return await this.math(key, "+", value);
+    }
+
+    /**
+     * Subtract
+     * @param {String} key Key
+     * @param {Number} value Value     
+     * @example db.subtract("items", 100).then(() => console.log("Removed 100 items"));
+     */
+    async subtract(key, value) {
+        return await this.math(key, "-", value);
+    }
+
+    /**
+     * Returns database uptime
+     * @type {Number}
+     * @example console.log(`Database is up for ${db.uptime} ms.`);
+     */
+    get uptime() {
+        if (!this.readyAt) return 0;
+        const timestamp = this.readyAt.getTime();
+        return Date.now() - timestamp;
+    }
+
+    /**
+     * Exports the data to json file
+     * @param {String} fileName File name
+     * @param {String} path File path
+     * @returns {Promise&lt;String>}
+     * @example db.export("database", "./").then(path => {
+     *     console.log(`File exported to ${path}`);
+     * });
+     */
+    export(fileName="database", path="./") {
+        if (typeof fileName !== "string") throw new Error("File name must be a string!");
+        if (typeof path !== "string") throw new Error("File path must be a string!");
+
+        return new Promise((resolve, reject) => {
+            this.all().then(data => {
+                fs.writeFileSync(`${path}${fileName}.json`, JSON.stringify(data));
+                resolve(`${path}${fileName}.json`);
+            }).catch(reject);
+        });
+    }
+
+    /**
+     * Disconnects the database
+     * @example db.disconnect();
+     */
+    disconnect() {
+        return this._destroyDatabase();
+    }
+
+}
+
+module.exports = db;</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 15:06:15 GMT+0545 (Nepal Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
