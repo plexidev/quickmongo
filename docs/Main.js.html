@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#import">import</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:debug">debug</a></li><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#add">add</a></li><li data-type='method'><a href="Database.html#all">all</a></li><li data-type='method'><a href="Database.html#delete">delete</a></li><li data-type='method'><a href="Database.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Database.html#disconnect">disconnect</a></li><li data-type='method'><a href="Database.html#exists">exists</a></li><li data-type='method'><a href="Database.html#export">export</a></li><li data-type='method'><a href="Database.html#fetch">fetch</a></li><li data-type='method'><a href="Database.html#fetchLatency">fetchLatency</a></li><li data-type='method'><a href="Database.html#get">get</a></li><li data-type='method'><a href="Database.html#has">has</a></li><li data-type='method'><a href="Database.html#import">import</a></li><li data-type='method'><a href="Database.html#math">math</a></li><li data-type='method'><a href="Database.html#set">set</a></li><li data-type='method'><a href="Database.html#subtract">subtract</a></li></ul></li><li><a href="MemoryStorage.html">MemoryStorage</a><ul class='methods'><li data-type='method'><a href="MemoryStorage.html#all">all</a></li><li data-type='method'><a href="MemoryStorage.html#delete">delete</a></li><li data-type='method'><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="MemoryStorage.html#exists">exists</a></li><li data-type='method'><a href="MemoryStorage.html#export">export</a></li><li data-type='method'><a href="MemoryStorage.html#fetch">fetch</a></li><li data-type='method'><a href="MemoryStorage.html#get">get</a></li><li data-type='method'><a href="MemoryStorage.html#has">has</a></li><li data-type='method'><a href="MemoryStorage.html#set">set</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -50,11 +50,12 @@
 const Schema = require("./Schema");
 const Error = require("./Error");
 const fs = require("fs");
+const Util = require("./Util");
 
 /**
  * Quick mongodb wrapper
  */
-class db extends Base {
+class Database extends Base {
 
     /**
      * Creates quickmongo instance
@@ -63,8 +64,8 @@ class db extends Base {
      * @example const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
      */
-    constructor(mongodbURL, name) {
-        super(mongodbURL);
+    constructor(mongodbURL, name, connectionOptions={}) {
+        super(mongodbURL, connectionOptions);
 
         /**
          * Current Schema
@@ -80,9 +81,8 @@ class db extends Base {
      * @example db.set("foo", "bar").then(() => console.log("Saved data"));
      */
     async set(key, value) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
-        if (value === Infinity || value === -Infinity) throw new Error("Value may not be Infinity.");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
+        if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
         let raw = await this.schema.findOne({
             ID: key
         });
@@ -112,8 +112,7 @@ class db extends Base {
      * @example db.delete("foo").then(() => console.log("Deleted data"));
      */
     async delete(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let data = await this.schema.findOneAndDelete({ ID: key })
             .catch(e => {
                 return this.emit("error", e);
@@ -127,8 +126,7 @@ class db extends Base {
      * @example db.exists("foo").then(console.log);
      */
     async exists(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let get = await this.get(key);
         return !!get;
     }
@@ -148,8 +146,7 @@ class db extends Base {
      * @example db.get("foo").then(console.log);
      */
     async get(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let get = await this.schema.findOne({ ID: key })
             .catch(e => {
                 return this.emit("error", e);
@@ -203,11 +200,9 @@ class db extends Base {
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
      */
     async math(key, operator, value) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
-        if (!operator) throw new Error("No operator was provided!");
-        if (!value) throw new Error("No value was provided!");
-        if (typeof value !== "number") throw new Error("Value must be a number.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
+        if (!operator) throw new Error("No operator provided!");
+        if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
 
         switch(operator) {
             case "add":
@@ -329,7 +324,7 @@ class db extends Base {
      * @returns {Promise&lt;Boolean>}
      */
     async import(data=[]) {
-        if (!Array.isArray(data)) throw new Error("Data type must be Array.");
+        if (!Array.isArray(data)) throw new Error("Data type must be Array.", "DataTypeError");
         if (data.length &lt; 1) return [];
         let start = Date.now();
         this.emit("debug", `Queued ${data.length} entries!`);
@@ -343,10 +338,11 @@ class db extends Base {
                 item.data = null;
             };
             this.set(item.ID, item.data);
-            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);        
+            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);      
         });
-        this.emit("debug", `Successfully migrated ${data.length} entries to mongodb! Took ${Date.now() - start}ms!`);
-        return true;
+        this.set(item.ID, item.data);
+        this.emit("debug", `Successfully migrated ${data.length}. Took ${Date.now() - start}ms!`);
+        return;
     }
 
     /**
@@ -358,9 +354,52 @@ class db extends Base {
         return this._destroyDatabase();
     }
 
+    /**
+     * Returns current schema name
+     * @readonly
+     */
+    get name() {
+        return this.schema.name;
+    }
+
+    /**
+     * Read latency
+     * @ignore
+     */
+    async _read() {
+        let start = Date.now();
+        await this.get("LQ==");
+        return Date.now() - start;
+    }
+
+    /**
+     * Write latency
+     * @ignore
+     */
+    async _write() {
+        let start = Date.now();
+        await this.set("LQ==", Buffer.from(start.toString()).toString("base64"));
+        return Date.now() - start;
+    }
+
+    /**
+     * Fetches read and write latency of the database in ms
+     * @example const ping = await db.fetchLatency();
+     * console.log("Read: ", ping.read);
+     * console.log("Write: ", ping.write);
+     * console.log("Average: ", ping.average);
+     */
+    async fetchLatency() {
+        let read = await this._read();
+        let write = await this._write();
+        let average = (read + write) / 2;
+        this.delete("LQ==").catch(e => {});
+        return { read, write, average };
+    }
+
 }
 
-module.exports = db;</code></pre>
+module.exports = Database;</code></pre>
         </article>
     </section>
 
@@ -373,7 +412,7 @@ module.exports = db;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 19:33:30 GMT+0545 (Nepal Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:57:02 GMT+0545 (Nepal Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#import">import</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:debug">debug</a></li><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#add">add</a></li><li data-type='method'><a href="Database.html#all">all</a></li><li data-type='method'><a href="Database.html#delete">delete</a></li><li data-type='method'><a href="Database.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Database.html#disconnect">disconnect</a></li><li data-type='method'><a href="Database.html#exists">exists</a></li><li data-type='method'><a href="Database.html#export">export</a></li><li data-type='method'><a href="Database.html#fetch">fetch</a></li><li data-type='method'><a href="Database.html#fetchLatency">fetchLatency</a></li><li data-type='method'><a href="Database.html#get">get</a></li><li data-type='method'><a href="Database.html#has">has</a></li><li data-type='method'><a href="Database.html#import">import</a></li><li data-type='method'><a href="Database.html#math">math</a></li><li data-type='method'><a href="Database.html#set">set</a></li><li data-type='method'><a href="Database.html#subtract">subtract</a></li></ul></li><li><a href="MemoryStorage.html">MemoryStorage</a><ul class='methods'><li data-type='method'><a href="MemoryStorage.html#all">all</a></li><li data-type='method'><a href="MemoryStorage.html#delete">delete</a></li><li data-type='method'><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="MemoryStorage.html#exists">exists</a></li><li data-type='method'><a href="MemoryStorage.html#export">export</a></li><li data-type='method'><a href="MemoryStorage.html#fetch">fetch</a></li><li data-type='method'><a href="MemoryStorage.html#get">get</a></li><li data-type='method'><a href="MemoryStorage.html#has">has</a></li><li data-type='method'><a href="MemoryStorage.html#set">set</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -88,14 +88,14 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line14">14</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line15">15</a>
   </code>
 </div>
 
     
 
     <h4 class="name" id="Base">
-      <a href="#params-Base"><span class="type-signature"></span>new Base</a><span class="signature">(mongodbURL)</span><span class="type-signature"> &rarr; {<a href="Base.html">Base</a>}</span>
+      <a href="#params-Base"><span class="type-signature"></span>new Base</a><span class="signature">(mongodbURL, connectionOptions)</span><span class="type-signature"> &rarr; {<a href="Base.html">Base</a>}</span>
 
     </h4>
 
@@ -226,6 +226,29 @@ This class is implemented by the main Database class.</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>connectionOptions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Mongodb connection options</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -274,7 +297,7 @@ This class is implemented by the main Database class.</p>
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Instantiates the base database.\r\n     * This class is implemented by the main Database class.\r\n     * @param {String} mongodbURL Mongodb Database URL.\r\n     * @returns {Base}\r\n     * @example const db = new Base(\"mongodb://localhost/mydb\");\r\n     */","meta":{"range":[438,1537],"filename":"Base.js","lineno":14,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000026","name":"Base","type":"MethodDefinition","paramnames":["mongodbURL","connectionOptions"]},"vars":{"":null},"shortpath":"Base.js"},"description":"<p>Instantiates the base database.\nThis class is implemented by the main Database class.</p>","params":[{"type":{"names":["String"]},"description":"<p>Mongodb Database URL.</p>","name":"mongodbURL"}],"returns":[{"type":{"names":["Base"]}}],"examples":[{"caption":"","code":"const db = new Base(\"mongodb://localhost/mydb\");"}],"name":"Base","longname":"Base","kind":"class","scope":"global","___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Base","signature":"<span class=\"signature\">(mongodbURL)</span><span class=\"type-signature\"> &rarr; {<a href=\"Base.html\">Base</a>}</span>","ancestors":[]}
+{"comment":"/**\r\n     * Instantiates the base database.\r\n     * This class is implemented by the main Database class.\r\n     * @param {String} mongodbURL Mongodb Database URL.\r\n     * @param {Object} connectionOptions Mongodb connection options\r\n     * @returns {Base}\r\n     * @example const db = new Base(\"mongodb://localhost/mydb\");\r\n     */","meta":{"range":[507,1627],"filename":"Base.js","lineno":15,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000026","name":"Base","type":"MethodDefinition","paramnames":["mongodbURL","connectionOptions"]},"vars":{"":null},"shortpath":"Base.js"},"description":"<p>Instantiates the base database.\nThis class is implemented by the main Database class.</p>","params":[{"type":{"names":["String"]},"description":"<p>Mongodb Database URL.</p>","name":"mongodbURL"},{"type":{"names":["Object"]},"description":"<p>Mongodb connection options</p>","name":"connectionOptions"}],"returns":[{"type":{"names":["Base"]}}],"examples":[{"caption":"","code":"const db = new Base(\"mongodb://localhost/mydb\");"}],"name":"Base","longname":"Base","kind":"class","scope":"global","___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Base","signature":"<span class=\"signature\">(mongodbURL, connectionOptions)</span><span class=\"type-signature\"> &rarr; {<a href=\"Base.html\">Base</a>}</span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -308,7 +331,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line24">24</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line25">25</a>
   </code>
 </div>
 
@@ -391,7 +414,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line30">30</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line31">31</a>
   </code>
 </div>
 
@@ -474,7 +497,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line42">42</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line43">43</a>
   </code>
 </div>
 
@@ -566,7 +589,204 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line76">76</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line87">87</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="event:debug">
+      <a href="#params-debug">debug</a>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    <p>Emitted on debug mode</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.on("debug", console.log);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-debug">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line87">87</a>
+  </code>
+</div>
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-debug" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Debug message</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n  * Emitted on debug mode\r\n  * @event Base#debug\r\n  * @param {String} Message Debug message\r\n  * @example db.on(\"debug\", console.log);\r\n  */","meta":{"filename":"Base.js","lineno":87,"columnno":1,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted on debug mode</p>","kind":"event","name":"debug","params":[{"type":{"names":["String"]},"description":"<p>Debug message</p>","name":"Message"}],"examples":[{"caption":"","code":"db.on(\"debug\", console.log);"}],"memberof":"Base","longname":"Base#event:debug","scope":"instance","___id":"T000002R000018","___s":true,"attribs":"","id":"event:debug","ancestors":["<a href=\"Base.html\">Base</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line80">80</a>
   </code>
 </div>
 
@@ -628,7 +848,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line76">76</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line80">80</a>
   </code>
 </div>
 
@@ -746,7 +966,7 @@ This class is implemented by the main Database class.</p>
 
 <!--
 <pre>
-{"comment":"/**\r\n * Emitted when database encounters error\r\n * @event Base#error\r\n * @param {Error} Error Error Message\r\n * @example db.on(\"error\", console.error);\r\n */","meta":{"filename":"Base.js","lineno":76,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database encounters error</p>","kind":"event","name":"error","params":[{"type":{"names":["Error"]},"description":"<p>Error Message</p>","name":"Error"}],"examples":[{"caption":"","code":"db.on(\"error\", console.error);"}],"memberof":"Base","longname":"Base#event:error","scope":"instance","___id":"T000002R000016","___s":true,"attribs":"","id":"event:error","ancestors":["<a href=\"Base.html\">Base</a>#"]}
+{"comment":"/**\r\n * Emitted when database encounters error\r\n * @event Base#error\r\n * @param {Error} Error Error Message\r\n * @example db.on(\"error\", console.error);\r\n */","meta":{"filename":"Base.js","lineno":80,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database encounters error</p>","kind":"event","name":"error","params":[{"type":{"names":["Error"]},"description":"<p>Error Message</p>","name":"Error"}],"examples":[{"caption":"","code":"db.on(\"error\", console.error);"}],"memberof":"Base","longname":"Base#event:error","scope":"instance","___id":"T000002R000017","___s":true,"attribs":"","id":"event:error","ancestors":["<a href=\"Base.html\">Base</a>#"]}
 </pre>
 -->
 </div>
@@ -763,7 +983,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line68">68</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line72">72</a>
   </code>
 </div>
 
@@ -825,7 +1045,7 @@ This class is implemented by the main Database class.</p>
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line68">68</a>
+    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line72">72</a>
   </code>
 </div>
 
@@ -891,7 +1111,7 @@ This class is implemented by the main Database class.</p>
 
 <!--
 <pre>
-{"comment":"/**\r\n * Emitted when database creates connection\r\n * @event Base#ready\r\n * @example db.on(\"ready\", () => {\r\n *     console.log(\"Successfully connected to the database!\");\r\n * });\r\n */","meta":{"filename":"Base.js","lineno":68,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database creates connection</p>","kind":"event","name":"ready","examples":[{"caption":"","code":"db.on(\"ready\", () => {\r    console.log(\"Successfully connected to the database!\");\r});"}],"memberof":"Base","longname":"Base#event:ready","scope":"instance","___id":"T000002R000015","___s":true,"attribs":"","id":"event:ready","ancestors":["<a href=\"Base.html\">Base</a>#"]}
+{"comment":"/**\r\n * Emitted when database creates connection\r\n * @event Base#ready\r\n * @example db.on(\"ready\", () => {\r\n *     console.log(\"Successfully connected to the database!\");\r\n * });\r\n */","meta":{"filename":"Base.js","lineno":72,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database creates connection</p>","kind":"event","name":"ready","examples":[{"caption":"","code":"db.on(\"ready\", () => {\r    console.log(\"Successfully connected to the database!\");\r});"}],"memberof":"Base","longname":"Base#event:ready","scope":"instance","___id":"T000002R000016","___s":true,"attribs":"","id":"event:ready","ancestors":["<a href=\"Base.html\">Base</a>#"]}
 </pre>
 -->
 </div>
@@ -910,7 +1130,7 @@ This class is implemented by the main Database class.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 19:33:30 GMT+0545 (Nepal Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:57:02 GMT+0545 (Nepal Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

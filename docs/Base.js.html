@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Cache.html">Cache</a><ul class='methods'><li data-type='method'><a href="Cache.html#all">all</a></li><li data-type='method'><a href="Cache.html#delete">delete</a></li><li data-type='method'><a href="Cache.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Cache.html#exists">exists</a></li><li data-type='method'><a href="Cache.html#get">get</a></li><li data-type='method'><a href="Cache.html#set">set</a></li></ul></li><li><a href="db.html">db</a><ul class='methods'><li data-type='method'><a href="db.html#add">add</a></li><li data-type='method'><a href="db.html#all">all</a></li><li data-type='method'><a href="db.html#delete">delete</a></li><li data-type='method'><a href="db.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="db.html#disconnect">disconnect</a></li><li data-type='method'><a href="db.html#exists">exists</a></li><li data-type='method'><a href="db.html#export">export</a></li><li data-type='method'><a href="db.html#fetch">fetch</a></li><li data-type='method'><a href="db.html#get">get</a></li><li data-type='method'><a href="db.html#has">has</a></li><li data-type='method'><a href="db.html#import">import</a></li><li data-type='method'><a href="db.html#math">math</a></li><li data-type='method'><a href="db.html#set">set</a></li><li data-type='method'><a href="db.html#subtract">subtract</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:debug">debug</a></li><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#add">add</a></li><li data-type='method'><a href="Database.html#all">all</a></li><li data-type='method'><a href="Database.html#delete">delete</a></li><li data-type='method'><a href="Database.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Database.html#disconnect">disconnect</a></li><li data-type='method'><a href="Database.html#exists">exists</a></li><li data-type='method'><a href="Database.html#export">export</a></li><li data-type='method'><a href="Database.html#fetch">fetch</a></li><li data-type='method'><a href="Database.html#fetchLatency">fetchLatency</a></li><li data-type='method'><a href="Database.html#get">get</a></li><li data-type='method'><a href="Database.html#has">has</a></li><li data-type='method'><a href="Database.html#import">import</a></li><li data-type='method'><a href="Database.html#math">math</a></li><li data-type='method'><a href="Database.html#set">set</a></li><li data-type='method'><a href="Database.html#subtract">subtract</a></li></ul></li><li><a href="MemoryStorage.html">MemoryStorage</a><ul class='methods'><li data-type='method'><a href="MemoryStorage.html#all">all</a></li><li data-type='method'><a href="MemoryStorage.html#delete">delete</a></li><li data-type='method'><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="MemoryStorage.html#exists">exists</a></li><li data-type='method'><a href="MemoryStorage.html#export">export</a></li><li data-type='method'><a href="MemoryStorage.html#fetch">fetch</a></li><li data-type='method'><a href="MemoryStorage.html#get">get</a></li><li data-type='method'><a href="MemoryStorage.html#has">has</a></li><li data-type='method'><a href="MemoryStorage.html#set">set</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -56,6 +56,7 @@ class Base extends EventEmitter {
      * Instantiates the base database.
      * This class is implemented by the main Database class.
      * @param {String} mongodbURL Mongodb Database URL.
+     * @param {Object} connectionOptions Mongodb connection options
      * @returns {Base}
      * @example const db = new Base("mongodb://localhost/mydb");
      */
@@ -63,7 +64,7 @@ class Base extends EventEmitter {
         super();
         if (!mongodbURL || !mongodbURL.startsWith("mongodb")) throw new Error("No mongodb url was provided!");
         if (typeof mongodbURL !== "string") throw new Error(`Expected a string for mongodbURL, received ${typeof mongodbURL}`);
-        if (typeof connectionOptions !== "object") throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
+        if (connectionOptions &amp;&amp; typeof connectionOptions !== "object") throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
 
         /**
          * Current database url
@@ -93,10 +94,11 @@ class Base extends EventEmitter {
     }
 
     /**
-     * Creates connection
+     * Creates mongodb connection
      * @private
      */
     _create() {
+        this.emit("Creating database connection...");
         mongoose.connect(this.dbURL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -110,6 +112,8 @@ class Base extends EventEmitter {
     _destroyDatabase() {
         mongoose.disconnect();
         this.readyAt = undefined;
+        this.dbURL = null;
+        this.emit("debug", "Database disconnected!");
     }
 }
 
@@ -128,6 +132,13 @@ class Base extends EventEmitter {
  * @example db.on("error", console.error);
  */
 
+ /**
+  * Emitted on debug mode
+  * @event Base#debug
+  * @param {String} Message Debug message
+  * @example db.on("debug", console.log);
+  */
+
 module.exports = Base;</code></pre>
         </article>
     </section>
@@ -141,7 +152,7 @@ module.exports = Base;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 19:33:30 GMT+0545 (Nepal Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:57:02 GMT+0545 (Nepal Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

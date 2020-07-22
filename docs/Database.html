@@ -1,0 +1,3418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Database - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:debug">debug</a></li><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#add">add</a></li><li data-type='method'><a href="Database.html#all">all</a></li><li data-type='method'><a href="Database.html#delete">delete</a></li><li data-type='method'><a href="Database.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Database.html#disconnect">disconnect</a></li><li data-type='method'><a href="Database.html#exists">exists</a></li><li data-type='method'><a href="Database.html#export">export</a></li><li data-type='method'><a href="Database.html#fetch">fetch</a></li><li data-type='method'><a href="Database.html#fetchLatency">fetchLatency</a></li><li data-type='method'><a href="Database.html#get">get</a></li><li data-type='method'><a href="Database.html#has">has</a></li><li data-type='method'><a href="Database.html#import">import</a></li><li data-type='method'><a href="Database.html#math">math</a></li><li data-type='method'><a href="Database.html#set">set</a></li><li data-type='method'><a href="Database.html#subtract">subtract</a></li></ul></li><li><a href="MemoryStorage.html">MemoryStorage</a><ul class='methods'><li data-type='method'><a href="MemoryStorage.html#all">all</a></li><li data-type='method'><a href="MemoryStorage.html#delete">delete</a></li><li data-type='method'><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="MemoryStorage.html#exists">exists</a></li><li data-type='method'><a href="MemoryStorage.html#export">export</a></li><li data-type='method'><a href="MemoryStorage.html#fetch">fetch</a></li><li data-type='method'><a href="MemoryStorage.html#get">get</a></li><li data-type='method'><a href="MemoryStorage.html#has">has</a></li><li data-type='method'><a href="MemoryStorage.html#set">set</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Database</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+
+<section>
+
+
+
+<header data-tmpl="container.tmpl">
+    
+        <h2>
+        Database
+        </h2>
+        
+            <div class="lead"><p>Quick mongodb wrapper</p></div>
+        
+    
+
+    
+      <div class="bs-callout bs-callout-default">
+        <h5>Members</h5>
+        <br />
+        <dl class="dl-horizontal methods-members">
+        <dt>Fields &amp; Properties</dt><dd><ul>
+            <li><a href="#name">name</a></li>
+            
+            <li><a href="#schema">schema</a></li>
+            
+            <li><a href="#uptime">uptime</a></li>
+            </ul></dd><dt>Methods</dt><dd><ul>
+            <li><a href="#add">add</a></li>
+            
+            <li><a href="#all">all</a></li>
+            
+            <li><a href="#delete">delete</a></li>
+            
+            <li><a href="#deleteAll">deleteAll</a></li>
+            
+            <li><a href="#disconnect">disconnect</a></li>
+            
+            <li><a href="#exists">exists</a></li>
+            
+            <li><a href="#export">export</a></li>
+            
+            <li><a href="#fetch">fetch</a></li>
+            
+            <li><a href="#fetchLatency">fetchLatency</a></li>
+            
+            <li><a href="#get">get</a></li>
+            
+            <li><a href="#has">has</a></li>
+            
+            <li><a href="#import">import</a></li>
+            
+            <li><a href="#math">math</a></li>
+            
+            <li><a href="#set">set</a></li>
+            
+            <li><a href="#subtract">subtract</a></li>
+            </ul></dd></dl></div>
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        <!--method.tmpl-->
+<div class="method-details">
+
+
+
+
+
+    
+    <h3 class="constructor">Constructor</h3>
+    
+
+    
+      <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line19">19</a>
+  </code>
+</div>
+
+    
+
+    <h4 class="name" id="Database">
+      <a href="#params-Database"><span class="type-signature"></span>new Database</a><span class="signature">(mongodbURL, name)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    <p>Creates quickmongo instance</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const { Database } = require("quickmongo");const db = new Database("mongodb://localhost/quickmongo");</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-Database">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-Database" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mongodbURL</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Mongodb database url</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Schema name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Creates quickmongo instance\r\n     * @param {String} mongodbURL Mongodb database url\r\n     * @param {String} name Schema name\r\n     * @example const { Database } = require(\"quickmongo\");\r\n     * const db = new Database(\"mongodb://localhost/quickmongo\");\r\n     */","meta":{"range":[519,745],"filename":"Main.js","lineno":19,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000578","name":"Database","type":"MethodDefinition","paramnames":["mongodbURL","name","connectionOptions"]},"shortpath":"Main.js"},"name":"Database","longname":"Database","kind":"class","description":"<p>Creates quickmongo instance</p>","examples":[{"caption":"","code":"const { Database } = require(\"quickmongo\");\rconst db = new Database(\"mongodb://localhost/quickmongo\");"}],"scope":"global","classdesc":"<p>Quick mongodb wrapper</p>","params":[{"type":{"names":["String"]},"description":"<p>Mongodb database url</p>","name":"mongodbURL"},{"type":{"names":["String"]},"description":"<p>Schema name</p>","name":"name"}],"___id":"T000003R000003","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Database","signature":"<span class=\"signature\">(mongodbURL, name)</span><span class=\"type-signature\"></span>","ancestors":[]}
+</pre>
+-->
+</div>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            <!--members.tmpl-->
+<div class="member-details">
+
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line313">313</a>
+  </code>
+</div>
+
+
+
+<h4 class="name" id="name">
+  <span class="type-signature">(readonly) </span>name<span class="type-signature"></span>
+</h4>
+
+
+
+
+<div class="description">
+    <p>Returns current schema name</p>
+</div>
+
+
+<div>
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+        
+            <!--members.tmpl-->
+<div class="member-details">
+
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line26">26</a>
+  </code>
+</div>
+
+
+
+<h4 class="name" id="schema">
+  <span class="type-signature"></span>schema<span class="type-signature"> :Schema</span>
+</h4>
+
+
+
+
+<div class="description">
+    <p>Current Schema</p>
+</div>
+
+
+<div>
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+        
+            <!--members.tmpl-->
+<div class="member-details">
+
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line236">236</a>
+  </code>
+</div>
+
+
+
+<h4 class="name" id="uptime">
+  <span class="type-signature"></span>uptime<span class="type-signature"> :Number</span>
+</h4>
+
+
+
+
+<div class="description">
+    <p>Returns database uptime</p>
+</div>
+
+
+<div>
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>console.log(`Database is up for ${db.uptime} ms.`);</code></pre>
+
+
+
+</div>
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line217">217</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="add">
+      <a href="#params-add"><span class="type-signature">(async) </span>add</a><span class="signature">(key, value)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Add</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.add("items", 200).then(() => console.log("Added 200 items"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-add">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-add" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>key</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Add\r\n     * @param {String} key key\r\n     * @param {Number} value value\r\n     * @example db.add(\"items\", 200).then(() => console.log(\"Added 200 items\"));\r\n     */","meta":{"range":[6926,7006],"filename":"Main.js","lineno":217,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001196","name":"Database#add","type":"MethodDefinition","paramnames":["key","value"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Add</p>","params":[{"type":{"names":["String"]},"description":"<p>key</p>","name":"key"},{"type":{"names":["Number"]},"description":"<p>value</p>","name":"value"}],"examples":[{"caption":"","code":"db.add(\"items\", 200).then(() => console.log(\"Added 200 items\"));"}],"name":"add","longname":"Database#add","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000084","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"add","signature":"<span class=\"signature\">(key, value)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line125">125</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="all">
+      <a href="#params-all"><span class="type-signature">(async) </span>all</a><span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Returns everything from the database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let data = await db.all();console.log(`There are total ${data.length} entries.`);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-all">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns (Async)</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Returns everything from the database\r\n     * @returns {Promise<Array>}\r\n     * @example let data = await db.all();\r\n     * console.log(`There are total ${data.length} entries.`);\r\n     */","meta":{"range":[3688,3956],"filename":"Main.js","lineno":125,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000862","name":"Database#all","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Returns everything from the database</p>","returns":[{"type":{"names":["Promise.<Array>"]}}],"examples":[{"caption":"","code":"let data = await db.all();\rconsole.log(`There are total ${data.length} entries.`);"}],"name":"all","longname":"Database#all","kind":"function","memberof":"Database","scope":"instance","params":[],"async":true,"___id":"T000002R000069","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"all","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {Promise.&lt;Array>}</span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line66">66</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="delete">
+      <a href="#params-delete"><span class="type-signature">(async) </span>delete</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Deletes a data from the database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.delete("foo").then(() => console.log("Deleted data"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-delete">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-delete" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Deletes a data from the database\r\n     * @param {String} key Key\r\n     * @example db.delete(\"foo\").then(() => console.log(\"Deleted data\"));\r\n     */","meta":{"range":[1937,2230],"filename":"Main.js","lineno":66,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000712","name":"Database#delete","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Deletes a data from the database</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"}],"examples":[{"caption":"","code":"db.delete(\"foo\").then(() => console.log(\"Deleted data\"));"}],"name":"delete","longname":"Database#delete","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000059","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"delete","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line141">141</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="deleteAll">
+      <a href="#params-deleteAll"><span class="type-signature">(async) </span>deleteAll</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Deletes the entire schema</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.deleteAll().then(() => console.log("Deleted everything"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-deleteAll">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Deletes the entire schema\r\n     * @example db.deleteAll().then(() => console.log(\"Deleted everything\"));\r\n     */","meta":{"range":[4095,4272],"filename":"Main.js","lineno":141,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000910","name":"Database#deleteAll","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Deletes the entire schema</p>","examples":[{"caption":"","code":"db.deleteAll().then(() => console.log(\"Deleted everything\"));"}],"name":"deleteAll","longname":"Database#deleteAll","kind":"function","memberof":"Database","scope":"instance","params":[],"async":true,"___id":"T000002R000074","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"deleteAll","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line304">304</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="disconnect">
+      <a href="#params-disconnect"><span class="type-signature"></span>disconnect</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    <p>Disconnects the database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.disconnect();</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-disconnect">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Disconnects the database\r\n     * @example db.disconnect();\r\n     */","meta":{"range":[10126,10282],"filename":"Main.js","lineno":304,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001507","name":"Database#disconnect","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Disconnects the database</p>","examples":[{"caption":"","code":"db.disconnect();"}],"name":"disconnect","longname":"Database#disconnect","kind":"function","memberof":"Database","scope":"instance","params":[],"___id":"T000002R000092","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"disconnect","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line80">80</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="exists">
+      <a href="#params-exists"><span class="type-signature">(async) </span>exists</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Checks if there is a data stored with the given key</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.exists("foo").then(console.log);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-exists">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-exists" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Checks if there is a data stored with the given key\r\n     * @param {String} key Key\r\n     * @example db.exists(\"foo\").then(console.log);\r\n     */","meta":{"range":[2401,2576],"filename":"Main.js","lineno":80,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000757","name":"Database#exists","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Checks if there is a data stored with the given key</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"}],"examples":[{"caption":"","code":"db.exists(\"foo\").then(console.log);"}],"name":"exists","longname":"Database#exists","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000062","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"exists","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line251">251</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="export">
+      <a href="#params-export"><span class="type-signature"></span>export</a><span class="signature">(fileName, path)</span><span class="type-signature"> &rarr; {Promise.&lt;String>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    <p>Exports the data to json file</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.export("database", "./").then(path => {    console.log(`File exported to ${path}`);});</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-export">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-export" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    database
+                
+                </td>
+            
+
+            <td class="description last"><p>File name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    ./
+                
+                </td>
+            
+
+            <td class="description last"><p>File path</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;String></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Exports the data to json file\r\n     * @param {String} fileName File name\r\n     * @param {String} path File path\r\n     * @returns {Promise<String>}\r\n     * @example db.export(\"database\", \"./\").then(path => {\r\n     *     console.log(`File exported to ${path}`);\r\n     * });\r\n     */","meta":{"range":[7902,8551],"filename":"Main.js","lineno":251,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001253","name":"Database#export","type":"MethodDefinition","paramnames":["fileName","path"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Exports the data to json file</p>","params":[{"type":{"names":["String"]},"description":"<p>File name</p>","name":"fileName","defaultvalue":"database"},{"type":{"names":["String"]},"description":"<p>File path</p>","name":"path","defaultvalue":"./"}],"returns":[{"type":{"names":["Promise.<String>"]}}],"examples":[{"caption":"","code":"db.export(\"database\", \"./\").then(path => {\r    console.log(`File exported to ${path}`);\r});"}],"name":"export","longname":"Database#export","kind":"function","memberof":"Database","scope":"instance","___id":"T000002R000088","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"export","signature":"<span class=\"signature\">(fileName, path)</span><span class=\"type-signature\"> &rarr; {Promise.&lt;String>}</span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line115">115</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="fetch">
+      <a href="#params-fetch"><span class="type-signature">(async) </span>fetch</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Fetches the data from database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.fetch("foo").then(console.log);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-fetch">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-fetch" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Fetches the data from database\r\n     * @param {String} key Key\r\n     * @example db.fetch(\"foo\").then(console.log);\r\n     */","meta":{"range":[3419,3475],"filename":"Main.js","lineno":115,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000851","name":"Database#fetch","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Fetches the data from database</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"}],"examples":[{"caption":"","code":"db.fetch(\"foo\").then(console.log);"}],"name":"fetch","longname":"Database#fetch","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000068","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"fetch","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line344">344</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="fetchLatency">
+      <a href="#params-fetchLatency"><span class="type-signature">(async) </span>fetchLatency</a><span class="signature">()</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Fetches read and write latency of the database in ms</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const ping = await db.fetchLatency();console.log("Read: ", ping.read);console.log("Write: ", ping.write);console.log("Average: ", ping.average);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-fetchLatency">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Fetches read and write latency of the database in ms\r\n     * @example const ping = await db.fetchLatency();\r\n     * console.log(\"Read: \", ping.read);\r\n     * console.log(\"Write: \", ping.write);\r\n     * console.log(\"Average: \", ping.average);\r\n     */","meta":{"range":[11117,11358],"filename":"Main.js","lineno":344,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001595","name":"Database#fetchLatency","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Fetches read and write latency of the database in ms</p>","examples":[{"caption":"","code":"const ping = await db.fetchLatency();\rconsole.log(\"Read: \", ping.read);\rconsole.log(\"Write: \", ping.write);\rconsole.log(\"Average: \", ping.average);"}],"name":"fetchLatency","longname":"Database#fetchLatency","kind":"function","memberof":"Database","scope":"instance","params":[],"async":true,"___id":"T000002R000098","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"fetchLatency","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line100">100</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="get">
+      <a href="#params-get"><span class="type-signature">(async) </span>get</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Fetches the data from database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.get("foo").then(console.log);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-get">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-get" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Fetches the data from database\r\n     * @param {String} key Key\r\n     * @example db.get(\"foo\").then(console.log);\r\n     */","meta":{"range":[2954,3270],"filename":"Main.js","lineno":100,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000799","name":"Database#get","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Fetches the data from database</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"}],"examples":[{"caption":"","code":"db.get(\"foo\").then(console.log);"}],"name":"get","longname":"Database#get","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000065","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"get","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line91">91</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="has">
+      <a href="#params-has"><span class="type-signature">(async) </span>has</a><span class="signature">(key)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Checks if there is a data stored with the given key</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.has("foo").then(console.log);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-has">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-has" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Checks if there is a data stored with the given key\r\n     * @param {String} key Key\r\n     * @example db.has(\"foo\").then(console.log);\r\n     */","meta":{"range":[2744,2807],"filename":"Main.js","lineno":91,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000787","name":"Database#has","type":"MethodDefinition","paramnames":["key"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Checks if there is a data stored with the given key</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"}],"examples":[{"caption":"","code":"db.has(\"foo\").then(console.log);"}],"name":"has","longname":"Database#has","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000064","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"has","signature":"<span class=\"signature\">(key)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line278">278</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="import">
+      <a href="#params-import"><span class="type-signature">(async) </span>import</a><span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise.&lt;Boolean>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Imports data from other source to quickmongo.</p>
+<p>Data type should be Array containing <code>ID</code> and <code>data</code> fields.
+Example:</p>
+<pre class="prettyprint source lang-js"><code>[{ ID: &quot;foo&quot;, data: &quot;bar&quot; }, { ID: &quot;hi&quot;, data: &quot;hello&quot; }]
+</code></pre>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const data = QuickDB.all(); // imports data from quick.db to quickmongoQuickMongo.import(data);</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-import">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-import" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of data</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns (Async)</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Boolean></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Imports data from other source to quickmongo. \r\n     * \r\n     * Data type should be Array containing `ID` and `data` fields.\r\n     * Example: \r\n     * ```js\r\n     * [{ ID: \"foo\", data: \"bar\" }, { ID: \"hi\", data: \"hello\" }]\r\n     * ```\r\n     * @param {Array} data Array of data\r\n     * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo\r\n     * QuickMongo.import(data);\r\n     * @returns {Promise<Boolean>}\r\n     */","meta":{"range":[9020,10033],"filename":"Main.js","lineno":278,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001348","name":"Database#import","type":"MethodDefinition","paramnames":["data"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Imports data from other source to quickmongo.</p>\n<p>Data type should be Array containing <code>ID</code> and <code>data</code> fields.\nExample:</p>\n<pre class=\"prettyprint source lang-js\"><code>[{ ID: &quot;foo&quot;, data: &quot;bar&quot; }, { ID: &quot;hi&quot;, data: &quot;hello&quot; }]\n</code></pre>","params":[{"type":{"names":["Array"]},"description":"<p>Array of data</p>","name":"data"}],"examples":[{"caption":"","code":"const data = QuickDB.all(); // imports data from quick.db to quickmongo\rQuickMongo.import(data);"}],"returns":[{"type":{"names":["Promise.<Boolean>"]}}],"name":"import","longname":"Database#import","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000089","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"import","signature":"<span class=\"signature\">(data)</span><span class=\"type-signature\"> &rarr; {Promise.&lt;Boolean>}</span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line154">154</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="math">
+      <a href="#params-math"><span class="type-signature">(async) </span>math</a><span class="signature">(key, operator, value)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Math calculation</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.math("items", "+", 200).then(() => console.log("Added 200 items"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-math">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-math" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key of the data</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>operator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>One of +, -, * or /</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Math calculation\r\n     * @param {String} key Key of the data\r\n     * @param {String} operator One of +, -, * or /\r\n     * @param {Number} value Value\r\n     * @example db.math(\"items\", \"+\", 200).then(() => console.log(\"Added 200 items\"));\r\n     */","meta":{"range":[4544,6738],"filename":"Main.js","lineno":154,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000937","name":"Database#math","type":"MethodDefinition","paramnames":["key","operator","value"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Math calculation</p>","params":[{"type":{"names":["String"]},"description":"<p>Key of the data</p>","name":"key"},{"type":{"names":["String"]},"description":"<p>One of +, -, * or /</p>","name":"operator"},{"type":{"names":["Number"]},"description":"<p>Value</p>","name":"value"}],"examples":[{"caption":"","code":"db.math(\"items\", \"+\", 200).then(() => console.log(\"Added 200 items\"));"}],"name":"math","longname":"Database#math","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000075","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"math","signature":"<span class=\"signature\">(key, operator, value)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line35">35</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="set">
+      <a href="#params-set"><span class="type-signature">(async) </span>set</a><span class="signature">(key, value)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Sets the value to the database</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.set("foo", "bar").then(() => console.log("Saved data"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-set">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-set" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Data</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Sets the value to the database\r\n     * @param {String} key Key\r\n     * @param {*} value Data\r\n     * @example db.set(\"foo\", \"bar\").then(() => console.log(\"Saved data\"));\r\n     */","meta":{"range":[949,1763],"filename":"Main.js","lineno":35,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000600","name":"Database#set","type":"MethodDefinition","paramnames":["key","value"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Sets the value to the database</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"},{"type":{"names":["*"]},"description":"<p>Data</p>","name":"value"}],"examples":[{"caption":"","code":"db.set(\"foo\", \"bar\").then(() => console.log(\"Saved data\"));"}],"name":"set","longname":"Database#set","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000052","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"set","signature":"<span class=\"signature\">(key, value)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="Main.js.html">Main.js</a>:<a href="Main.js.html#line227">227</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="subtract">
+      <a href="#params-subtract"><span class="type-signature">(async) </span>subtract</a><span class="signature">(key, value)</span><span class="type-signature"></span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+<span class="label label-default">Async</span>
+
+
+
+
+<div class="description">
+    <p>Subtract</p>
+</div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>db.subtract("items", 100).then(() => console.log("Removed 100 items"));</code></pre>
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-subtract">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-subtract" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Subtract\r\n     * @param {String} key Key\r\n     * @param {Number} value Value     \r\n     * @example db.subtract(\"items\", 100).then(() => console.log(\"Removed 100 items\"));\r\n     */","meta":{"range":[7211,7296],"filename":"Main.js","lineno":227,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100001211","name":"Database#subtract","type":"MethodDefinition","paramnames":["key","value"]},"vars":{"":null},"shortpath":"Main.js"},"description":"<p>Subtract</p>","params":[{"type":{"names":["String"]},"description":"<p>Key</p>","name":"key"},{"type":{"names":["Number"]},"description":"<p>Value</p>","name":"value"}],"examples":[{"caption":"","code":"db.subtract(\"items\", 100).then(() => console.log(\"Removed 100 items\"));"}],"name":"subtract","longname":"Database#subtract","kind":"function","memberof":"Database","scope":"instance","async":true,"___id":"T000002R000085","___s":true,"attribs":"<span class=\"type-signature\">(async) </span>","id":"subtract","signature":"<span class=\"signature\">(key, value)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Database.html\">Database</a>#"]}
+</pre>
+-->
+</div>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:57:02 GMT+0545 (Nepal Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

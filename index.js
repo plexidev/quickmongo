@@ -1,5 +1,9 @@
 module.exports = {
+    Base: require("./src/Base"),
     Database: require("./src/Main"),
-    version: require("./package.json").version,
-    MemoryStorage: require("./src/Cache")
+    Error: require("./src/Error"),
+    MemoryStorage: require("./src/Cache"),
+    Schema: require("./src/Schema"),
+    Util: require("./src/Util"),
+    version: require("./package.json").version
 };

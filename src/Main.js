@@ -2,11 +2,12 @@ const Base = require("./Base");
 const Schema = require("./Schema");
 const Error = require("./Error");
 const fs = require("fs");
+const Util = require("./Util");
 
 /**
  * Quick mongodb wrapper
  */
-class db extends Base {
+class Database extends Base {
 
     /**
      * Creates quickmongo instance
@@ -15,8 +16,8 @@ class db extends Base {
      * @example const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
      */
-    constructor(mongodbURL, name) {
-        super(mongodbURL);
+    constructor(mongodbURL, name, connectionOptions={}) {
+        super(mongodbURL, connectionOptions);
 
         /**
          * Current Schema
@@ -32,9 +33,8 @@ class db extends Base {
      * @example db.set("foo", "bar").then(() => console.log("Saved data"));
      */
     async set(key, value) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
-        if (value === Infinity || value === -Infinity) throw new Error("Value may not be Infinity.");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
+        if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
         let raw = await this.schema.findOne({
             ID: key
         });
@@ -64,8 +64,7 @@ class db extends Base {
      * @example db.delete("foo").then(() => console.log("Deleted data"));
      */
     async delete(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let data = await this.schema.findOneAndDelete({ ID: key })
             .catch(e => {
                 return this.emit("error", e);
@@ -79,8 +78,7 @@ class db extends Base {
      * @example db.exists("foo").then(console.log);
      */
     async exists(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let get = await this.get(key);
         return !!get;
     }
@@ -100,8 +98,7 @@ class db extends Base {
      * @example db.get("foo").then(console.log);
      */
     async get(key) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         let get = await this.schema.findOne({ ID: key })
             .catch(e => {
                 return this.emit("error", e);
@@ -155,11 +152,9 @@ class db extends Base {
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
      */
     async math(key, operator, value) {
-        if (!key) throw new Error("No key specified!", "KeyError");
-        if (typeof key !== "string") throw new Error("Key must be a string.", "SyntaxError");
-        if (!operator) throw new Error("No operator was provided!");
-        if (!value) throw new Error("No value was provided!");
-        if (typeof value !== "number") throw new Error("Value must be a number.", "SyntaxError");
+        if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
+        if (!operator) throw new Error("No operator provided!");
+        if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
 
         switch(operator) {
             case "add":
@@ -281,7 +276,7 @@ class db extends Base {
      * @returns {Promise<Boolean>}
      */
     async import(data=[]) {
-        if (!Array.isArray(data)) throw new Error("Data type must be Array.");
+        if (!Array.isArray(data)) throw new Error("Data type must be Array.", "DataTypeError");
         if (data.length < 1) return [];
         let start = Date.now();
         this.emit("debug", `Queued ${data.length} entries!`);
@@ -295,10 +290,11 @@ class db extends Base {
                 item.data = null;
             };
             this.set(item.ID, item.data);
-            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);        
+            this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);      
         });
-        this.emit("debug", `Successfully migrated ${data.length} entries to mongodb! Took ${Date.now() - start}ms!`);
-        return true;
+        this.set(item.ID, item.data);
+        this.emit("debug", `Successfully migrated ${data.length}. Took ${Date.now() - start}ms!`);
+        return;
     }
 
     /**
@@ -310,6 +306,49 @@ class db extends Base {
         return this._destroyDatabase();
     }
 
+    /**
+     * Returns current schema name
+     * @readonly
+     */
+    get name() {
+        return this.schema.name;
+    }
+
+    /**
+     * Read latency
+     * @ignore
+     */
+    async _read() {
+        let start = Date.now();
+        await this.get("LQ==");
+        return Date.now() - start;
+    }
+
+    /**
+     * Write latency
+     * @ignore
+     */
+    async _write() {
+        let start = Date.now();
+        await this.set("LQ==", Buffer.from(start.toString()).toString("base64"));
+        return Date.now() - start;
+    }
+
+    /**
+     * Fetches read and write latency of the database in ms
+     * @example const ping = await db.fetchLatency();
+     * console.log("Read: ", ping.read);
+     * console.log("Write: ", ping.write);
+     * console.log("Average: ", ping.average);
+     */
+    async fetchLatency() {
+        let read = await this._read();
+        let write = await this._write();
+        let average = (read + write) / 2;
+        this.delete("LQ==").catch(e => {});
+        return { read, write, average };
+    }
+
 }
 
-module.exports = db;
+module.exports = Database;
