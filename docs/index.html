@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta property=og:type content=website>
+    <meta property=og:url content=https://quickmongo.snowflakedev.xyz>
+    <meta property=og:title content="QuickMongo">
+    <meta property=og:description content="Quick mongodb wrapper for beginners.">
+
+    <title>QuickMongo</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/nav.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/skyceil.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <h4><a href="index.html">Home</a></h4><h5 class="no-bottom must-underline">Classes</h5><ul><li><span class="small-icon C">C</span><b><a href="Base.html">Base</a></b><ul class="has-class-methods"><li><span class="small-icon M">M</span><a href="Base.html#dbURL">dbURL</a></li><li><span class="small-icon M">M</span><a href="Base.html#options">options</a></li><li><span class="small-icon M">M</span><a href="Base.html#readyAt">readyAt</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="Database.html">Database</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="Database.html#add">add</a></li><li><span class="small-icon F">F</span><a href="Database.html#all">all</a></li><li><span class="small-icon F">F</span><a href="Database.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="Database.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="Database.html#disconnect">disconnect</a></li><li><span class="small-icon F">F</span><a href="Database.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="Database.html#export">export</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetchLatency">fetchLatency</a></li><li><span class="small-icon F">F</span><a href="Database.html#get">get</a></li><li><span class="small-icon F">F</span><a href="Database.html#has">has</a></li><li><span class="small-icon F">F</span><a href="Database.html#import">import</a></li><li><span class="small-icon F">F</span><a href="Database.html#math">math</a></li><li><span class="small-icon F">F</span><a href="Database.html#set">set</a></li><li><span class="small-icon F">F</span><a href="Database.html#startsWith">startsWith</a></li><li><span class="small-icon F">F</span><a href="Database.html#subtract">subtract</a></li><li><span class="small-icon M">M</span><a href="Database.html#name">name</a></li><li><span class="small-icon M">M</span><a href="Database.html#schema">schema</a></li><li><span class="small-icon M">M</span><a href="Database.html#uptime">uptime</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="MemoryStorage.html">MemoryStorage</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="MemoryStorage.html#all">all</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#export">export</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#get">get</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#has">has</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#set">set</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#startsWith">startsWith</a></li></ul></li></ul><h5 class="no-bottom must-underline">Events</h5><ul><li><span class="small-icon E">E</span><a href="Base.html#event:debug">debug</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:error">error</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:ready">ready</a></li></ul>
+</nav>
+
+<div id="main">
+    <div class="burger">
+        <div class="burger-line-1"></div>
+        <div class="burger-line-2"></div>
+        <div class="burger-line-3"></div>
+    </div>
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>QuickMongo</h1>
+<p>Quick mongodb wrapper for beginners.</p>
+<h1>Documentation</h1>
+<p><strong><a href="https://quickmongo.snowflakedev.xyz">QuickMongo</a></strong></p>
+<h1>Features</h1>
+<ul>
+<li>Easy</li>
+<li>Simple</li>
+<li>Fast</li>
+<li>Import &amp; export support</li>
+<li>Key value based</li>
+</ul>
+<blockquote>
+<p>Btw, <code>quick.db</code> users can easily export their data to <code>quickmongo</code>.</p>
+</blockquote>
+<h1>Quick Example</h1>
+<pre class="prettyprint source lang-js"><code>const { Database } = require(&quot;quickmongo&quot;);
+const db = new Database(&quot;mongodb://localhost/quickmongo&quot;);
+
+db.on(&quot;ready&quot;, () => {
+    console.log(&quot;Database connected!&quot;);
+});
+
+db.set(&quot;foo&quot;, &quot;bar&quot;);
+
+db.get(&quot;foo&quot;).then(console.log);
+</code></pre>
+<h1>Exporting data from quick.db to quickmongo</h1>
+<pre class="prettyprint source lang-js"><code>const db = require(&quot;quick.db&quot;);
+const { Database } = require(&quot;quickmongo&quot;);
+const mongo = new Database(&quot;mongodb://localhost/quickmongo&quot;);
+
+function export() {
+    const data = db.all();
+    mongo.import(data).then(() => {
+        console.log(&quot;Successfully exported quick.db data to quickmongo!&quot;);
+    });    
+}
+
+export();
+</code></pre>
+<h1>Exporting data from quick.db tables (and custom schema names)</h1>
+<pre class="prettyprint source lang-js"><code>const db = require(&quot;quick.db&quot;);
+const table = new db.table(&quot;mytable&quot;);
+
+const { Database } = require(&quot;quickmongo&quot;);
+const mongo = new Database(&quot;mongodb://localhost/quickmongo&quot;, &quot;mytable&quot;); // custom schema name (acts like quickdb table)
+
+function export() {
+    const data = table.all();
+    mongo.import(data).then(() => {
+        console.log(&quot;Successfully exported quick.db data to quickmongo!&quot;);
+    });    
+}
+
+export();
+</code></pre>
+<h1>Links</h1>
+<ul>
+<li><strong><a href="https://discord.gg/2SUybzb">Discord Support Server</a></strong></li>
+<li><strong><a href="https://quickmongo.snowflakedev.xyz">Documentation</a></strong></li>
+<li><strong><a href="https://github.com/Snowflake107/quickmongo">GitHub</a></strong></li>
+</ul>
+<h1>Examples</h1>
+<pre class="prettyprint source lang-js"><code>const { Database } = require(&quot;quickmongo&quot;);
+const db = new Database(&quot;mongodb://localhost/quickmongo&quot;);
+
+// set
+db.set(&quot;money&quot;, 200).then(i => {
+    console.log(`Set balance to $${i}`); // 200
+});
+
+// add
+db.add(&quot;money&quot;, 100).then(i => {
+    console.log(`Added money! now you have $${i}`); // 300
+});
+
+// fetch
+db.get(&quot;money&quot;).then(i => {
+    console.log(`Your balance: ${i}`); // 300
+});
+
+// fetch all
+db.all().then(console.log); // [{ ID: &quot;money&quot;, data: 300 }]
+
+// delete all
+db.deleteAll().then(() => console.log(&quot;done!&quot;));
+
+// export your data to json file
+db.export(&quot;rawdata&quot;).then(path => {
+    console.log(`Data exported to ${path}...`);
+});
+
+// import data from quick.db (listen to &quot;debug&quot; event for details)
+db.import(quickdb.all()).then(() => {
+    console.log(&quot;Data imported!&quot;);
+});
+</code></pre>
+<h1>Value Targets (Path)</h1>
+<p>Value target (Like <code>key.target</code> of <code>quick.db</code>) support is not yet available in this package. It will be available soon :)</p>
+<p>But you can still use it like this:</p>
+<pre class="prettyprint source lang-js"><code>const { Database } = require(&quot;quickmongo&quot;);
+const db = new Database(&quot;mongodb://localhost/quickmongo&quot;);
+
+// set data
+db.set(&quot;user&quot;, { items: [] });
+
+// update items
+let data = await db.get(&quot;user&quot;);
+data.items = [&quot;keyboard&quot;];
+db.set(&quot;user&quot;, data); // { items: [&quot;keyboard&quot;] }
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    <h4>&copy <a href="https://snowflakedev.xyz">Snowflake Development ❄</a> - 2020</h4>
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+</body>
+</html>
