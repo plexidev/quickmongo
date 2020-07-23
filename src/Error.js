@@ -1,7 +1,3 @@
-/**
- * @private
- * @ignore
- */
 class QuickError extends Error {
 
     constructor(message, name = null) {

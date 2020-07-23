@@ -7,9 +7,8 @@ class Base extends EventEmitter {
     /**
      * Instantiates the base database.
      * This class is implemented by the main Database class.
-     * @param {String} mongodbURL Mongodb Database URL.
-     * @param {Object} connectionOptions Mongodb connection options
-     * @returns {Base}
+     * @param {string} mongodbURL Mongodb Database URL.
+     * @param {object} connectionOptions Mongodb connection options
      * @example const db = new Base("mongodb://localhost/mydb");
      */
     constructor(mongodbURL, connectionOptions={}) {
@@ -20,13 +19,13 @@ class Base extends EventEmitter {
 
         /**
          * Current database url
-         * @type {String}
+         * @type {string}
          */
         this.dbURL = mongodbURL;
 
         /**
          * Mongoose connection options
-         * @type {Object}
+         * @type {object}
          */
         this.options = connectionOptions;
 

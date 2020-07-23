@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 class Util {
 
     constructor() {
@@ -6,7 +8,7 @@ class Util {
 
     /**
      * Returns true if provided key is valid
-     * @param {*} str Anything to test
+     * @param str Anything to test
      * @returns {Boolean}
      */
     static isKey(str) {
@@ -15,7 +17,7 @@ class Util {
 
     /**
      * Returns true if the given data is valid
-     * @param {*} data Any data
+     * @param data Any data
      * @returns {Boolean}
      */
     static isValue(data) {
@@ -26,7 +28,7 @@ class Util {
 
     /**
      * Returns target & key from the given string (quickdb style)
-     * @param {String} key key to parse
+     * @param {string} key key to parse
      * @example Util.parseKey("myitem.items");
      * // -> { key: "myitems", target: "items" }
      */
@@ -39,6 +41,23 @@ class Util {
             return { key: parsed, target };
         }
         return { key, target: undefined };
+    }
+
+    /**
+     * Sort data
+     * @param {string} key Key
+     * @param {Array} data Data
+     * @param {object} ops options
+     */
+    static sort(key, data, ops) {
+        if (!key || !data || !Array.isArray(data)) return [];
+        let arb = data.filter(i => i.ID.startsWith(key));
+        if (ops.sort && typeof ops.sort === 'string') {
+            if (ops.sort.startsWith('.')) ops.sort = ops.sort.slice(1);
+            ops.sort = ops.sort.split('.');
+            arb = _.sortBy(arb, ops.sort).reverse();
+        }
+        return arb;
     }
 }
 

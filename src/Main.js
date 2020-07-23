@@ -11,8 +11,9 @@ class Database extends Base {
 
     /**
      * Creates quickmongo instance
-     * @param {String} mongodbURL Mongodb database url
-     * @param {String} name Schema name
+     * @param {string} mongodbURL Mongodb database url
+     * @param {string} name Schema name
+     * @param {object} connectionOptions Mongoose connection options
      * @example const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
      */
@@ -28,8 +29,8 @@ class Database extends Base {
 
     /**
      * Sets the value to the database
-     * @param {String} key Key
-     * @param {*} value Data
+     * @param {string} key Key
+     * @param value Data
      * @example db.set("foo", "bar").then(() => console.log("Saved data"));
      */
     async set(key, value) {
@@ -60,7 +61,7 @@ class Database extends Base {
 
     /**
      * Deletes a data from the database
-     * @param {String} key Key
+     * @param {string} key Key
      * @example db.delete("foo").then(() => console.log("Deleted data"));
      */
     async delete(key) {
@@ -74,7 +75,7 @@ class Database extends Base {
 
     /**
      * Checks if there is a data stored with the given key
-     * @param {String} key Key
+     * @param {string} key Key
      * @example db.exists("foo").then(console.log);
      */
     async exists(key) {
@@ -85,7 +86,7 @@ class Database extends Base {
 
     /**
      * Checks if there is a data stored with the given key
-     * @param {String} key Key
+     * @param {string} key Key
      * @example db.has("foo").then(console.log);
      */
     async has(key) {
@@ -94,7 +95,7 @@ class Database extends Base {
 
     /**
      * Fetches the data from database
-     * @param {String} key Key
+     * @param {string} key Key
      * @example db.get("foo").then(console.log);
      */
     async get(key) {
@@ -109,7 +110,7 @@ class Database extends Base {
 
     /**
      * Fetches the data from database
-     * @param {String} key Key
+     * @param {string} key Key
      * @example db.fetch("foo").then(console.log);
      */
     async fetch(key) {
@@ -146,9 +147,9 @@ class Database extends Base {
 
     /**
      * Math calculation
-     * @param {String} key Key of the data
-     * @param {String} operator One of +, -, * or /
-     * @param {Number} value Value
+     * @param {string} key Key of the data
+     * @param {string} operator One of +, -, * or /
+     * @param {number} value Value
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
      */
     async math(key, operator, value) {
@@ -210,8 +211,8 @@ class Database extends Base {
 
     /**
      * Add
-     * @param {String} key key
-     * @param {Number} value value
+     * @param {string} key key
+     * @param {number} value value
      * @example db.add("items", 200).then(() => console.log("Added 200 items"));
      */
     async add(key, value) {
@@ -220,8 +221,8 @@ class Database extends Base {
 
     /**
      * Subtract
-     * @param {String} key Key
-     * @param {Number} value Value     
+     * @param {string} key Key
+     * @param {number} value Value     
      * @example db.subtract("items", 100).then(() => console.log("Removed 100 items"));
      */
     async subtract(key, value) {
@@ -230,7 +231,7 @@ class Database extends Base {
 
     /**
      * Returns database uptime
-     * @type {Number}
+     * @type {number}
      * @example console.log(`Database is up for ${db.uptime} ms.`);
      */
     get uptime() {
@@ -241,9 +242,9 @@ class Database extends Base {
 
     /**
      * Exports the data to json file
-     * @param {String} fileName File name
-     * @param {String} path File path
-     * @returns {Promise<String>}
+     * @param {string} fileName File name
+     * @param {string} path File path
+     * @returns {Promise<string>}
      * @example db.export("database", "./").then(path => {
      *     console.log(`File exported to ${path}`);
      * });
@@ -292,7 +293,6 @@ class Database extends Base {
             this.set(item.ID, item.data);
             this.emit("debug", `Successfully migrated ${item.ID} @${index}!`);      
         });
-        this.set(item.ID, item.data);
         this.emit("debug", `Successfully migrated ${data.length}. Took ${Date.now() - start}ms!`);
         return;
     }
@@ -330,7 +330,7 @@ class Database extends Base {
      */
     async _write() {
         let start = Date.now();
-        await this.set("LQ==", Buffer.from(start.toString()).toString("base64"));
+        await this.set("LQ==", Buffer.from(start.tostring()).tostring("base64"));
         return Date.now() - start;
     }
 
@@ -347,6 +347,18 @@ class Database extends Base {
         let average = (read + write) / 2;
         this.delete("LQ==").catch(e => {});
         return { read, write, average };
+    }
+
+    /**
+     * Fetches everything and sorts by given target
+     * @param {string} key Key
+     * @param {object} ops Options
+     * @example const data = await db.startsWith("money", { sort: ".data" });
+     */
+    async startsWith(key, ops) {
+        if (!key || typeof key !== "string") throw new Error(`Expected key to be a string, received ${typeof key}`);
+        let all = await this.all();
+        return Util.sort(key, all, ops);
     }
 
 }
