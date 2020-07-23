@@ -2,114 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Base - Documentation</title>
+    <title>Class: Base</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/nav.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/skyceil.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
 </head>
+
 <body>
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="Base.html#event:debug">debug</a></li><li><a href="Base.html#event:error">error</a></li><li><a href="Base.html#event:ready">ready</a></li></ul><h3>Classes</h3><ul><li><a href="Base.html">Base</a></li><li><a href="Database.html">Database</a><ul class='methods'><li data-type='method'><a href="Database.html#add">add</a></li><li data-type='method'><a href="Database.html#all">all</a></li><li data-type='method'><a href="Database.html#delete">delete</a></li><li data-type='method'><a href="Database.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="Database.html#disconnect">disconnect</a></li><li data-type='method'><a href="Database.html#exists">exists</a></li><li data-type='method'><a href="Database.html#export">export</a></li><li data-type='method'><a href="Database.html#fetch">fetch</a></li><li data-type='method'><a href="Database.html#fetchLatency">fetchLatency</a></li><li data-type='method'><a href="Database.html#get">get</a></li><li data-type='method'><a href="Database.html#has">has</a></li><li data-type='method'><a href="Database.html#import">import</a></li><li data-type='method'><a href="Database.html#math">math</a></li><li data-type='method'><a href="Database.html#set">set</a></li><li data-type='method'><a href="Database.html#subtract">subtract</a></li></ul></li><li><a href="MemoryStorage.html">MemoryStorage</a><ul class='methods'><li data-type='method'><a href="MemoryStorage.html#all">all</a></li><li data-type='method'><a href="MemoryStorage.html#delete">delete</a></li><li data-type='method'><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li data-type='method'><a href="MemoryStorage.html#exists">exists</a></li><li data-type='method'><a href="MemoryStorage.html#export">export</a></li><li data-type='method'><a href="MemoryStorage.html#fetch">fetch</a></li><li data-type='method'><a href="MemoryStorage.html#get">get</a></li><li data-type='method'><a href="MemoryStorage.html#has">has</a></li><li data-type='method'><a href="MemoryStorage.html#set">set</a></li></ul></li></ul>
+<nav class="navbar">
+    <h4><a href="index.html">Home</a></h4><h5 class="no-bottom must-underline">Classes</h5><ul><li><span class="small-icon C">C</span><b><a href="Base.html">Base</a></b><ul class="has-class-methods"><li><span class="small-icon M">M</span><a href="Base.html#dbURL">dbURL</a></li><li><span class="small-icon M">M</span><a href="Base.html#options">options</a></li><li><span class="small-icon M">M</span><a href="Base.html#readyAt">readyAt</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="Database.html">Database</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="Database.html#add">add</a></li><li><span class="small-icon F">F</span><a href="Database.html#all">all</a></li><li><span class="small-icon F">F</span><a href="Database.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="Database.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="Database.html#disconnect">disconnect</a></li><li><span class="small-icon F">F</span><a href="Database.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="Database.html#export">export</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetchLatency">fetchLatency</a></li><li><span class="small-icon F">F</span><a href="Database.html#get">get</a></li><li><span class="small-icon F">F</span><a href="Database.html#has">has</a></li><li><span class="small-icon F">F</span><a href="Database.html#import">import</a></li><li><span class="small-icon F">F</span><a href="Database.html#math">math</a></li><li><span class="small-icon F">F</span><a href="Database.html#set">set</a></li><li><span class="small-icon F">F</span><a href="Database.html#subtract">subtract</a></li><li><span class="small-icon M">M</span><a href="Database.html#name">name</a></li><li><span class="small-icon M">M</span><a href="Database.html#schema">schema</a></li><li><span class="small-icon M">M</span><a href="Database.html#uptime">uptime</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="MemoryStorage.html">MemoryStorage</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="MemoryStorage.html#all">all</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#export">export</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#get">get</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#has">has</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#set">set</a></li></ul></li></ul><h5 class="no-bottom must-underline">Events</h5><ul><li><span class="small-icon E">E</span><a href="Base.html#event:debug">debug</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:error">error</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:ready">ready</a></li></ul>
 </nav>
 
 <div id="main">
-    
-    <h1 class="page-title">Base</h1>
-    
+    <div class="burger">
+        <div class="burger-line-1"></div>
+        <div class="burger-line-2"></div>
+        <div class="burger-line-3"></div>
+    </div>
 
-    <!--container.tmpl-->
+    <h1 class="page-title">Class: Base</h1>
 
+    
 
 
 
 
 <section>
-
-
-
-<header data-tmpl="container.tmpl">
+<header>
+    <hr>
     
-        <h2>
-        Base
-        </h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Base<span class="signature">(mongodbURL, connectionOptions)</span><span class="type-signature"> &rarr; {<a href="Base.html">Base</a>}</span></h2>
         
     
-
-    
-      <div class="bs-callout bs-callout-default">
-        <h5>Members</h5>
-        <br />
-        <dl class="dl-horizontal methods-members">
-        <dt>Fields &amp; Properties</dt><dd><ul>
-            <li><a href="#dbURL">dbURL</a></li>
-            
-            <li><a href="#options">options</a></li>
-            
-            <li><a href="#readyAt">readyAt</a></li>
-            </ul></dd></dl></div>
 </header>
 
 <article>
     <div class="container-overview">
     
-        <!--method.tmpl-->
-<div class="method-details">
-
-
-
-
+        
 
     
 
     
-      <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line15">15</a>
-  </code>
-</div>
-
+    <h4 class="name" id="Base"><span class="type-signature"></span>new Base<span class="signature">(mongodbURL, connectionOptions)</span><span class="type-signature"> &rarr; {<a href="Base.html">Base</a>}</span></h4>
     
 
-    <h4 class="name" id="Base">
-      <a href="#params-Base"><span class="type-signature"></span>new Base</a><span class="signature">(mongodbURL, connectionOptions)</span><span class="type-signature"> &rarr; {<a href="Base.html">Base</a>}</span>
-
-    </h4>
-
     
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -121,187 +66,169 @@ This class is implemented by the main Database class.</p>
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const db = new Base("mongodb://localhost/mydb");</code></pre>
 
 
 
 
 
-
-<div class="collapse_" id="methodCollapse-Base">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
+    <h5>Parameters:</h5>
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-Base" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+<div class="table-box">
+    <table class="params">
+        <thead>
         <tr>
             
-                <td class="name"><code>mongodbURL</code></td>
+            <th>Name</th>
             
 
-            <td class="type">
+            <th>Type</th>
+
             
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
                 
+                    <td class="name"><code>mongodbURL</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type">String</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Mongodb Database URL.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>connectionOptions</code></td>
-            
-
-            <td class="type">
-            
                 
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Mongodb Database URL.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>connectionOptions</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type">Object</span>
 
 
-            
-            </td>
+                
+                </td>
 
-            
+                
 
-            
+                
 
-            <td class="description last"><p>Mongodb connection options</p></td>
-        </tr>
+                <td class="description last"><p>Mongodb connection options</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+<dl class="details">
 
     
-    </tbody>
-</table>
 
-  </div>
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
 
+    
 
-  <div class="bs-callout bs-callout-success">
-    <h5>Returns </h5>
+    
 
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Base.html">Base</a></span>
-
-
-    </dd>
+    
 </dl>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<ul>
+    <li>
+        Type: <span class="simple-code">
+<span class="param-type"><a href="Base.html">Base</a></span>
+
+</span>
+    </li>
+</ul>
+
     
-</div>
-  
 
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint example linenums"><code>const db = new Base("mongodb://localhost/mydb");</code></pre>
 
 
-</div>
 
-<!--
-<pre>
-{"comment":"/**\r\n     * Instantiates the base database.\r\n     * This class is implemented by the main Database class.\r\n     * @param {String} mongodbURL Mongodb Database URL.\r\n     * @param {Object} connectionOptions Mongodb connection options\r\n     * @returns {Base}\r\n     * @example const db = new Base(\"mongodb://localhost/mydb\");\r\n     */","meta":{"range":[507,1627],"filename":"Base.js","lineno":15,"columnno":4,"path":"E:\\NPM\\quickmongo\\src","code":{"id":"astnode100000026","name":"Base","type":"MethodDefinition","paramnames":["mongodbURL","connectionOptions"]},"vars":{"":null},"shortpath":"Base.js"},"description":"<p>Instantiates the base database.\nThis class is implemented by the main Database class.</p>","params":[{"type":{"names":["String"]},"description":"<p>Mongodb Database URL.</p>","name":"mongodbURL"},{"type":{"names":["Object"]},"description":"<p>Mongodb connection options</p>","name":"connectionOptions"}],"returns":[{"type":{"names":["Base"]}}],"examples":[{"caption":"","code":"const db = new Base(\"mongodb://localhost/mydb\");"}],"name":"Base","longname":"Base","kind":"class","scope":"global","___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Base","signature":"<span class=\"signature\">(mongodbURL, connectionOptions)</span><span class=\"type-signature\"> &rarr; {<a href=\"Base.html\">Base</a>}</span>","ancestors":[]}
-</pre>
--->
-</div>
-
+<hr>
     
     </div>
 
@@ -311,7 +238,9 @@ This class is implemented by the main Database class.</p>
 
     
 
-     
+    
+
+    
 
     
 
@@ -319,27 +248,8 @@ This class is implemented by the main Database class.</p>
         <h3 class="subsection-title">Members</h3>
 
         
-            <!--members.tmpl-->
-<div class="member-details">
-
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line25">25</a>
-  </code>
-</div>
-
-
-
-<h4 class="name" id="dbURL">
-  <span class="type-signature"></span>dbURL<span class="type-signature"> :String</span>
-</h4>
+            
+<h4 class="name" id="dbURL"><span class="type-signature"></span>dbURL<span class="type-signature"> :String</span></h4>
 
 
 
@@ -349,18 +259,32 @@ This class is implemented by the main Database class.</p>
 </div>
 
 
-<div>
 
-<!-- details.tmpl -->
-
-
-
-
-
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
 
 
+        </li>
+    </ul>
 
-<dl class="dl-horizontal">
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 
@@ -377,7 +301,10 @@ This class is implemented by the main Database class.</p>
     
 
     
-
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line25">line 25</a>
+    </li></ul></dd>
     
 
     
@@ -392,37 +319,10 @@ This class is implemented by the main Database class.</p>
 
 
 
-
-
-
-
-
-</div>
-
-</div>
-
+<hr>
         
-            <!--members.tmpl-->
-<div class="member-details">
-
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line31">31</a>
-  </code>
-</div>
-
-
-
-<h4 class="name" id="options">
-  <span class="type-signature"></span>options<span class="type-signature"> :Object</span>
-</h4>
+            
+<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :Object</span></h4>
 
 
 
@@ -432,18 +332,32 @@ This class is implemented by the main Database class.</p>
 </div>
 
 
-<div>
 
-<!-- details.tmpl -->
-
-
-
-
-
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
 
 
+        </li>
+    </ul>
 
-<dl class="dl-horizontal">
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 
@@ -460,7 +374,10 @@ This class is implemented by the main Database class.</p>
     
 
     
-
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line31">line 31</a>
+    </li></ul></dd>
     
 
     
@@ -475,37 +392,10 @@ This class is implemented by the main Database class.</p>
 
 
 
-
-
-
-
-
-</div>
-
-</div>
-
+<hr>
         
-            <!--members.tmpl-->
-<div class="member-details">
-
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line43">43</a>
-  </code>
-</div>
-
-
-
-<h4 class="name" id="readyAt">
-  <span class="type-signature"></span>readyAt<span class="type-signature"> :Date</span>
-</h4>
+            
+<h4 class="name" id="readyAt"><span class="type-signature"></span>readyAt<span class="type-signature"> :Date</span></h4>
 
 
 
@@ -515,18 +405,32 @@ This class is implemented by the main Database class.</p>
 </div>
 
 
-<div>
 
-<!-- details.tmpl -->
-
-
-
-
-
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Date</span>
 
 
+        </li>
+    </ul>
 
-<dl class="dl-horizontal">
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 
@@ -543,7 +447,10 @@ This class is implemented by the main Database class.</p>
     
 
     
-
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line43">line 43</a>
+    </li></ul></dd>
     
 
     
@@ -558,15 +465,7 @@ This class is implemented by the main Database class.</p>
 
 
 
-
-
-
-
-
-</div>
-
-</div>
-
+<hr>
         
     
 
@@ -578,44 +477,15 @@ This class is implemented by the main Database class.</p>
         <h3 class="subsection-title">Events</h3>
 
         
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line87">87</a>
-  </code>
-</div>
-
-
-
+            
 
     
 
     
-
-    <h4 class="name" id="event:debug">
-      <a href="#params-debug">debug</a>
-
-    </h4>
-
+    <h4 class="name" id="event:debug">debug</h4>
     
 
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -626,33 +496,59 @@ This class is implemented by the main Database class.</p>
 
 
 
-    <h5>Example</h5>
+
+
+
+
+
+    <h5>Parameters:</h5>
     
-    <pre class="prettyprint"><code>db.on("debug", console.log);</code></pre>
+
+<div class="table-box">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>Message</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">String</span>
 
 
+                
+                </td>
 
+                
 
+                
 
+                <td class="description last"><p>Debug message</p></td>
+            </tr>
 
-<div class="collapse_" id="methodCollapse-debug">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line87">87</a>
-  </code>
+        
+        </tbody>
+    </table>
 </div>
 
 
@@ -660,10 +556,7 @@ This class is implemented by the main Database class.</p>
 
 
 
-
-<dl class="dl-horizontal">
-
-    
+<dl class="details">
 
     
 
@@ -679,6 +572,21 @@ This class is implemented by the main Database class.</p>
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line87">line 87</a>
+    </li></ul></dd>
     
 
     
@@ -695,124 +603,34 @@ This class is implemented by the main Database class.</p>
 
 
 
-  <div id="params-debug" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
 
 
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
 
-        <th>Type</th>
 
-        
 
-        
 
-        <th class="last">Description</th>
-    </tr>
-    </thead>
 
-    <tbody>
+
+
+
+
+    <h5>Example</h5>
     
-
-        <tr>
-            
-                <td class="name"><code>Message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Debug message</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
+    <pre class="prettyprint example linenums"><code>db.on("debug", console.log);</code></pre>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n  * Emitted on debug mode\r\n  * @event Base#debug\r\n  * @param {String} Message Debug message\r\n  * @example db.on(\"debug\", console.log);\r\n  */","meta":{"filename":"Base.js","lineno":87,"columnno":1,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted on debug mode</p>","kind":"event","name":"debug","params":[{"type":{"names":["String"]},"description":"<p>Debug message</p>","name":"Message"}],"examples":[{"caption":"","code":"db.on(\"debug\", console.log);"}],"memberof":"Base","longname":"Base#event:debug","scope":"instance","___id":"T000002R000018","___s":true,"attribs":"","id":"event:debug","ancestors":["<a href=\"Base.html\">Base</a>#"]}
-</pre>
--->
-</div>
-
+<hr>
         
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line80">80</a>
-  </code>
-</div>
-
-
-
+            
 
     
 
     
-
-    <h4 class="name" id="event:error">
-      <a href="#params-error">error</a>
-
-    </h4>
-
+    <h4 class="name" id="event:error">error</h4>
     
 
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -823,33 +641,59 @@ This class is implemented by the main Database class.</p>
 
 
 
-    <h5>Example</h5>
+
+
+
+
+
+    <h5>Parameters:</h5>
     
-    <pre class="prettyprint"><code>db.on("error", console.error);</code></pre>
+
+<div class="table-box">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>Error</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Error</span>
 
 
+                
+                </td>
 
+                
 
+                
 
+                <td class="description last"><p>Error Message</p></td>
+            </tr>
 
-<div class="collapse_" id="methodCollapse-error">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line80">80</a>
-  </code>
+        
+        </tbody>
+    </table>
 </div>
 
 
@@ -857,10 +701,7 @@ This class is implemented by the main Database class.</p>
 
 
 
-
-<dl class="dl-horizontal">
-
-    
+<dl class="details">
 
     
 
@@ -876,6 +717,21 @@ This class is implemented by the main Database class.</p>
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line80">line 80</a>
+    </li></ul></dd>
     
 
     
@@ -892,124 +748,34 @@ This class is implemented by the main Database class.</p>
 
 
 
-  <div id="params-error" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
 
 
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
 
-        <th>Type</th>
 
-        
 
-        
 
-        <th class="last">Description</th>
-    </tr>
-    </thead>
 
-    <tbody>
+
+
+
+
+    <h5>Example</h5>
     
-
-        <tr>
-            
-                <td class="name"><code>Error</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Error</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Error Message</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
+    <pre class="prettyprint example linenums"><code>db.on("error", console.error);</code></pre>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n * Emitted when database encounters error\r\n * @event Base#error\r\n * @param {Error} Error Error Message\r\n * @example db.on(\"error\", console.error);\r\n */","meta":{"filename":"Base.js","lineno":80,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database encounters error</p>","kind":"event","name":"error","params":[{"type":{"names":["Error"]},"description":"<p>Error Message</p>","name":"Error"}],"examples":[{"caption":"","code":"db.on(\"error\", console.error);"}],"memberof":"Base","longname":"Base#event:error","scope":"instance","___id":"T000002R000017","___s":true,"attribs":"","id":"event:error","ancestors":["<a href=\"Base.html\">Base</a>#"]}
-</pre>
--->
-</div>
-
+<hr>
         
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line72">72</a>
-  </code>
-</div>
-
-
-
+            
 
     
 
     
-
-    <h4 class="name" id="event:ready">
-      <a href="#params-ready">ready</a>
-
-    </h4>
-
+    <h4 class="name" id="event:ready">ready</h4>
     
 
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -1020,34 +786,6 @@ This class is implemented by the main Database class.</p>
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>db.on("ready", () => {    console.log("Successfully connected to the database!");});</code></pre>
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-ready">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="Base.js.html">Base.js</a>:<a href="Base.js.html#line72">72</a>
-  </code>
-</div>
 
 
 
@@ -1055,7 +793,9 @@ This class is implemented by the main Database class.</p>
 
 
 
-<dl class="dl-horizontal">
+
+
+<dl class="details">
 
     
 
@@ -1073,6 +813,19 @@ This class is implemented by the main Database class.</p>
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Base.js.html">Base.js</a>, <a href="Base.js.html#line72">line 72</a>
+    </li></ul></dd>
     
 
     
@@ -1100,22 +853,13 @@ This class is implemented by the main Database class.</p>
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint example linenums"><code>db.on("ready", () => {    console.log("Successfully connected to the database!");});</code></pre>
 
 
 
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\r\n * Emitted when database creates connection\r\n * @event Base#ready\r\n * @example db.on(\"ready\", () => {\r\n *     console.log(\"Successfully connected to the database!\");\r\n * });\r\n */","meta":{"filename":"Base.js","lineno":72,"columnno":0,"path":"E:\\NPM\\quickmongo\\src","code":{},"shortpath":"Base.js"},"description":"<p>Emitted when database creates connection</p>","kind":"event","name":"ready","examples":[{"caption":"","code":"db.on(\"ready\", () => {\r    console.log(\"Successfully connected to the database!\");\r});"}],"memberof":"Base","longname":"Base#event:ready","scope":"instance","___id":"T000002R000016","___s":true,"attribs":"","id":"event:ready","ancestors":["<a href=\"Base.html\">Base</a>#"]}
-</pre>
--->
-</div>
-
+<hr>
         
     
 </article>
@@ -1125,15 +869,17 @@ This class is implemented by the main Database class.</p>
 
 
 
+
 </div>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:57:02 GMT+0545 (Nepal Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 23 2020 17:35:40 GMT+0545 (Nepal Time) using <a href="https://github.com/zyrouge/jsdoc-skyceil">Skyceil Theme</a>
 </footer>
 
 <script>prettyPrint();</script>
 <script src="scripts/linenumber.js"></script>
+
 </body>
 </html>
