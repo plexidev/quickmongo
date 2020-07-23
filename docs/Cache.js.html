@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Cache.js</title>
+    <meta property=og:type content=website>
+    <meta property=og:url content=https://quickmongo.snowflakedev.xyz>
+    <meta property=og:title content="QuickMongo">
+    <meta property=og:description content="Quick mongodb wrapper for beginners.">
+    
+    <title>QuickMongo | Cache.js</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -17,7 +22,7 @@
 <body>
 
 <nav class="navbar">
-    <h4><a href="index.html">Home</a></h4><h5 class="no-bottom must-underline">Classes</h5><ul><li><span class="small-icon C">C</span><b><a href="Base.html">Base</a></b><ul class="has-class-methods"><li><span class="small-icon M">M</span><a href="Base.html#dbURL">dbURL</a></li><li><span class="small-icon M">M</span><a href="Base.html#options">options</a></li><li><span class="small-icon M">M</span><a href="Base.html#readyAt">readyAt</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="Database.html">Database</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="Database.html#add">add</a></li><li><span class="small-icon F">F</span><a href="Database.html#all">all</a></li><li><span class="small-icon F">F</span><a href="Database.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="Database.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="Database.html#disconnect">disconnect</a></li><li><span class="small-icon F">F</span><a href="Database.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="Database.html#export">export</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetchLatency">fetchLatency</a></li><li><span class="small-icon F">F</span><a href="Database.html#get">get</a></li><li><span class="small-icon F">F</span><a href="Database.html#has">has</a></li><li><span class="small-icon F">F</span><a href="Database.html#import">import</a></li><li><span class="small-icon F">F</span><a href="Database.html#math">math</a></li><li><span class="small-icon F">F</span><a href="Database.html#set">set</a></li><li><span class="small-icon F">F</span><a href="Database.html#subtract">subtract</a></li><li><span class="small-icon M">M</span><a href="Database.html#name">name</a></li><li><span class="small-icon M">M</span><a href="Database.html#schema">schema</a></li><li><span class="small-icon M">M</span><a href="Database.html#uptime">uptime</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="MemoryStorage.html">MemoryStorage</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="MemoryStorage.html#all">all</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#export">export</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#get">get</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#has">has</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#set">set</a></li></ul></li></ul><h5 class="no-bottom must-underline">Events</h5><ul><li><span class="small-icon E">E</span><a href="Base.html#event:debug">debug</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:error">error</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:ready">ready</a></li></ul>
+    <h4><a href="index.html">Home</a></h4><h5 class="no-bottom must-underline">Classes</h5><ul><li><span class="small-icon C">C</span><b><a href="Base.html">Base</a></b><ul class="has-class-methods"><li><span class="small-icon M">M</span><a href="Base.html#dbURL">dbURL</a></li><li><span class="small-icon M">M</span><a href="Base.html#options">options</a></li><li><span class="small-icon M">M</span><a href="Base.html#readyAt">readyAt</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="Database.html">Database</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="Database.html#add">add</a></li><li><span class="small-icon F">F</span><a href="Database.html#all">all</a></li><li><span class="small-icon F">F</span><a href="Database.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="Database.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="Database.html#disconnect">disconnect</a></li><li><span class="small-icon F">F</span><a href="Database.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="Database.html#export">export</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="Database.html#fetchLatency">fetchLatency</a></li><li><span class="small-icon F">F</span><a href="Database.html#get">get</a></li><li><span class="small-icon F">F</span><a href="Database.html#has">has</a></li><li><span class="small-icon F">F</span><a href="Database.html#import">import</a></li><li><span class="small-icon F">F</span><a href="Database.html#math">math</a></li><li><span class="small-icon F">F</span><a href="Database.html#set">set</a></li><li><span class="small-icon F">F</span><a href="Database.html#startsWith">startsWith</a></li><li><span class="small-icon F">F</span><a href="Database.html#subtract">subtract</a></li><li><span class="small-icon M">M</span><a href="Database.html#name">name</a></li><li><span class="small-icon M">M</span><a href="Database.html#schema">schema</a></li><li><span class="small-icon M">M</span><a href="Database.html#uptime">uptime</a></li></ul></li><li><span class="small-icon C">C</span><b><a href="MemoryStorage.html">MemoryStorage</a></b><ul class="has-class-methods"><li><span class="small-icon F">F</span><a href="MemoryStorage.html#all">all</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#delete">delete</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#deleteAll">deleteAll</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#exists">exists</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#export">export</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#fetch">fetch</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#get">get</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#has">has</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#set">set</a></li><li><span class="small-icon F">F</span><a href="MemoryStorage.html#startsWith">startsWith</a></li></ul></li></ul><h5 class="no-bottom must-underline">Events</h5><ul><li><span class="small-icon E">E</span><a href="Base.html#event:debug">debug</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:error">error</a></li><li><span class="small-icon E">E</span><a href="Base.html#event:ready">ready</a></li></ul>
 </nav>
 
 <div id="main">
@@ -57,9 +62,8 @@ class MemoryStorage {
 
     /**
      * Sets the data in cache
-     * @param {String} key Key for the data
-     * @param {any} value Value
-     * @returns {any}
+     * @param {string} key Key for the data
+     * @param value Value
      */
     set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -75,8 +79,7 @@ class MemoryStorage {
 
     /**
      * deletes an item from the cache
-     * @param {String} key Key
-     * @returns {any}
+     * @param {string} key Key
      */
     delete(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -87,8 +90,8 @@ class MemoryStorage {
 
     /**
      * Checks if the key exists in cache or not
-     * @param {String} key Key
-     * @returns {Boolean}
+     * @param {string} key Key
+     * @returns {boolean}
      */
     exists(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -97,8 +100,8 @@ class MemoryStorage {
 
     /**
   * Checks if the key exists in cache or not
-  * @param {String} key Key
-  * @returns {Boolean}
+  * @param {string} key Key
+  * @returns {boolean}
   */
     has(key) {
         return this.exists(key);
@@ -106,8 +109,7 @@ class MemoryStorage {
 
     /**
      * Returns the data of the matching key
-     * @param {String} key Key
-     * @returns {any}
+     * @param {string} key Key
      */
     get(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -118,8 +120,7 @@ class MemoryStorage {
 
     /**
      * Returns the data of the matching key
-     * @param {String} key Key
-     * @returns {any}
+     * @param {string} key Key
      */
     fetch(key) {
         return this.get(key);
@@ -128,7 +129,6 @@ class MemoryStorage {
 
     /**
      * Returns everything from the cache
-     * @returns {any}
      */
     all() {
         return this.obj;
@@ -136,7 +136,6 @@ class MemoryStorage {
 
     /**
      * Deletes everything from the cache
-     * @returns {any}
      */
     deleteAll() {
         this.obj = [];
@@ -145,9 +144,9 @@ class MemoryStorage {
 
     /**
      * Exports the data to json file
-     * @param {String} fileName File name
-     * @param {String} path File path
-     * @returns {Promise&lt;String>}
+     * @param {string} fileName File name
+     * @param {string} path File path
+     * @returns {Promise&lt;string>}
      * @example db.export("database", "./").then(path => {
      *     console.log(`File exported to ${path}`);
      * });
@@ -167,6 +166,18 @@ class MemoryStorage {
         });
     }
 
+    /**
+     * Fetches everything and sorts by given target
+     * @param {string} key Key
+     * @param {object} ops Options
+     * @example const data = await db.startsWith("money", { sort: ".data" });
+     */
+    startsWith(key, ops) {
+        if (!key || typeof key !== "string") throw new Error(`Expected key to be a string, received ${typeof key}`);
+        let all = this.all();
+        return Util.sort(key, all, ops);
+    }
+
 }
 
 module.exports = MemoryStorage;</code></pre>
@@ -182,7 +193,7 @@ module.exports = MemoryStorage;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Thu Jul 23 2020 17:35:40 GMT+0545 (Nepal Time) using <a href="https://github.com/zyrouge/jsdoc-skyceil">Skyceil Theme</a>
+    <h4>&copy <a href="https://snowflakedev.xyz">Snowflake Development ❄</a> - 2020</h4>
 </footer>
 
 <script>prettyPrint();</script>
