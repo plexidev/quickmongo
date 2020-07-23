@@ -35,14 +35,14 @@ const db = require("quick.db");
 const { Database } = require("quickmongo");
 const mongo = new Database("mongodb://localhost/quickmongo");
 
-function export() {
+function exportData() {
     const data = db.all();
     mongo.import(data).then(() => {
         console.log("Successfully exported quick.db data to quickmongo!");
     });    
 }
 
-export();
+exportData();
 ```
 
 # Exporting data from quick.db tables (and custom schema names)
@@ -54,14 +54,14 @@ const table = new db.table("mytable");
 const { Database } = require("quickmongo");
 const mongo = new Database("mongodb://localhost/quickmongo", "mytable"); // custom schema name (acts like quickdb table)
 
-function export() {
+function exportData() {
     const data = table.all();
     mongo.import(data).then(() => {
         console.log("Successfully exported quick.db data to quickmongo!");
     });    
 }
 
-export();
+exportData();
 ```
 
 # Links

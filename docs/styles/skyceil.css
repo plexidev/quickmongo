@@ -67,6 +67,7 @@ tt, code, kbd, samp {
 
 .page-title {
     padding-top: 1rem;
+    padding-left: 30px;
 }
 
 article dl {
@@ -193,7 +194,6 @@ footer {
 }
 
 h1, h2, h3, h4 {
-    font-weight: 200;
     margin: 0;
 }
 
@@ -202,7 +202,7 @@ h1
     font-family: 'Montserrat Light', sans-serif;
     font-size: 48px;
     letter-spacing: -2px;
-    margin: 12px 24px 20px;
+    margin: 12px 24px 20px 0px;
 }
 
 h2, h3.subsection-title
@@ -509,5 +509,9 @@ nav .has-class-methods {
         background: white;
         width: 75%;
         left: 0;
+    }
+
+    footer {
+        padding: 0;
     }
 }
