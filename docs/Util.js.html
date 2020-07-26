@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: Base.js</title>
+    <title>Source: Util.js</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
         <div class="burger-line-3"></div>
     </div>
 
-    <h1 class="page-title">Source: Base.js</h1>
+    <h1 class="page-title">Source: Util.js</h1>
 
     
 
@@ -36,109 +36,119 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const EventEmitter = require("events").EventEmitter;
-const mongoose = require("mongoose");
+            <pre class="prettyprint source linenums"><code>const _ = require("lodash");
 const Error = require("./Error");
 
-class Base extends EventEmitter {
+class Util {
 
     /**
-     * Instantiates the base database.
-     * This class is implemented by the main Database class.
-     * @param {string} mongodbURL Mongodb Database URL.
-     * @param {object} connectionOptions Mongodb connection options
-     * @example const db = new Base("mongodb://localhost/mydb");
+     * **You _cannot instantiate_ Util class. Every methods of this class are `static` methods.**
+     * @example Util.method(...)
      */
-    constructor(mongodbURL, connectionOptions={}) {
-        super();
-        if (!mongodbURL || !mongodbURL.startsWith("mongodb")) throw new Error("No mongodb url was provided!");
-        if (typeof mongodbURL !== "string") throw new Error(`Expected a string for mongodbURL, received ${typeof mongodbURL}`);
-        if (connectionOptions &amp;&amp; typeof connectionOptions !== "object") throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
-
-        /**
-         * Current database url
-         * @type {string}
-         */
-        this.dbURL = mongodbURL;
-
-        /**
-         * Mongoose connection options
-         * @type {object}
-         */
-        this.options = connectionOptions;
-
-        this._create();
-
-        mongoose.connection.on("error", (e) => {
-            this.emit("error", e);
-        });
-        mongoose.connection.on("open", () => {
-            /**
-             * Timestamp when database became ready
-             * @type {Date}
-             */
-            this.readyAt = new Date();
-            this.emit("ready");
-        });
+    constructor() {
+        throw new Error(`Class ${this.constructor.name} may not be instantiated!`);
     }
 
     /**
-     * Creates mongodb connection
-     * @ignore
+     * Returns true if provided key is valid
+     * @param {any} str Anything to test
+     * @returns {Boolean}
      */
-    _create(url) {
-        this.emit("debug", "Creating database connection...");
-        if (url &amp;&amp; typeof url === "string") this.dbURL = url;
-        if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
-        mongoose.connect(this.dbURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+    static isKey(str) {
+        return typeof str === "string";
     }
 
     /**
-     * Destroys database
-     * @ignore
+     * Returns true if the given data is valid
+     * @param {any} data Any data
+     * @returns {Boolean}
      */
-    _destroyDatabase() {
-        mongoose.disconnect();
-        this.readyAt = undefined;
-        this.dbURL = null;
-        this.emit("debug", "Database disconnected!");
+    static isValue(data) {
+        if (data === Infinity || data === -Infinity) return false;
+        if (typeof data === "undefined") return false;
+        return true;
     }
-    
+
     /**
-     * Current database url
-     * @type {string}
+     * Returns target &amp; key from the given string (quickdb style)
+     * @param {string} key key to parse
+     * @example Util.parseKey("myitem.items");
+     * // -> { key: "myitems", target: "items" }
      */
-    get url() {
-        return this.dbURL;
+    static parseKey(key) {
+        if (!key || typeof key !== "string") return { key: undefined, target: undefined };
+        if (key.includes(".")) {
+            let spl = key.split(".");
+            let parsed = spl.shift();
+            let target = spl.join(".");
+            return { key: parsed, target };
+        }
+        return { key, target: undefined };
+    }
+
+    /**
+     * Sort data
+     * @param {string} key Key
+     * @param {Array} data Data
+     * @param {object} ops options
+     * @example Util.sort("user_", {...}, { sort: ".data" });
+     */
+    static sort(key, data, ops) {
+        if (!key || !data || !Array.isArray(data)) return [];
+        let arb = data.filter(i => i.ID.startsWith(key));
+        if (ops.sort &amp;&amp; typeof ops.sort === 'string') {
+            if (ops.sort.startsWith('.')) ops.sort = ops.sort.slice(1);
+            ops.sort = ops.sort.split('.');
+            arb = _.sortBy(arb, ops.sort).reverse();
+        }
+        return arb;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Data key
+     * @param {any} data Data
+     * @param {any} value value
+     * @example Util.setData("user.items", {...}, ["pen"]);
+     */
+    static setData(key, data, value) {
+        let parsed = this.parseKey(key);
+        if (typeof data === "object" &amp;&amp; parsed.target) {
+            return _.set(data, parsed.target, value);
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        return data;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Data key
+     * @param {any} data Data
+     * @param {any} value value
+     * @example Util.unsetData("user.items", {...});
+     */
+    static unsetData(key, data) {
+        let parsed = this.parseKey(key);
+        let item = data;
+        if (typeof data === "object" &amp;&amp; parsed.target) {
+            _.unset(item, parsed.target);
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        return item;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Key
+     * @param {any} data Data
+     * @example Util.getData("user.items", {...});
+     */
+    static getData(key, data) {
+        let parsed = this.parseKey(key);
+        if (parsed.target) data = _.get(data, parsed.target);
+        return data;
     }
 }
 
-/**
- * Emitted when database creates connection
- * @event Base#ready
- * @example db.on("ready", () => {
- *     console.log("Successfully connected to the database!");
- * });
- */
-
-/**
- * Emitted when database encounters error
- * @event Base#error
- * @param {Error} Error Error Message
- * @example db.on("error", console.error);
- */
-
- /**
-  * Emitted on debug mode
-  * @event Base#debug
-  * @param {String} Message Debug message
-  * @example db.on("debug", console.log);
-  */
-
-module.exports = Base;</code></pre>
+module.exports = Util;</code></pre>
         </article>
     </section>
 

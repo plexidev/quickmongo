@@ -1,6 +1,8 @@
 # QuickMongo
 Quick mongodb wrapper for beginners.
 
+![QuickMongo](https://nodei.co/npm/quickmongo.png)
+
 # Documentation
 **[QuickMongo](https://quickmongo.snowflakedev.xyz)**
 
@@ -10,6 +12,8 @@ Quick mongodb wrapper for beginners.
 - Fast
 - Import & export support
 - Key value based
+- More than 25 methods
+- Beginner friendly
 
 > Btw, `quick.db` users can easily export their data to `quickmongo`.
 

@@ -21,6 +21,7 @@ class MemoryStorage {
      * Sets the data in cache
      * @param {string} key Key for the data
      * @param value Value
+     * @example db.set("foo", "bar");
      */
     set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -37,6 +38,7 @@ class MemoryStorage {
     /**
      * deletes an item from the cache
      * @param {string} key Key
+     * @example db.delete("foo");
      */
     delete(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -49,6 +51,7 @@ class MemoryStorage {
      * Checks if the key exists in cache or not
      * @param {string} key Key
      * @returns {boolean}
+     * @example db.exists("foo");
      */
     exists(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -59,6 +62,7 @@ class MemoryStorage {
   * Checks if the key exists in cache or not
   * @param {string} key Key
   * @returns {boolean}
+  * @example db.has("foo");
   */
     has(key) {
         return this.exists(key);
@@ -67,6 +71,7 @@ class MemoryStorage {
     /**
      * Returns the data of the matching key
      * @param {string} key Key
+     * @example db.get("foo");
      */
     get(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -78,6 +83,7 @@ class MemoryStorage {
     /**
      * Returns the data of the matching key
      * @param {string} key Key
+     * @example db.fetch("foo");
      */
     fetch(key) {
         return this.get(key);
@@ -86,6 +92,7 @@ class MemoryStorage {
 
     /**
      * Returns everything from the cache
+     * @example db.all();
      */
     all() {
         return this.obj;
@@ -93,6 +100,7 @@ class MemoryStorage {
 
     /**
      * Deletes everything from the cache
+     * @example db.deleteAll();
      */
     deleteAll() {
         this.obj = [];

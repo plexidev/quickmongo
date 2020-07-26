@@ -1,14 +1,19 @@
 const _ = require("lodash");
+const Error = require("./Error");
 
 class Util {
 
+    /**
+     * **You _cannot instantiate_ Util class. Every methods of this class are `static` methods.**
+     * @example Util.method(...)
+     */
     constructor() {
         throw new Error(`Class ${this.constructor.name} may not be instantiated!`);
     }
 
     /**
      * Returns true if provided key is valid
-     * @param str Anything to test
+     * @param {any} str Anything to test
      * @returns {Boolean}
      */
     static isKey(str) {
@@ -17,7 +22,7 @@ class Util {
 
     /**
      * Returns true if the given data is valid
-     * @param data Any data
+     * @param {any} data Any data
      * @returns {Boolean}
      */
     static isValue(data) {
@@ -48,6 +53,7 @@ class Util {
      * @param {string} key Key
      * @param {Array} data Data
      * @param {object} ops options
+     * @example Util.sort("user_", {...}, { sort: ".data" });
      */
     static sort(key, data, ops) {
         if (!key || !data || !Array.isArray(data)) return [];
@@ -58,6 +64,49 @@ class Util {
             arb = _.sortBy(arb, ops.sort).reverse();
         }
         return arb;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Data key
+     * @param {any} data Data
+     * @param {any} value value
+     * @example Util.setData("user.items", {...}, ["pen"]);
+     */
+    static setData(key, data, value) {
+        let parsed = this.parseKey(key);
+        if (typeof data === "object" && parsed.target) {
+            return _.set(data, parsed.target, value);
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        return data;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Data key
+     * @param {any} data Data
+     * @param {any} value value
+     * @example Util.unsetData("user.items", {...});
+     */
+    static unsetData(key, data) {
+        let parsed = this.parseKey(key);
+        let item = data;
+        if (typeof data === "object" && parsed.target) {
+            _.unset(item, parsed.target);
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        return item;
+    }
+
+    /**
+     * Data resolver
+     * @param {string} key Key
+     * @param {any} data Data
+     * @example Util.getData("user.items", {...});
+     */
+    static getData(key, data) {
+        let parsed = this.parseKey(key);
+        if (parsed.target) data = _.get(data, parsed.target);
+        return data;
     }
 }
 

@@ -46,10 +46,12 @@ class Base extends EventEmitter {
 
     /**
      * Creates mongodb connection
-     * @private
+     * @ignore
      */
-    _create() {
-        this.emit("Creating database connection...");
+    _create(url) {
+        this.emit("debug", "Creating database connection...");
+        if (url && typeof url === "string") this.dbURL = url;
+        if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
         mongoose.connect(this.dbURL, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -58,13 +60,21 @@ class Base extends EventEmitter {
 
     /**
      * Destroys database
-     * @private
+     * @ignore
      */
     _destroyDatabase() {
         mongoose.disconnect();
         this.readyAt = undefined;
         this.dbURL = null;
         this.emit("debug", "Database disconnected!");
+    }
+    
+    /**
+     * Current database url
+     * @type {string}
+     */
+    get url() {
+        return this.dbURL;
     }
 }
 
