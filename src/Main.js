@@ -3,7 +3,7 @@ const Schema = require("./Schema");
 const Error = require("./Error");
 const fs = require("fs");
 const Util = require("./Util");
-
+const _ = require("lodash");
 /**
  * Quick mongodb wrapper
  */
@@ -36,6 +36,7 @@ class Database extends Base {
     async set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
+        if(!key.includes('.')) {
         let raw = await this.schema.findOne({
             ID: key
         });
@@ -57,6 +58,32 @@ class Database extends Base {
                 });
             return raw.data;
         }
+    } else {
+        const subkey = key.split('.').shift();
+        let raw = await this.schema.findOne({
+            ID: subkey
+        });
+        if(!raw) {
+            const setValue = _.set({}, key.split('.').slice(1).join('.'), value);
+            let data = new this.schema({
+                ID: subkey,
+                data: setValue
+            });
+            await data.save()
+                .catch(e => {
+                    return this.emit("error", e);
+                });
+            return data.data;
+        } else {
+            const setValue = _.set(raw, key.split('.').slice(1).join('.'), value);
+            raw.data = setValue;
+            await raw.save()
+                .catch(e => {
+                    return this.emit("error", e);
+                });
+            return raw.data;
+        }
+    }
     }
 
     /**
