@@ -127,12 +127,27 @@ class Database extends Base {
      */
     async get(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
+        if(!key.includes('.')) {
         let get = await this.schema.findOne({ ID: key })
             .catch(e => {
                 return this.emit("error", e);
             });
         if (!get) return null;
         return get.data;
+        } else {
+            const subkey = key.split('.').shift();
+            let get = await this.schema.findOne({ ID: subkey })
+            .catch(e => {
+                return this.emit("error", e);
+            });
+             if (!get) return null;
+             const data = key.split('.').slice(1).reduce((a, b) => a[b], get)
+             .catch(e => {
+                return this.emit("error", e);
+            });
+            if(!data) return null;
+            return data;
+        }
     }
 
     /**
