@@ -141,10 +141,7 @@ class Database extends Base {
                 return this.emit("error", e);
             });
              if (!get) return null;
-             const data = key.split('.').slice(1).reduce((a, b) => a[b], get)
-             .catch(e => {
-                return this.emit("error", e);
-            });
+             const data = key.split('.').slice(1).reduce((a, b) => a[b], get.data)
             if(!data) return null;
             return data;
         }
