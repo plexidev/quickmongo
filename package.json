@@ -1,0 +1,47 @@
+{
+  "name": "quickmongo",
+  "version": "1.1.5",
+  "description": "Quick mongodb wrapper for beginners.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": [
+      {
+        "require": "./index.js",
+        "import": "./esm/index.mjs"
+      },
+      "./index.js"
+    ],
+    "./esm": "./esm/index.mjs"
+  },
+  "scripts": {
+    "docsgen": "jsdoc --configure .jsdoc.json --verbose",
+    "test": "cd test && node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Snowflake107/quickmongo.git"
+  },
+  "author": "Snowflake107",
+  "license": "Apache License 2.0",
+  "bugs": {
+    "url": "https://github.com/Snowflake107/quickmongo/issues"
+  },
+  "homepage": "https://quickmongo.js.org",
+  "funding": "https://www.paypal.me/devsnowflake",
+  "keywords": [
+    "db",
+    "quickmongo",
+    "mongodb",
+    "mongoose",
+    "quick.db"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.19",
+    "mongoose": "^5.10.6"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.5",
+    "jsdoc-skyceil": "github:Zyrouge/jsdoc-skyceil"
+  }
+}
