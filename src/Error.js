@@ -4,7 +4,7 @@ class QuickError extends Error {
         super();
         Error.captureStackTrace(this, this.constructor);
         this.message = message;
-        this.name = name || "QuickMongoError";
+        this.name = name || "TypeError";
     }
 
 }

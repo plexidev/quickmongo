@@ -77,7 +77,7 @@ class Util {
         let parsed = this.parseKey(key);
         if (typeof data === "object" && parsed.target) {
             return _.set(data, parsed.target, value);
-        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "TargetError");
         return data;
     }
 
@@ -93,7 +93,7 @@ class Util {
         let item = data;
         if (typeof data === "object" && parsed.target) {
             _.unset(item, parsed.target);
-        } else if (parsed.target) throw new Error("Cannot target non-object.", "SyntaxError");
+        } else if (parsed.target) throw new Error("Cannot target non-object.", "TargetError");
         return item;
     }
 

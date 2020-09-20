@@ -49,6 +49,8 @@ class Base extends EventEmitter {
      * @ignore
      */
     _create(url) {
+        // do not create multiple connections
+        if (mongoose.connection.readyState) return;
         this.emit("debug", "Creating database connection...");
         if (url && typeof url === "string") this.dbURL = url;
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");

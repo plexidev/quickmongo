@@ -36,13 +36,14 @@ class Database extends Base {
     async set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
+        const parsed = Util.parseKey(key);
         let raw = await this.schema.findOne({
-            ID: key
+            ID: parsed.key
         });
         if (!raw) {
             let data = new this.schema({
-                ID: key,
-                data: value
+                ID: parsed.key,
+                data: parsed.target ? Util.setData(key, {}, value) : value
             });
             await data.save()
                 .catch(e => {
@@ -50,7 +51,7 @@ class Database extends Base {
                 });
             return data.data;
         } else {
-            raw.data = value;
+            raw.data = parsed.target ? Util.setData(key, Object.assign({}, raw.data), value) : value;
             await raw.save()
                 .catch(e => {
                     return this.emit("error", e);
@@ -66,11 +67,21 @@ class Database extends Base {
      */
     async delete(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
-        let data = await this.schema.findOneAndDelete({ ID: key })
-            .catch(e => {
-                return this.emit("error", e);
-            });
-        return data;
+        const parsed = Util.parseKey(key);
+        const raw = await this.schema.findOne({ ID: parsed.key });
+        if (!raw) return false;
+        if (parsed.target) {
+            let data = Util.unsetData(key, Object.assign({}, raw.data));
+            raw.data = data;
+            raw.save().catch(e => this.emit("error", e));
+            return data;
+        } else {
+            let data = await this.schema.findOneAndDelete({ ID: parsed.key })
+                .catch(e => {
+                    return this.emit("error", e);
+                });
+            return data;
+        }
     }
 
     /**
@@ -100,12 +111,17 @@ class Database extends Base {
      */
     async get(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
-        let get = await this.schema.findOne({ ID: key })
+        const parsed = Util.parseKey(key);
+
+        let get = await this.schema.findOne({ ID: parsed.key })
             .catch(e => {
                 return this.emit("error", e);
             });
         if (!get) return null;
-        return get.data;
+        let item;
+        if (parsed.target) item = Util.getData(key, Object.assign({}, get.data));
+        else item = get.data;
+        return item ? item : null;
     }
 
     /**
@@ -285,19 +301,32 @@ class Database extends Base {
      * [{ ID: "foo", data: "bar" }, { ID: "hi", data: "hello" }]
      * ```
      * @param {Array} data Array of data
-     * @param {boolean} ordered If set to false, it will insert valid documents before throwing errors (if any)
+     * @param {object} ops Import options
+     * @param {boolean} [ops.validate=false] If set to true, it will insert valid documents only
+     * @param {boolean} [ops.overwriteExisting=false] If it should overwrite existing value (slow)
      * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo
      * QuickMongo.import(data);
      * @returns {Promise<Boolean>}
      */
-    import(data=[], ordered = true) {
-        return new Promise((resolve, reject) => {
+    import(data=[], ops = { overwriteExisting: false, validate: false }) {
+        return new Promise(async (resolve, reject) => {
             if (!Array.isArray(data)) return reject(new Error(`Data type must be Array, received ${typeof data}!`, "DataTypeError"));
             if (data.length < 1) return resolve(false);
-            this.schema.insertMany(data, { ordered: !!ordered }, (error) => {
-                if (error) return reject(new Error(`${error}`, "DataImportError"));
+            if (!ops.overwriteExisting) {
+                this.schema.insertMany(data, { ordered: !ops.validate }, (error) => {
+                    if (error) return reject(new Error(`${error}`, "DataImportError"));
+                    return resolve(true);
+                });
+            } else {
+                data.forEach((x, i) => {
+                    if (!ops.validate && (!x.ID || !x.data)) return;
+                    else if (!!ops.validate && (!x.ID || !x.data)) return reject(new Error(`Data is missing ${!x.ID ? "ID" : "data"} path!`, "DataImportError"));
+                    setTimeout(() => {
+                        this.set(x.ID, x.data);
+                    }, 457 * (i + 1));
+                });
                 return resolve(true);
-            });
+            }
         });
     }
 
@@ -481,20 +510,27 @@ class Database extends Base {
 
     /**
      * Returns random entry from the database
-     * @param {number} total total entries to return
+     * @param {number} n Number entries to return
      * @returns {Promise<any[]>}
      * @example const random = await db.random();
      * console.log(random);
      */
-    async random(total = 1) {
-        if (typeof total !== "number" || total < 1) total = 1;
+    async random(n = 1) {
+        if (typeof n !== "number" || n < 1) n = 1;
         const data = await this.all();
-        const arr = [];
-        for (let i = 0; i < total; i++) {
-            const entry = data[Math.floor(Math.random() * data.length)];
-            if (!arr.includes(entry)) arr.push(entry);
-        }
-        return arr;
+        if (n > data.length) throw new RangeError("Random value length may not exceed total length.");
+        const shuffled = data.sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, n);
+    }
+
+    /**
+     * This method acts like `quick.db#table`. It will return new instance of itself.
+     * @param {string} name Schema/Model name 
+     */
+    table(name) {
+        if (!name || typeof name !== "string") throw new Error("Invalid model name");
+        const CustomModel = new Database(this.dbURL, name, this.options);
+        return CustomModel;
     }
 
     /**
@@ -526,7 +562,7 @@ class Database extends Base {
      * @example console.log(db.toString());
      */
     toString() {
-        return `<${this.constructor.name} QuickMongo>`;
+        return `${this.schema.modelName}`;
     }
 
     /**

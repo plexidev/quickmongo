@@ -10,12 +10,15 @@ Quick mongodb wrapper for beginners.
 - Easy
 - Simple
 - Fast
+- Very similar to **[quick.db](https://npmjs.com/package/quick.db)**
+- Best alternative to quick.db
+- Dot notation support
 - Import & export support
 - Key value based
-- More than 25 methods
+- More than 30 methods
 - Beginner friendly
-
-> Btw, `quick.db` users can easily export their data to `quickmongo`.
+- Asynchronous
+- Multiple model/schema support
 
 # Quick Example
 
@@ -46,7 +49,7 @@ function exportData() {
     });    
 }
 
-exportData();
+mongo.on("ready", () => exportData());
 ```
 
 # Exporting data from quick.db tables (and custom schema names)
@@ -56,7 +59,8 @@ const db = require("quick.db");
 const table = new db.table("mytable");
 
 const { Database } = require("quickmongo");
-const mongo = new Database("mongodb://localhost/quickmongo", "mytable"); // custom schema name (acts like quickdb table)
+const mdb = new Database("mongodb://localhost/quickmongo");
+const mongo = mdb.table("mytable"); // custom schema/model, (acts like quickdb table) with all the features of main Database
 
 function exportData() {
     const data = table.all();
@@ -65,7 +69,22 @@ function exportData() {
     });    
 }
 
-exportData();
+mdb.on("ready", () => exportData());
+```
+
+# Exporting data from QuickMongo to QuickDB
+
+```js
+const db = require("quick.db");
+const { Database } = require("quickmongo");
+const mdb = new Database("mongodb://localhost/quickmongo");
+
+mdb.on("ready", () => exportData());
+
+function exportData() {
+    mdb.exportToQuickDB(db)
+        .then(console.log);
+}
 ```
 
 # Links
@@ -109,22 +128,4 @@ db.export("rawdata").then(path => {
 db.import(quickdb.all()).then(() => {
     console.log("Data imported!");
 });
-```
-
-# Value Targets (Path)
-Value target (Like `key.target` of `quick.db`) support is not yet available in this package. It will be available soon :)
-
-But you can still use it like this:
-
-```js
-const { Database } = require("quickmongo");
-const db = new Database("mongodb://localhost/quickmongo");
-
-// set data
-db.set("user", { items: [] });
-
-// update items
-let data = await db.get("user");
-data.items = ["keyboard"];
-db.set("user", data); // { items: ["keyboard"] }
 ```

@@ -96,7 +96,7 @@ export class Database extends Base {
   public subtract(key: string, value: number): Promise<any>;
   public get uptime(): number;
   public export(fileName?: string, path?: string): Promise<string>;
-  public import(data?: any[], ordered?: boolean): Promise<void>;
+  public import(data?: DataSet[], ops?: { overwriteExisting?: boolean, validate?: boolean }): Promise<boolean>;
   public disconnect(): Promise<void>;
   public connect(url: string): Promise<void>;
   public get name(): string;
@@ -125,6 +125,7 @@ export class Database extends Base {
   public entries(): Promise<number>;
   public raw(params?: Mongoose.QueryFindOptions): Promise<Mongoose.Document>;
   public random(limit?: number): Promise<DataSet[]>;
+  public table(name: string): Database;
   public exportToQuickDB(): Promise<DataSet[]>;
   public get utils(): Util;
   public toString(): string;
