@@ -50,7 +50,7 @@ class Base extends EventEmitter {
      */
     _create(url) {
         // do not create multiple connections
-        if (mongoose.connection.readyState) return;
+        if (this.state === "CONNECTED" || this.state === "CONNECTING") return;
         this.emit("debug", "Creating database connection...");
         if (url && typeof url === "string") this.dbURL = url;
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
@@ -71,6 +71,13 @@ class Base extends EventEmitter {
         this.dbURL = null;
         this.emit("debug", "Database disconnected!");
     }
+
+    /**
+     * Returns mongodb connection
+     */
+    get connection() {
+        return mongoose.connection;
+    }
     
     /**
      * Current database url
@@ -78,6 +85,22 @@ class Base extends EventEmitter {
      */
     get url() {
         return this.dbURL;
+    }
+
+    /**
+     * Returns database connection state
+     */
+    get state() {
+        switch(mongoose.connection.readyState) {
+            case 0:
+                return "DISCONNECTED";
+            case 1:
+                return "CONNECTED";
+            case 2:
+                return "CONNECTING";
+            case 3:
+                return "DISCONNECTING";
+        }
     }
 }
 

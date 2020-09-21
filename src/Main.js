@@ -271,7 +271,7 @@ class Database extends Base {
 
     /**
      * Exports the data to json file
-     * @param {string} fileName File name
+     * @param {string} fileName File name.
      * @param {string} path File path
      * @returns {Promise<string>}
      * @example db.export("database.json", "./").then(path => {
@@ -279,15 +279,16 @@ class Database extends Base {
      * });
      */
     export(fileName="database", path="./") {
-        if (typeof fileName !== "string") throw new Error("File name must be a string!");
-        if (typeof path !== "string") throw new Error("File path must be a string!");
-
         return new Promise((resolve, reject) => {
             this.emit("debug", `Exporting database entries to ${path || ""}${fileName}`);
             this.all().then((data) => {
-                fs.writeFileSync(`${path || ""}${fileName}`, JSON.stringify(data));
-                this.emit("debug", `Exported all data!`);
-                resolve(`${path || ""}${fileName}`);
+                const strData = JSON.stringify(data);
+                if (fileName) {
+                    fs.writeFileSync(`${path || ""}${fileName}`, strData);
+                    this.emit("debug", `Exported all data!`);
+                    return resolve(`${path || ""}${fileName}`);
+                }
+                return resolve(strData);
             }).catch(reject);
         });
     }
@@ -555,6 +556,15 @@ class Database extends Base {
      */
     get utils() {
         return Util;
+    }
+
+    /**
+     * Updates current model and uses new one
+     * @param {string} name model name to use 
+     */
+    updateModel(name) {
+        this.schema = Schema(name);
+        return this.schema;
     }
 
     /**
