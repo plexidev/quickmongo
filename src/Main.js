@@ -21,8 +21,7 @@ class Database extends Base {
         super(mongodbURL, connectionOptions);
 
         /**
-         * Current Schema
-         * @type {Schema}
+         * Current Model
          */
         this.schema = Schema(name);
     }
@@ -64,6 +63,7 @@ class Database extends Base {
      * Deletes a data from the database
      * @param {string} key Key
      * @example db.delete("foo").then(() => console.log("Deleted data"));
+     * @returns {Promise<boolean>}
      */
     async delete(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -72,15 +72,16 @@ class Database extends Base {
         if (!raw) return false;
         if (parsed.target) {
             let data = Util.unsetData(key, Object.assign({}, raw.data));
+            if (data === raw.data) return false;
             raw.data = data;
             raw.save().catch(e => this.emit("error", e));
-            return data;
+            return true;
         } else {
-            let data = await this.schema.findOneAndDelete({ ID: parsed.key })
+            await this.schema.findOneAndDelete({ ID: parsed.key })
                 .catch(e => {
                     return this.emit("error", e);
                 });
-            return data;
+            return true;
         }
     }
 
@@ -155,6 +156,17 @@ class Database extends Base {
     }
 
     /**
+     * Returns everything from the database
+     * @param {number} limit Data limit
+     * @returns {Promise<Array>}
+     * @example let data = await db.all();
+     * console.log(`There are total ${data.length} entries.`);
+     */
+    async fetchAll(limit) {
+        return await this.all(limit);
+    }
+
+    /**
      * Deletes the entire schema
      * @example db.deleteAll().then(() => console.log("Deleted everything"));
      */
@@ -167,7 +179,7 @@ class Database extends Base {
     /**
      * Math calculation
      * @param {string} key Key of the data
-     * @param {string} operator One of +, -, * or /
+     * @param {string} operator One of +, -, *, / or %
      * @param {number} value Value
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
      */
@@ -193,7 +205,7 @@ class Database extends Base {
             case "-":
                 let less = await this.get(key);
                 if (!less) {
-                    return this.set(key, value);
+                    return this.set(key, 0 - value);
                 } else {
                     if (typeof less !== "number") throw new Error(`Expected existing data to be a number, received ${typeof less}!`);
                     return this.set(key, less - value);
@@ -205,7 +217,7 @@ class Database extends Base {
             case "*":
                 let mul = await this.get(key);
                 if (!mul) {
-                    return this.set(key, value);
+                    return this.set(key, 0 * value);
                 } else {
                     if (typeof mul !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mul}!`);
                     return this.set(key, mul * value);
@@ -217,7 +229,7 @@ class Database extends Base {
             case "/":
                 let div = await this.get(key);
                 if (!div) {
-                    return this.set(key, value);
+                    return this.set(key, 0 / value);
                 } else {
                     if (typeof div !== "number") throw new Error(`Expected existing data to be a number, received ${typeof div}!`);
                     return this.set(key, div / value);
@@ -227,7 +239,7 @@ class Database extends Base {
             case "%":
                 let mod = await this.get(key);
                 if (!mod) {
-                    return this.set(key, value);
+                    return this.set(key, 0 % value);
                 } else {
                     if (typeof mod !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mod}!`);
                     return this.set(key, mod % value);
@@ -294,6 +306,8 @@ class Database extends Base {
     }
 
     /**
+     * <warn>You should set `useUnique` to `true` in order to avoid duplicate documents.</warn>
+     * 
      * Imports data from other source to quickmongo. 
      * 
      * Data type should be Array containing `ID` and `data` fields.
@@ -304,16 +318,16 @@ class Database extends Base {
      * @param {Array} data Array of data
      * @param {object} ops Import options
      * @param {boolean} [ops.validate=false] If set to true, it will insert valid documents only
-     * @param {boolean} [ops.overwriteExisting=false] If it should overwrite existing value (slow)
+     * @param {boolean} [ops.unique=false] If it should import unique data only (slow)
      * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo
      * QuickMongo.import(data);
      * @returns {Promise<Boolean>}
      */
-    import(data=[], ops = { overwriteExisting: false, validate: false }) {
+    import(data=[], ops = { unique: false, validate: false }) {
         return new Promise(async (resolve, reject) => {
             if (!Array.isArray(data)) return reject(new Error(`Data type must be Array, received ${typeof data}!`, "DataTypeError"));
             if (data.length < 1) return resolve(false);
-            if (!ops.overwriteExisting) {
+            if (!ops.unique) {
                 this.schema.insertMany(data, { ordered: !ops.validate }, (error) => {
                     if (error) return reject(new Error(`${error}`, "DataImportError"));
                     return resolve(true);
@@ -324,7 +338,7 @@ class Database extends Base {
                     else if (!!ops.validate && (!x.ID || !x.data)) return reject(new Error(`Data is missing ${!x.ID ? "ID" : "data"} path!`, "DataImportError"));
                     setTimeout(() => {
                         this.set(x.ID, x.data);
-                    }, 457 * (i + 1));
+                    }, 150 * (i + 1));
                 });
                 return resolve(true);
             }
@@ -519,7 +533,7 @@ class Database extends Base {
     async random(n = 1) {
         if (typeof n !== "number" || n < 1) n = 1;
         const data = await this.all();
-        if (n > data.length) throw new RangeError("Random value length may not exceed total length.");
+        if (n > data.length) throw new Error("Random value length may not exceed total length.", "RangeError");
         const shuffled = data.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, n);
     }

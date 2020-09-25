@@ -1,6 +1,6 @@
 {
   "name": "quickmongo",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Quick mongodb wrapper for beginners.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -38,7 +38,7 @@
   ],
   "dependencies": {
     "lodash": "^4.17.19",
-    "mongoose": "^5.10.6"
+    "mongoose": "^5.10.7"
   },
   "devDependencies": {
     "jsdoc": "^3.6.5",

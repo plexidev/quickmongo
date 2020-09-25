@@ -25,7 +25,6 @@ class Base extends EventEmitter {
 
         /**
          * Mongoose connection options
-         * @type {object}
          */
         this.options = connectionOptions;
 
@@ -54,10 +53,12 @@ class Base extends EventEmitter {
         this.emit("debug", "Creating database connection...");
         if (url && typeof url === "string") this.dbURL = url;
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
+        delete this.options["useUnique"];
         mongoose.connect(this.dbURL, {
             ...this.options,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex: true
         });
     }
 

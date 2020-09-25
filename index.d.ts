@@ -82,23 +82,24 @@ export class Database extends Base {
     constructor(
       mongodbURL: string,
       name?: string,
-      connectionOptions?: Mongoose.ConnectionOptions,
+      connectionOptions?: Mongoose.ConnectionOptions
     );
 
     public set(key: string, value: any): Promise<any>;
-    public delete(key: string): Promise<any>;
+    public delete(key: string): Promise<boolean>;
     public exists(key: string): Promise<boolean>;
     public has(key: string): Promise<boolean>;
     public get(key: string): Promise<any>;
     public fetch(key: string): Promise<any>;
     public all(limit?: number): Promise<DataSet[]>;
+    public fetchAll(limit?: number): Promise<DataSet[]>;
     public deleteAll(): Promise<true>;
     public math(key: string, operator: MathOps, value: number): Promise<any>;
     public add(key: string, value: number): Promise<any>;
     public subtract(key: string, value: number): Promise<any>;
     public get uptime(): number;
     public export(fileName?: string, path?: string): Promise<string>;
-    public import(data?: DataSet[], ops?: { overwriteExisting?: boolean, validate?: boolean }): Promise<boolean>;
+    public import(data?: DataSet[], ops?: { unique?: boolean, validate?: boolean }): Promise<boolean>;
     public disconnect(): Promise<void>;
     public connect(url: string): Promise<void>;
     public get name(): string;

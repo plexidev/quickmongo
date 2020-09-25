@@ -7,18 +7,18 @@ Quick mongodb wrapper for beginners.
 **[QuickMongo](https://quickmongo.js.org)**
 
 # Features
+- Beginner friendly
 - Easy
 - Simple
 - Fast
 - Very similar to **[quick.db](https://npmjs.com/package/quick.db)**
-- Best alternative to quick.db
 - Dot notation support
 - Import & export support
 - Key value based
 - More than 30 methods
 - Beginner friendly
 - Asynchronous
-- Multiple model/schema support
+- Multiple model support
 
 # Quick Example
 
@@ -35,56 +35,21 @@ db.set("foo", "bar");
 db.get("foo").then(console.log);
 ```
 
-# Exporting data from quick.db to quickmongo
+# Importing data from quick.db
 
 ```js
 const db = require("quick.db");
 const { Database } = require("quickmongo");
 const mongo = new Database("mongodb://localhost/quickmongo");
 
-function exportData() {
+function importData() {
     const data = db.all();
     mongo.import(data).then(() => {
-        console.log("Successfully exported quick.db data to quickmongo!");
+        console.log("Done!");
     });    
 }
 
-mongo.on("ready", () => exportData());
-```
-
-# Exporting data from quick.db tables (and custom schema names)
-
-```js
-const db = require("quick.db");
-const table = new db.table("mytable");
-
-const { Database } = require("quickmongo");
-const mdb = new Database("mongodb://localhost/quickmongo");
-const mongo = mdb.table("mytable"); // custom schema/model, (acts like quickdb table) with all the features of main Database
-
-function exportData() {
-    const data = table.all();
-    mongo.import(data).then(() => {
-        console.log("Successfully exported quick.db data to quickmongo!");
-    });    
-}
-
-mdb.on("ready", () => exportData());
-```
-
-# Exporting data from QuickMongo to QuickDB
-
-```js
-const db = require("quick.db");
-const { Database } = require("quickmongo");
-const mdb = new Database("mongodb://localhost/quickmongo");
-
-mdb.on("ready", () => exportData());
-
-function exportData() {
-    mdb.exportToQuickDB(db)
-        .then(console.log);
-}
+mongo.on("ready", () => importData());
 ```
 
 # Links
@@ -92,40 +57,32 @@ function exportData() {
 - **[Documentation](https://quickmongo.js.org)**
 - **[GitHub](https://github.com/Snowflake107/quickmongo)**
 
-# Examples
+# Example
 
 ```js
 const { Database } = require("quickmongo");
 const db = new Database("mongodb://localhost/quickmongo");
 
-// set
-db.set("money", 200).then(i => {
-    console.log(`Set balance to $${i}`); // 200
-});
+// Setting an object in the database:
+db.set("userInfo", { difficulty: "Easy" }).then(console.log);
+// -> { difficulty: 'Easy' }
 
-// add
-db.add("money", 100).then(i => {
-    console.log(`Added money! now you have $${i}`); // 300
-});
+db.push("userInfo.items", "Sword").then(console.log);
+// -> { difficulty: 'Easy', items: ['Sword'] }
 
-// fetch
-db.get("money").then(i => {
-    console.log(`Your balance: ${i}`); // 300
-});
+db.add("userInfo.balance", 500).then(console.log);
+// -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
 
-// fetch all
-db.all().then(console.log); // [{ ID: "money", data: 300 }]
+// Repeating previous examples:
+db.push("userInfo.items", "Watch").then(console.log);
+// -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
 
-// delete all
-db.deleteAll().then(() => console.log("done!"));
+db.add("userInfo.balance", 500).then(console.log);
+// -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
 
-// export your data to json file
-db.export("rawdata").then(path => {
-    console.log(`Data exported to ${path}...`);
-});
-
-// import data from quick.db (listen to "debug" event for details)
-db.import(quickdb.all()).then(() => {
-    console.log("Data imported!");
-});
+// Fetching individual properties
+db.get("userInfo.balance").then(console.log);
+// -> 1000
+db.get("userInfo.items").then(console.log);
+// -> ['Sword', 'Watch']
 ```
