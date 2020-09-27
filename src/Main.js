@@ -12,7 +12,7 @@ class Database extends Base {
     /**
      * Creates quickmongo instance
      * @param {string} mongodbURL Mongodb database url
-     * @param {string} name Schema name
+     * @param {string} name Model name
      * @param {object} connectionOptions Mongoose connection options
      * @example const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
@@ -167,7 +167,7 @@ class Database extends Base {
     }
 
     /**
-     * Deletes the entire schema
+     * Deletes the entire model
      * @example db.deleteAll().then(() => console.log("Deleted everything"));
      */
     async deleteAll() {
@@ -366,7 +366,7 @@ class Database extends Base {
     }
 
     /**
-     * Returns current schema name
+     * Returns current model name
      * @readonly
      */
     get name() {
@@ -503,7 +503,7 @@ class Database extends Base {
     }
 
     /**
-     * Returns entries count of current schema
+     * Returns entries count of current model
      * @returns {Promise<number>}
      * @example const entries = await db.entries();
      * console.log(`There are total ${entries} entries!`);
@@ -513,7 +513,7 @@ class Database extends Base {
     }
 
     /**
-     * Returns raw data from current schema
+     * Returns raw data from current model
      * @param {object} params Search params
      * @returns {Promise<Mongoose.Document>}
      * @example const raw = await db.raw();
@@ -540,7 +540,7 @@ class Database extends Base {
 
     /**
      * This method acts like `quick.db#table`. It will return new instance of itself.
-     * @param {string} name Schema/Model name 
+     * @param {string} name Model name 
      */
     table(name) {
         if (!name || typeof name !== "string") throw new Error("Invalid model name");

@@ -8,9 +8,9 @@ export interface Events {
 }
 
 export class Base extends EventEmitter {
-    public dbURL: string | null;
+    public dbURL: string;
     public options: Mongoose.ConnectionOptions;
-    public readyAt: Date | undefined;
+    public readyAt: Date;
 
     constructor(
       mongodbURL: string,
@@ -19,7 +19,7 @@ export class Base extends EventEmitter {
 
     private _create(url: string): Promise<void>;
     private _destroyDatabase(): Promise<void>;
-    public get url(): string | null;
+    public get url(): string;
     public get connection(): Mongoose.Connection;
     public get state(): "CONNECTED" | "CONNECTING" | "DISCONNECTED" | "DISCONNECTING";
 

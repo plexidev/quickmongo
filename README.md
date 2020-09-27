@@ -8,14 +8,11 @@ Quick mongodb wrapper for beginners.
 
 # Features
 - Beginner friendly
-- Easy
-- Simple
-- Fast
+- Easy to use
 - Very similar to **[quick.db](https://npmjs.com/package/quick.db)**
 - Dot notation support
 - Import & export support
 - Key value based
-- More than 30 methods
 - Beginner friendly
 - Asynchronous
 - Multiple model support
