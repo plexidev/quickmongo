@@ -23,7 +23,7 @@ class Database extends Base {
         /**
          * Current Model
          */
-        this.schema = Schema(name);
+        this.schema = Schema(name, this.connection);
     }
 
     /**

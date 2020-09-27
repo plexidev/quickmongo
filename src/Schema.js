@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema } = require("mongoose");
 
 const Default = new Schema({
     ID: {
@@ -11,6 +11,6 @@ const Default = new Schema({
     }
 });
 
-module.exports = (name) => {
-    return typeof name === "string" ? model(name, Default) : model("JSON", Default);
+module.exports = (name, conn) => {
+    return typeof name === "string" ? conn.model(name, Default) : conn.model("JSON", Default);
 };
