@@ -145,7 +145,10 @@ class Database extends Base {
         if (typeof limit !== "number" || limit < 1) limit = 0;
         let data = await this.schema.find().catch(e => {});
         if (!!limit) data = data.slice(0, limit);
-        comp = data.map(x => ({ ID: x.ID, data: x.data }))
+        let comp = []
+        for(i in data){
+            comp.push({ ID: data[i].ID, data: data[i].data })
+        }
         return comp;
     }
 
