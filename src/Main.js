@@ -146,7 +146,7 @@ class Database extends Base {
         let data = await this.schema.find().catch(e => {});
         if (!!limit) data = data.slice(0, limit);
         let comp = []
-        for(i in data){
+        for(let i = 0; i < data.length; i++){
             comp.push({ ID: data[i].ID, data: data[i].data })
         }
         return comp;
