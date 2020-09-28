@@ -146,8 +146,7 @@ class Database extends Base {
         let data = await this.schema.find().catch(e => {});
         if (!!limit) data = data.slice(0, limit);
         comp = data.map(x => {
-            ID: x.ID,
-            data: x.data
+            return { ID: x.ID, data: x.data }
         })
         return comp;
     }
