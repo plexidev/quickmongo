@@ -31,7 +31,7 @@ class Database extends Base {
      * @param {string} key Key
      * @param value Data
      * @example db.set("foo", "bar").then(() => console.log("Saved data"));
-     */
+     */ 
     async set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
         if (!Util.isValue(value)) throw new Error("Invalid value specified!", "ValueError");
