@@ -14,7 +14,7 @@ export class Base extends EventEmitter {
 
     constructor(
       mongodbURL: string,
-      connectionOptions?: Mongoose.ConnectionOptions,
+      connectionOptions?: QuickMongoOptions,
     );
 
     private _create(url: string): Promise<void>;
@@ -76,13 +76,17 @@ export type MathOps = | "add"
 
 export type ModelReturn = Mongoose.Model<Mongoose.Document, {}>;
 
+export interface QuickMongoOptions extends Mongoose.ConnectionOptions {
+    useUnique?: boolean;
+}
+
 export class Database extends Base {
     public schema: ModelReturn;
 
     constructor(
       mongodbURL: string,
       name?: string,
-      connectionOptions?: Mongoose.ConnectionOptions
+      connectionOptions?: QuickMongoOptions
     );
 
     public set(key: string, value: any): Promise<any>;
@@ -93,7 +97,7 @@ export class Database extends Base {
     public fetch(key: string): Promise<any>;
     public all(limit?: number): Promise<DataSet[]>;
     public fetchAll(limit?: number): Promise<DataSet[]>;
-    public deleteAll(): Promise<true>;
+    public deleteAll(): Promise<boolean>;
     public math(key: string, operator: MathOps, value: number): Promise<any>;
     public add(key: string, value: number): Promise<any>;
     public subtract(key: string, value: number): Promise<any>;

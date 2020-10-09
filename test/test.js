@@ -1,8 +1,10 @@
 const { Database } = require("../index");
 const db = new Database("mongodb://localhost/test", "JSON", { useUnique: true });
+const db1 = new Database("mongodb://localhost/test1", "JSON", { useUnique: true });
 
 db.on("ready", () => {
     console.log(`Hey, im connected! ${db.toString()}`);
+    db.deleteAll();
     execute();
 });
 
@@ -30,7 +32,7 @@ async function execute() {
     const test = db.table('test');
     test.set('data', 'hello world').then(console.log);
     console.log(await db.get('data')); // -> null
-    console.log(test.get('data')); // -> 'hello world'
+    console.log(await test.get('data')); // -> 'hello world'
 
     // Setting an object in the database:
     db.set('userInfo', { difficulty: 'Easy' }).then(console.log);
@@ -54,4 +56,6 @@ async function execute() {
     // -> 1000
     db.get('userInfo.items').then(console.log);
     // -> ['Sword', 'Watch']
+
+    console.log(await db1.raw(), "DB1")
 }

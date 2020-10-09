@@ -52,7 +52,7 @@ class Base extends EventEmitter {
      */
     _create(url) {
         // do not create multiple connections
-        if (this.state === "CONNECTED" || this.state === "CONNECTING") return;
+        if (this.connection && this.connection.readyState && this.state === "CONNECTED" || this.state === "CONNECTING") return;
         this.emit("debug", "Creating database connection...");
         if (url && typeof url === "string") this.dbURL = url;
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
@@ -88,6 +88,7 @@ class Base extends EventEmitter {
      * Returns database connection state
      */
     get state() {
+        if (!this.connection || !this.connection.readyState) return "DISCONNECTED";
         switch(this.connection.readyState) {
             case 0:
                 return "DISCONNECTED";
