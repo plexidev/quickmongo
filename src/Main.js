@@ -137,22 +137,19 @@ class Database extends Base {
     /**
      * Returns everything from the database
      * @param {number} limit Data limit
-     * @returns {Promise<Array>}
      * @example let data = await db.all();
-     * console.log(`There are total ${data.length} entries.`);
+     * @returns {Promise<Array>}
+     * @example console.log(`There are total ${data.length} entries.`);
      */
     async all(limit = 0) {
         if (typeof limit !== "number" || limit < 1) limit = 0;
         let data = await this.schema.find().catch(e => {});
         if (!!limit) data = data.slice(0, limit);
-        let comp = [];
-        data.forEach(c => {
-            comp.push({
-                ID: c.ID,
-                data: c.data
-            });
-        });
-        return comp;
+
+        return data.map(m => ({
+            ID: m.ID,
+            data: m.data
+        }));
     }
 
     /**
