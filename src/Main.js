@@ -22,6 +22,7 @@ class Database extends Base {
 
         /**
          * Current Model
+         * @type {MongooseDocument}
          */
         this.schema = Schema(name);
     }
@@ -29,8 +30,9 @@ class Database extends Base {
     /**
      * Sets the value to the database
      * @param {string} key Key
-     * @param value Data
+     * @param {any} value Data
      * @example db.set("foo", "bar").then(() => console.log("Saved data"));
+     * @returns {Promise<any>}
      */
     async set(key, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -89,6 +91,7 @@ class Database extends Base {
      * Checks if there is a data stored with the given key
      * @param {string} key Key
      * @example db.exists("foo").then(console.log);
+     * @returns {Promise<boolean>}
      */
     async exists(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -100,6 +103,7 @@ class Database extends Base {
      * Checks if there is a data stored with the given key
      * @param {string} key Key
      * @example db.has("foo").then(console.log);
+     * @returns {Promise<boolean>}
      */
     async has(key) {
         return await this.exists(key);
@@ -109,6 +113,7 @@ class Database extends Base {
      * Fetches the data from database
      * @param {string} key Key
      * @example db.get("foo").then(console.log);
+     * @returns {Promise<any>}
      */
     async get(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -129,16 +134,23 @@ class Database extends Base {
      * Fetches the data from database
      * @param {string} key Key
      * @example db.fetch("foo").then(console.log);
+     * @returns {Promise<any>}
      */
     async fetch(key) {
         return this.get(key);
     }
 
     /**
+     * @typedef {object} Data
+     * @property {string} ID Data id
+     * @property {any} data Data
+     */
+
+    /**
      * Returns everything from the database
      * @param {number} limit Data limit
      * @example let data = await db.all();
-     * @returns {Promise<Array>}
+     * @returns {Promise<Data[]>}
      * @example console.log(`There are total ${data.length} entries.`);
      */
     async all(limit = 0) {
@@ -155,7 +167,7 @@ class Database extends Base {
     /**
      * Returns everything from the database
      * @param {number} limit Data limit
-     * @returns {Promise<Array>}
+     * @returns {Promise<Data[]>}
      * @example let data = await db.all();
      * console.log(`There are total ${data.length} entries.`);
      */
@@ -166,6 +178,7 @@ class Database extends Base {
     /**
      * Deletes the entire model
      * @example db.deleteAll().then(() => console.log("Deleted everything"));
+     * @returns {Promise<boolean>}
      */
     async deleteAll() {
         this.emit("debug", "Deleting everything from the database...");
@@ -179,6 +192,7 @@ class Database extends Base {
      * @param {string} operator One of +, -, *, / or %
      * @param {number} value Value
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
+     * @returns {Promise<any>}
      */
     async math(key, operator, value) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
@@ -252,6 +266,7 @@ class Database extends Base {
      * @param {string} key key
      * @param {number} value value
      * @example db.add("items", 200).then(() => console.log("Added 200 items"));
+     * @returns {Promise<any>}
      */
     async add(key, value) {
         return await this.math(key, "+", value);
@@ -262,6 +277,7 @@ class Database extends Base {
      * @param {string} key Key
      * @param {number} value Value     
      * @example db.subtract("items", 100).then(() => console.log("Removed 100 items"));
+     * @returns {Promise<any>}
      */
     async subtract(key, value) {
         return await this.math(key, "-", value);
@@ -318,7 +334,7 @@ class Database extends Base {
      * @param {boolean} [ops.unique=false] If it should import unique data only (slow)
      * @example const data = QuickDB.all(); // imports data from quick.db to quickmongo
      * QuickMongo.import(data);
-     * @returns {Promise<Boolean>}
+     * @returns {Promise<boolean>}
      */
     import(data=[], ops = { unique: false, validate: false }) {
         return new Promise(async (resolve, reject) => {
@@ -345,6 +361,7 @@ class Database extends Base {
     /**
      * Disconnects the database
      * @example db.disconnect();
+     * @returns {void}
      */
     disconnect() {
         this.emit("debug", "'database.disconnect()' was called, destroying the process...");
@@ -357,6 +374,7 @@ class Database extends Base {
      * You don't need to call this method because it is automatically called by database manager.
      * 
      * @param {string} url Database url
+     * @returns {void}
      */
     connect(url) {
         return this._create(url);
@@ -364,6 +382,7 @@ class Database extends Base {
 
     /**
      * Returns current model name
+     * @type {string}
      * @readonly
      */
     get name() {
@@ -373,6 +392,8 @@ class Database extends Base {
     /**
      * Read latency
      * @ignore
+     * @private
+     * @returns {Promise<number>}
      */
     async _read() {
         let start = Date.now();
@@ -383,6 +404,8 @@ class Database extends Base {
     /**
      * Write latency
      * @ignore
+     * @private
+     * @returns {Promise<number>}
      */
     async _write() {
         let start = Date.now();
@@ -391,11 +414,19 @@ class Database extends Base {
     }
 
     /**
+     * @typedef {object} DatabaseLatency
+     * @property {number} read Read latency
+     * @property {number} write Write latency
+     * @property {number} average Average latency
+     */
+
+    /**
      * Fetches read and write latency of the database in ms
      * @example const ping = await db.fetchLatency();
      * console.log("Read: ", ping.read);
      * console.log("Write: ", ping.write);
      * console.log("Average: ", ping.average);
+     * @returns {Promise<DatabaseLatency>}
      */
     async fetchLatency() {
         let read = await this._read();
@@ -411,6 +442,7 @@ class Database extends Base {
      * console.log("Read: ", ping.read);
      * console.log("Write: ", ping.write);
      * console.log("Average: ", ping.average);
+     * @returns {Promise<DatabaseLatency>}
      */
     async ping() {
         return await this.fetchLatency();
@@ -421,6 +453,7 @@ class Database extends Base {
      * @param {string} key Key
      * @param {object} ops Options
      * @example const data = await db.startsWith("money", { sort: ".data", limit: 10 });
+     * @returns {Promise<Data[]>}
      */
     async startsWith(key, ops) {
         if (!key || typeof key !== "string") throw new Error(`Expected key to be a string, received ${typeof key}`);
@@ -432,6 +465,7 @@ class Database extends Base {
      * Resolves data type
      * @param {string} key key
      * @example console.log(await db.type("foo"));
+     * @returns {Promise<"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | "array">}
      */
     async type(key) {
         if (!Util.isKey(key)) throw new Error("Invalid Key!", "KeyError");
@@ -444,6 +478,7 @@ class Database extends Base {
      * Returns array of the keys
      * @example const keys = await db.keyarray();
      * console.log(keys);
+     * @returns {Promise<string[]>}
      */
     async keyArray() {
         const data = await this.all();
@@ -454,6 +489,7 @@ class Database extends Base {
      * Returns array of the values
      * @example const data = await db.valueArray();
      * console.log(data);
+     * @returns {Promise<any[]>}
      */
     async valueArray() {
         const data = await this.all();
@@ -463,9 +499,10 @@ class Database extends Base {
     /**
      * Pushes an item into array
      * @param {string} key key
-     * @param {any|Array} value Value to push
+     * @param {any|any[]} value Value to push
      * @example db.push("users", "John"); // -> ["John"]
      * db.push("users", ["Milo", "Simon", "Kyle"]); // -> ["John", "Milo", "Simon", "Kyle"]
+     * @returns {Promise<any>}
      */
     async push(key, value) {
         const data = await this.get(key);
@@ -482,9 +519,10 @@ class Database extends Base {
     /**
      * Removes an item from array
      * @param {string} key key
-     * @param {any|Array} value item to remove
+     * @param {any|any[]} value item to remove
      * @example db.pull("users", "John"); // -> ["Milo", "Simon", "Kyle"]
      * db.pull("users", ["Milo", "Simon"]); // -> ["Kyle"]
+     * @returns {Promise<any>}
      */
     async pull(key, value) {
         let data = await this.get(key);
@@ -512,7 +550,7 @@ class Database extends Base {
     /**
      * Returns raw data from current model
      * @param {object} params Search params
-     * @returns {Promise<Mongoose.Document>}
+     * @returns {Promise<MongooseDocument>}
      * @example const raw = await db.raw();
      * console.log(raw);
      */
@@ -538,6 +576,7 @@ class Database extends Base {
     /**
      * This method acts like `quick.db#table`. It will return new instance of itself.
      * @param {string} name Model name 
+     * @returns {Database}
      */
     table(name) {
         if (!name || typeof name !== "string") throw new Error("Invalid model name");
@@ -547,7 +586,7 @@ class Database extends Base {
 
     /**
      * This method exports **QuickMongo** data to **Quick.db**
-     * @param quickdb Quick.db instance
+     * @param {any} quickdb Quick.db instance
      * @returns {Promise<any[]>}
      * @example const data = await db.exportToQuickDB(quickdb);
      */
@@ -564,6 +603,7 @@ class Database extends Base {
      * Returns **QuickMongo Util**
      * @example const parsed = db.utils.parseKey("foo.bar");
      * console.log(parsed);
+     * @type {Util}
      */
     get utils() {
         return Util;
@@ -572,6 +612,7 @@ class Database extends Base {
     /**
      * Updates current model and uses new one
      * @param {string} name model name to use 
+     * @returns {MongooseDocument}
      */
     updateModel(name) {
         this.schema = Schema(name);
@@ -581,6 +622,7 @@ class Database extends Base {
     /**
      * String representation of the database
      * @example console.log(db.toString());
+     * @returns {string}
      */
     toString() {
         return `${this.schema.modelName}`;
@@ -591,6 +633,7 @@ class Database extends Base {
      * @param {string} code code to eval
      * @example
      * db._eval("this.all().then(console.log)"); // -> [{ ID: "...", data: ... }, ...]
+     * @returns {any}
      */
     _eval(code) {
         return eval(code);

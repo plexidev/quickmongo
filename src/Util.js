@@ -5,7 +5,6 @@ class Util {
 
     /**
      * **You _cannot instantiate_ Util class. Every methods of this class are `static` methods.**
-     * @example Util.method(...)
      */
     constructor() {
         throw new Error(`Class ${this.constructor.name} may not be instantiated!`);
@@ -14,7 +13,7 @@ class Util {
     /**
      * Returns true if provided key is valid
      * @param {any} str Anything to test
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     static isKey(str) {
         return typeof str === "string";
@@ -23,7 +22,7 @@ class Util {
     /**
      * Returns true if the given data is valid
      * @param {any} data Any data
-     * @returns {Boolean}
+     * @returns {boolean}
      */
     static isValue(data) {
         if (data === Infinity || data === -Infinity) return false;
@@ -32,10 +31,17 @@ class Util {
     }
 
     /**
+     * @typedef {object} KEY
+     * @property {string | undefined} key Parsed Key
+     * @property {string | undefined} target Parsed target
+     */
+
+    /**
      * Returns target & key from the given string (quickdb style)
      * @param {string} key key to parse
      * @example Util.parseKey("myitem.items");
      * // -> { key: "myitems", target: "items" }
+     * @returns {KEY}
      */
     static parseKey(key) {
         if (!key || typeof key !== "string") return { key: undefined, target: undefined };
@@ -54,6 +60,7 @@ class Util {
      * @param {Array} data Data
      * @param {object} ops options
      * @example Util.sort("user_", {...}, { sort: ".data" });
+     * @returns {any[]}
      */
     static sort(key, data, ops) {
         if (!key || !data || !Array.isArray(data)) return [];
@@ -72,6 +79,7 @@ class Util {
      * @param {any} data Data
      * @param {any} value value
      * @example Util.setData("user.items", {...}, ["pen"]);
+     * @returns {any}
      */
     static setData(key, data, value) {
         let parsed = this.parseKey(key);
@@ -87,6 +95,7 @@ class Util {
      * @param {any} data Data
      * @param {any} value value
      * @example Util.unsetData("user.items", {...});
+     * @returns {any}
      */
     static unsetData(key, data) {
         let parsed = this.parseKey(key);
@@ -102,6 +111,7 @@ class Util {
      * @param {string} key Key
      * @param {any} data Data
      * @example Util.getData("user.items", {...});
+     * @returns {any}
      */
     static getData(key, data) {
         let parsed = this.parseKey(key);

@@ -136,20 +136,6 @@ export class Database extends Base {
     public _eval(code: string): any;
 }
 
-export class MemoryStorage {
-    public obj: any[];
-    public set(key: string, value: any): any;
-    public delete(key: string): false | any[];
-    public exists(key: string): boolean;
-    public has(key: string): boolean;
-    public get(key: string): any;
-    public fetch(key: string): any;
-    public all(): DataSet[];
-    public deleteAll(): any[];
-    public export(fileName?: string, path?: string): Promise<string>;
-    public startsWith(key: string, ops?: UtilSort): any[];
-}
-
 export function name(name: any): ModelReturn;
 
 export class Util {

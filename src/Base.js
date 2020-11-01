@@ -25,6 +25,7 @@ class Base extends EventEmitter {
 
         /**
          * Mongoose connection options
+         * @type {ConnectionOptions}
          */
         this.options = connectionOptions;
 
@@ -51,7 +52,10 @@ class Base extends EventEmitter {
         // do not create multiple connections
         if (this.state === "CONNECTED" || this.state === "CONNECTING") return;
         this.emit("debug", "Creating database connection...");
-        if (url && typeof url === "string") this.dbURL = url;
+
+        if (url && typeof url === "string") {
+            this.dbURL = url;
+        };
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
         delete this.options["useUnique"];
         mongoose.connect(this.dbURL, {
@@ -75,6 +79,7 @@ class Base extends EventEmitter {
 
     /**
      * Returns mongodb connection
+     * @type {MongooseConnection}
      */
     get connection() {
         return mongoose.connection;
@@ -90,6 +95,7 @@ class Base extends EventEmitter {
 
     /**
      * Returns database connection state
+     * @type {"DISCONNECTED"|"CONNECTED"|"CONNECTING"|"DISCONNECTING"}
      */
     get state() {
         switch(mongoose.connection.readyState) {
@@ -123,7 +129,7 @@ class Base extends EventEmitter {
  /**
   * Emitted on debug mode
   * @event Base#debug
-  * @param {String} Message Debug message
+  * @param {string} Message Debug message
   * @example db.on("debug", console.log);
   */
 
