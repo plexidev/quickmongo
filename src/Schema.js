@@ -3,7 +3,8 @@ const { Schema, model } = require("mongoose");
 const Default = new Schema({
     ID: {
         type: Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     },
     data: {
         type: Schema.Types.Mixed,

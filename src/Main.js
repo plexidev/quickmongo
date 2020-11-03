@@ -3,6 +3,7 @@ const Schema = require("./Schema");
 const Error = require("./Error");
 const fs = require("fs");
 const Util = require("./Util");
+const { deprecate } = require("util");
 
 /**
  * Quick mongodb wrapper
@@ -95,8 +96,17 @@ class Database extends Base {
      */
     async exists(key) {
         if (!Util.isKey(key)) throw new Error("Invalid key specified!", "KeyError");
-        let get = await this.get(key);
-        return !!get;
+        const parsed = Util.parseKey(key);
+
+        let get = await this.schema.findOne({ ID: parsed.key })
+            .catch(e => {
+                return this.emit("error", e);
+            });
+        if (!get) return null;
+        let item;
+        if (parsed.target) item = Util.getData(key, Object.assign({}, get.data));
+        else item = get.data;
+        return item === undefined ? false : true;
     }
 
     /**
@@ -127,7 +137,7 @@ class Database extends Base {
         let item;
         if (parsed.target) item = Util.getData(key, Object.assign({}, get.data));
         else item = get.data;
-        return item ? item : null;
+        return item !== undefined ? item : null;
     }
 
     /**
@@ -577,8 +587,20 @@ class Database extends Base {
      * This method acts like `quick.db#table`. It will return new instance of itself.
      * @param {string} name Model name 
      * @returns {Database}
+     * @deprecated
      */
     table(name) {
+        if (!name || typeof name !== "string") throw new Error("Invalid model name");
+        const CustomModel = new Database(this.dbURL, name, this.options);
+        return CustomModel;
+    }
+
+    /**
+     * This method acts like `quick.db#table`. It will return new instance of itself.
+     * @param {string} name Model name 
+     * @returns {Database}
+     */
+    createModel(name) {
         if (!name || typeof name !== "string") throw new Error("Invalid model name");
         const CustomModel = new Database(this.dbURL, name, this.options);
         return CustomModel;
@@ -640,5 +662,7 @@ class Database extends Base {
     }
 
 }
+
+Database.prototype.table = deprecate(Database.prototype.table, "db#table is deprecated and will be removed in future update, please use db#createModel instead!");
 
 module.exports = Database;

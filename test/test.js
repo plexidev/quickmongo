@@ -27,7 +27,7 @@ async function execute() {
     console.log('[13] Fetching deleted prop:', (await db.get('myObj.prop')) === null);
 
     // Fetching properties from specific tables
-    const test = db.table('test');
+    const test = db.createModel('test');
     test.set('data', 'hello world').then(console.log);
     console.log(await db.get('data')); // -> null
     console.log(test.get('data')); // -> 'hello world'

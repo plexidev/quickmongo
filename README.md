@@ -52,7 +52,7 @@ mongo.on("ready", () => importData());
 # Links
 - **[Discord Support Server](https://discord.gg/2SUybzb)**
 - **[Documentation](https://quickmongo.js.org)**
-- **[GitHub](https://github.com/Snowflake107/quickmongo)**
+- **[GitHub](https://github.com/DevSnowflake/quickmongo)**
 
 # Example
 
