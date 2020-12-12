@@ -18,7 +18,7 @@ class Database extends Base {
      * const db = new Database("mongodb://localhost/quickmongo");
      */
     constructor(mongodbURL, name, connectionOptions={}) {
-        super(mongodbURL, connectionOptions);
+        super(mongodbURL || process.env.MONGODB_URL, connectionOptions);
 
         /**
          * Current Model
