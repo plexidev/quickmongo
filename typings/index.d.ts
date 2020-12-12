@@ -4,8 +4,15 @@ declare module "quickmongo" {
 
 	export interface Events {
 		debug: [string];
-		error: [Error];
+		error: [QuickMongoError];
 		ready: [];
+	}
+
+	export class QuickMongoError extends Error {
+		message: string;
+		name: string;
+
+		constructor(message: string, name?: string);
 	}
 
 	export class Base extends EventEmitter {
@@ -125,7 +132,7 @@ declare module "quickmongo" {
 		public keyArray(): Promise<string[]>;
 		public valueArray(): Promise<any[]>;
 		public push(key: string, value: any | any[]): Promise<any>;
-		public pull(key: string, value: any | any[]): Promise<any>;
+		public pull(key: string, value: any | any[], multiple?: boolean): Promise<any>;
 		public entries(): Promise<number>;
 		public raw(params?: Mongoose.QueryFindOptions): Promise<Mongoose.Document>;
 		public random(limit?: number): Promise<DataSet[]>;

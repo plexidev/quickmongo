@@ -21,7 +21,9 @@ class Base extends EventEmitter {
          * Current database url
          * @type {string}
          */
-        this.dbURL = mongodbURL;
+        Object.defineProperty(this, "dbURL", {
+            value: mongodbURL
+        });
 
         /**
          * Mongoose connection options

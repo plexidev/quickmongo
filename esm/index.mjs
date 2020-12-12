@@ -4,6 +4,7 @@ export default QuickMongo;
 export const {
     Base,
     Database,
+    QuickMongoError,
     Schema,
     Util,
     version

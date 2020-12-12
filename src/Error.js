@@ -1,4 +1,4 @@
-class QuickError extends Error {
+class QuickMongoError extends Error {
 
     constructor(message, name = null) {
         super();
@@ -9,4 +9,4 @@ class QuickError extends Error {
 
 }
 
-module.exports = QuickError;
+module.exports = QuickMongoError;

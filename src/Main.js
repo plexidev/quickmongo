@@ -3,7 +3,6 @@ const Schema = require("./Schema");
 const Error = require("./Error");
 const fs = require("fs");
 const Util = require("./Util");
-const { deprecate } = require("util");
 
 /**
  * Quick mongodb wrapper
@@ -219,7 +218,6 @@ class Database extends Base {
                     if (typeof add !== "number") throw new Error(`Expected existing data to be a number, received ${typeof add}!`);
                     return this.set(key, add + value);
                 }
-                break;
 
             case "subtract":
             case "sub":
@@ -231,7 +229,6 @@ class Database extends Base {
                     if (typeof less !== "number") throw new Error(`Expected existing data to be a number, received ${typeof less}!`);
                     return this.set(key, less - value);
                 }
-                break;
 
             case "multiply":
             case "mul":
@@ -243,7 +240,6 @@ class Database extends Base {
                     if (typeof mul !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mul}!`);
                     return this.set(key, mul * value);
                 }
-                break;
 
             case "divide":
             case "div":
@@ -255,7 +251,7 @@ class Database extends Base {
                     if (typeof div !== "number") throw new Error(`Expected existing data to be a number, received ${typeof div}!`);
                     return this.set(key, div / value);
                 }
-                break;
+
             case "mod":
             case "%":
                 let mod = await this.get(key);
@@ -265,7 +261,7 @@ class Database extends Base {
                     if (typeof mod !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mod}!`);
                     return this.set(key, mod % value);
                 }
-                break;
+
             default:
                 throw new Error("Unknown operator");
         }
@@ -530,11 +526,13 @@ class Database extends Base {
      * Removes an item from array
      * @param {string} key key
      * @param {any|any[]} value item to remove
+     * @param {boolean} [multiple=true] if it should pull multiple items. Defaults to `true`.
+     * <warn>Currently, you can use `multiple` with `non array` pulls only.</warn>
      * @example db.pull("users", "John"); // -> ["Milo", "Simon", "Kyle"]
      * db.pull("users", ["Milo", "Simon"]); // -> ["Kyle"]
      * @returns {Promise<any>}
      */
-    async pull(key, value) {
+    async pull(key, value, multiple = true) {
         let data = await this.get(key);
         if (data === null) return false;
         if (!Array.isArray(data)) throw new Error(`Expected target type to be Array, received ${typeof data}!`);
@@ -542,8 +540,16 @@ class Database extends Base {
             data = data.filter(i => !value.includes(i));
             return await this.set(key, data);
         } else {
-            data = data.filter(i => i !== value);
-            return await this.set(key, data);
+            if (!!multiple) {
+                data = data.filter(i => i !== value);
+                return await this.set(key, data);
+            } else {
+                const hasItem = data.some(x => x === value);
+                if (!hasItem) return false;
+                const index = data.findIndex(x => x === value);
+                data = data.splice(index, 1);
+                return await this.set(key, data);
+            }
         }
     }
 
@@ -581,18 +587,6 @@ class Database extends Base {
         if (n > data.length) throw new Error("Random value length may not exceed total length.", "RangeError");
         const shuffled = data.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, n);
-    }
-
-    /**
-     * This method acts like `quick.db#table`. It will return new instance of itself.
-     * @param {string} name Model name 
-     * @returns {Database}
-     * @deprecated
-     */
-    table(name) {
-        if (!name || typeof name !== "string") throw new Error("Invalid model name");
-        const CustomModel = new Database(this.dbURL, name, this.options);
-        return CustomModel;
     }
 
     /**
@@ -647,7 +641,7 @@ class Database extends Base {
      * @returns {string}
      */
     toString() {
-        return `${this.schema.modelName}`;
+        return `QuickMongo<{${this.schema.modelName}}>`;
     }
 
     /**
@@ -662,7 +656,5 @@ class Database extends Base {
     }
 
 }
-
-Database.prototype.table = deprecate(Database.prototype.table, "db#table is deprecated and will be removed in future update, please use db#createModel instead!");
 
 module.exports = Database;
