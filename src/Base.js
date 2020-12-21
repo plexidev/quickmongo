@@ -18,8 +18,8 @@ class Base extends EventEmitter {
         if (connectionOptions && typeof connectionOptions !== "object") throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
 
         /**
+         * @typedef {string} dbURL
          * Current database url
-         * @type {string}
          */
         Object.defineProperty(this, "dbURL", {
             value: mongodbURL
@@ -92,7 +92,7 @@ class Base extends EventEmitter {
 
     /**
      * Returns database connection state
-     * @type {"DISCONNECTED"|"CONNECTED"|"CONNECTING"|"DISCONNECTING"}
+     * @type {("DISCONNECTED"|"CONNECTED"|"CONNECTING"|"DISCONNECTING")}
      */
     get state() {
         if (!this.connection || typeof this.connection.readyStaet !== "number") return "DISCONNECTED";
