@@ -24,7 +24,7 @@ class Database extends Base {
          * Current Model
          * @type {MongooseDocument}
          */
-        this.schema = Schema(name);
+        this.schema = Schema(this.connection, name);
     }
 
     /**
@@ -290,7 +290,7 @@ class Database extends Base {
     }
 
     /**
-     * Returns database uptime
+     * Returns database connection uptime
      * @type {number}
      * @example console.log(`Database is up for ${db.uptime} ms.`);
      */

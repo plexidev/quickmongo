@@ -19,16 +19,16 @@ declare module "quickmongo" {
 		public dbURL: string;
 		public options: Mongoose.ConnectionOptions;
 		public readyAt: Date;
+		public connection: Mongoose.Connection;
 
 		constructor(
 		mongodbURL: string,
 		connectionOptions?: Mongoose.ConnectionOptions,
 		);
 
-		private _create(url: string): Promise<void>;
+		private _create(url?: string): Promise<Mongoose.Connection>;
 		private _destroyDatabase(): Promise<void>;
 		public get url(): string;
-		public get connection(): Mongoose.Connection;
 		public get state(): "CONNECTED" | "CONNECTING" | "DISCONNECTED" | "DISCONNECTING";
 
 		public on<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): this;
@@ -88,7 +88,7 @@ declare module "quickmongo" {
 		public schema: ModelReturn;
 
 		constructor(
-		mongodbURL: string,
+		mongodbURL?: string,
 		name?: string,
 		connectionOptions?: Mongoose.ConnectionOptions
 		);

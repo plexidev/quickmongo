@@ -1,6 +1,6 @@
 {
   "name": "quickmongo",
-  "version": "2.0.7",
+  "version": "3.0.0",
   "description": "Quick mongodb wrapper for beginners.",
   "main": "index.js",
   "types": "typings/index.d.ts",
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/DevSnowflake/quickmongo.git"
   },
   "author": "Snowflake107",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/DevSnowflake/quickmongo/issues"
   },
@@ -49,5 +49,9 @@
   },
   "devDependencies": {
     "discord.js-docgen": "github:discordjs/docgen"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }

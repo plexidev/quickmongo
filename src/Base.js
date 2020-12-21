@@ -31,12 +31,16 @@ class Base extends EventEmitter {
          */
         this.options = connectionOptions;
 
-        this._create();
+        /**
+         * Returns mongodb connection
+         * @type {MongooseConnection}
+         */
+        this.connection = this._create();
 
-        mongoose.connection.on("error", (e) => {
+        this.connection.on("error", (e) => {
             this.emit("error", e);
         });
-        mongoose.connection.on("open", () => {
+        this.connection.on("open", () => {
             /**
              * Timestamp when database became ready
              * @type {Date}
@@ -48,19 +52,18 @@ class Base extends EventEmitter {
 
     /**
      * Creates mongodb connection
+     * @returns {MongooseConnection}
      * @ignore
      */
     _create(url) {
-        // do not create multiple connections
-        if (this.state === "CONNECTED" || this.state === "CONNECTING") return;
         this.emit("debug", "Creating database connection...");
 
-        if (url && typeof url === "string") {
-            this.dbURL = url;
-        };
+        if (url && typeof url === "string") this.dbURL = url;
         if (!this.dbURL || typeof this.dbURL !== "string") throw new Error("Database url was not provided!", "MongoError");
+
         delete this.options["useUnique"];
-        mongoose.connect(this.dbURL, {
+
+        return mongoose.createConnection(this.dbURL, {
             ...this.options,
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -73,18 +76,10 @@ class Base extends EventEmitter {
      * @ignore
      */
     _destroyDatabase() {
-        mongoose.disconnect();
+        this.connection.close(true);
         this.readyAt = undefined;
         this.dbURL = null;
         this.emit("debug", "Database disconnected!");
-    }
-
-    /**
-     * Returns mongodb connection
-     * @type {MongooseConnection}
-     */
-    get connection() {
-        return mongoose.connection;
     }
     
     /**
@@ -100,7 +95,8 @@ class Base extends EventEmitter {
      * @type {"DISCONNECTED"|"CONNECTED"|"CONNECTING"|"DISCONNECTING"}
      */
     get state() {
-        switch(mongoose.connection.readyState) {
+        if (!this.connection || typeof this.connection.readyStaet !== "number") return "DISCONNECTED";
+        switch(this.connection.readyState) {
             case 0:
                 return "DISCONNECTED";
             case 1:
