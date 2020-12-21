@@ -11,9 +11,9 @@ class Database extends Base {
 
     /**
      * Creates quickmongo instance
-     * @param {string} mongodbURL Mongodb database url
-     * @param {string} name Model name
-     * @param {object} connectionOptions Mongoose connection options
+     * @param {string} [mongodbURL] Mongodb database url
+     * @param {string} [name] Model name
+     * @param {object} [connectionOptions] Mongoose connection options
      * @example const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
      */
