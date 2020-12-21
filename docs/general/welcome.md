@@ -13,7 +13,7 @@ Quick mongodb wrapper for beginners.
 - Dot notation support
 - Import & export support
 - Key value based
-- Beginner friendly
+- Simple
 - Asynchronous
 - Multiple model support
 
