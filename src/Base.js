@@ -95,7 +95,7 @@ class Base extends EventEmitter {
      * @type {("DISCONNECTED"|"CONNECTED"|"CONNECTING"|"DISCONNECTING")}
      */
     get state() {
-        if (!this.connection || typeof this.connection.readyStaet !== "number") return "DISCONNECTED";
+        if (!this.connection || typeof this.connection.readyState !== "number") return "DISCONNECTED";
         switch(this.connection.readyState) {
             case 0:
                 return "DISCONNECTED";
