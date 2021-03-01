@@ -2,7 +2,7 @@ const { Database } = require("../index");
 const db = new Database("mongodb://localhost/test", "JSON", { useUnique: true });
 
 db.on("ready", () => {
-    console.log(`Hey, im connected! ${db.toString()}`);
+    console.log(`Hey, im ready! ${db.toString()}`);
     execute();
 });
 
@@ -10,7 +10,8 @@ db.on("error", console.error);
 db.on("debug", console.log);
 
 async function execute() {
-
+    await db.deleteAll();
+    
     // Methods (everything should be true)
     console.log('[1] Adding Numbers:', typeof (await db.add('myNumber', 100)) === 'number');
     console.log('[2] Setting Data:', typeof (await db.set('myData', 'This data is here')) === 'string');
@@ -30,7 +31,7 @@ async function execute() {
     const test = db.createModel('test');
     test.set('data', 'hello world').then(console.log);
     console.log(await db.get('data')); // -> null
-    console.log(test.get('data')); // -> 'hello world'
+    console.log(await test.get('data')); // -> 'hello world'
 
     // Setting an object in the database:
     db.set('userInfo', { difficulty: 'Easy' }).then(console.log);

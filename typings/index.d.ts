@@ -142,6 +142,7 @@ declare module "quickmongo" {
 		public get utils(): Util;
 		public updateModel(name: string): ModelReturn;
 		public toString(): string;
+		public get currentModelName(): string;
 		public _eval(code: string): any;
 	}
 

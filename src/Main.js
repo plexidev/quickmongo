@@ -644,6 +644,10 @@ class Database extends Base {
         return `QuickMongo<{${this.schema.modelName}}>`;
     }
 
+    get currentModelName() {
+        return this.schema.modelName;
+    }
+
     /**
      * Allows you to eval code using `this` keyword.
      * @param {string} code code to eval
