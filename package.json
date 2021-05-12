@@ -1,0 +1,42 @@
+{
+  "name": "quickmongo-next",
+  "version": "4.0.0",
+  "description": "Quick mongodb wrapper for beginners.",
+  "main": "lib/index.js",
+  "types": "lib",
+  "scripts": {
+    "build": "tsc -p .",
+    "docs": "docgen --source lib --custom docs/index.yml --output docs/docs.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevSnowflake/quickmongo.git"
+  },
+  "keywords": [
+    "db",
+    "quickmongo",
+    "mongodb",
+    "mongoose",
+    "quick.db",
+    "enmap",
+    "josh",
+    "keyv",
+    "mongo",
+    "easy-mongodb",
+    "endb"
+  ],
+  "author": "Snowflake107 & Scythe108",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DevSnowflake/quickmongo/issues"
+  },
+  "homepage": "https://quickmongo.js.org",
+  "devDependencies": {
+    "@types/lodash": "^4.14.168",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.1"
+  }
+}
