@@ -61,7 +61,7 @@ class Base extends EventEmitter {
     /**
      * Creates database connection
      * @param {string} [url=this.dbURL] Database url
-     * @returns {Connection}
+     * @returns {MongooseConnection}
      */
     _create(url: string): Connection {
         this.emit('debug', 'Creating database connection...');

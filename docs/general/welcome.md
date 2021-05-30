@@ -1,21 +1,25 @@
-# QuickMongo
-Quick mongodb wrapper for beginners.
+<p align="center">
+  <img src="https://cdn.discordapp.com/attachments/793689592414994466/832094486845849610/logo.7959db12_50.png" />
+</p>
 
-![QuickMongo](https://nodei.co/npm/quickmongo.png)
+## Download & Installation
 
-# Documentation
-**[QuickMongo](https://quickmongo.js.org)**
+```shell
+$ npm i quickmongo
+```
 
 # Features
 - Beginner friendly
-- Easy to use
 - Very similar to **[quick.db](https://npmjs.com/package/quick.db)**
 - Dot notation support
 - Import & export support
 - Key value based
-- Simple
 - Asynchronous
 - Multiple model support
+<h3>-> <a href="https://quickmongo.js.org">Documentation</a></h3>
+<h3>-> <a href="https://github.com/DevSnowflake/quickmongo">Github Repository</a></h3>
+<h3>-> <a href="https://discord.gg/uqB8kxh">Support Server (Discord)</a></h3>
+<br>
 
 # Quick Example
 
@@ -32,7 +36,7 @@ db.set("foo", "bar");
 db.get("foo").then(console.log);
 ```
 
-# Importing data from quick.db
+# Import Existing Data From quick.db
 
 ```js
 const db = require("quick.db");
@@ -48,11 +52,6 @@ function importData() {
 
 mongo.on("ready", () => importData());
 ```
-
-# Links
-- **[Discord Support Server](https://discord.gg/2SUybzb)**
-- **[Documentation](https://quickmongo.js.org)**
-- **[GitHub](https://github.com/Snowflake107/quickmongo)**
 
 # Example
 

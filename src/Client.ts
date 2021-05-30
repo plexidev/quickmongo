@@ -29,7 +29,7 @@ class MongoClient extends Base {
 
         /**
          * QuickMongo's Main Schema / Current Model
-         * @type {Document}
+         * @type {MongooseDocument}
          */
         this.schema = QuickMongoSchema(this.connection, name!);
     }
