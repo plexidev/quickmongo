@@ -8,6 +8,7 @@ import QuickMongoError from './util/QuickMongoError';
 
 /**
  * A quick.db like wrapper for MongoDB.
+ * @extends Base
  */
 class MongoClient extends Base {
     schema: Model<Document<any, any>, {}, {}>;
