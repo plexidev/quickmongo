@@ -3,5 +3,5 @@ lib/
 .vscode/
 docs/
 test/
+dev/
 yarn-error.log
-lib/
