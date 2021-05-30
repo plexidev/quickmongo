@@ -3,6 +3,10 @@ import { EventEmitter } from 'events';
 import mongoose from 'mongoose';
 import Error from './util/QuickMongoError';
 
+/**
+ * Base db
+ * @extends EventEmitter
+ */
 class Base extends EventEmitter {
     connection!: Connection;
     readyAt!: Date | undefined;
@@ -23,10 +27,11 @@ class Base extends EventEmitter {
         if (connectionOptions && typeof connectionOptions !== 'object') throw new Error(`Expected Object for connectionOptions, received ${typeof connectionOptions}`);
 
         /**
-         * @typedef {string} dbURL
+         * @name Base#dbURL
+         * @type {string}
          * Current database url
          */
-        Object.defineProperty(this, 'dbURL', { value: mongodbURL });
+        Object.defineProperty(this, 'dbURL', { value: mongodbURL, writable: true, configurable: true, enumerable: false });
 
         /**
          * Mongoose connection options
@@ -45,6 +50,7 @@ class Base extends EventEmitter {
         this.connection.on('open', () => {
             /**
              * Timestamp when database became ready
+             * @name Base#readyAt
              * @type {Date}
              */
             this.readyAt = new Date();
@@ -52,6 +58,11 @@ class Base extends EventEmitter {
         });
     }
 
+    /**
+     * Creates database connection
+     * @param {string} [url=this.dbURL] Database url
+     * @returns {Connection}
+     */
     _create(url: string): Connection {
         this.emit('debug', 'Creating database connection...');
 
@@ -68,7 +79,7 @@ class Base extends EventEmitter {
 
     /**
      * Destroys database
-     * @ignore
+     * @private
      */
     _destroyDatabase() {
         this.connection.close(true);
@@ -77,7 +88,10 @@ class Base extends EventEmitter {
         this.emit('debug', 'Database connection ended.');
     }
 
-    /** Current database url */
+    /**
+     * Current database url
+     * @type {string}
+     */
     get url(): string {
         return this.dbURL!;
     }

@@ -16,7 +16,7 @@ class MongoClient extends Base {
      * Instantiates QuickMongo
      * @param {string} [mongodbURL] MongoDB Database URI/URL
      * @param {string} [name] Model Name
-     * @param {object} [connectionOptions] Mongoose Connection Options
+     * @param {ConnectionOptions} [connectionOptions] Mongoose Connection Options
      * @example
      * const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
@@ -27,7 +27,7 @@ class MongoClient extends Base {
         super(mongodbURL ?? process.env.MONGODB_URL!, connectionOptions);
 
         /**
-         * @property QuickMongo's Main Schema / Current Model
+         * QuickMongo's Main Schema / Current Model
          * @type {Document}
          */
         this.schema = QuickMongoSchema(this.connection, name!);
@@ -86,7 +86,7 @@ class MongoClient extends Base {
 
     /**
      * Fetch Multiple Documents
-     * @param keys Array Of Key's To Fetch
+     * @param {string[]} keys Array Of Key's To Fetch
      * @returns {Array<object>}
      */
     public async getMultiple(keys: Array<string>) {
@@ -134,7 +134,7 @@ class MongoClient extends Base {
 
     /**
      * Delete Multiple Documents
-     * @param keys Key's To Delete
+     * @param {string[]} keys Key's To Delete
      */
     public async deleteMultiple(keys: Array<string>) {
         await this.schema.deleteMany({ ID: { $in: keys } });
@@ -484,7 +484,7 @@ class MongoClient extends Base {
      * Resolves data type
      * @param {string} key key
      * @example console.log(await db.type("foo"));
-     * @returns {Promise<"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | "array">}
+     * @returns {Promise<("string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | "array")>}
      */
     async type(key: string) {
         if (!Util.isKey(key)) throw new QuickMongoError('Invalid Key!', 'KeyError');
@@ -657,6 +657,11 @@ class MongoClient extends Base {
         return `QuickMongo<{${this.schema.modelName}}>`;
     }
 
+    /**
+     * Current model name
+     * @type {string}
+     * @readonly
+     */
     get currentModelName() {
         return this.schema.modelName;
     }
@@ -672,5 +677,27 @@ class MongoClient extends Base {
         return eval(code);
     }
 }
+
+/**
+ * Emitted when database creates connection
+ * @event Base#ready
+ * @example db.on("ready", () => {
+ *     console.log("Successfully connected to the database!");
+ * });
+ */
+
+/**
+ * Emitted when database encounters error
+ * @event Base#error
+ * @param {Error} Error Error Message
+ * @example db.on("error", console.error);
+ */
+
+/**
+ * Emitted on debug mode
+ * @event Base#debug
+ * @param {string} Message Debug message
+ * @example db.on("debug", console.log);
+ */
 
 export default MongoClient;
