@@ -1,9 +1,10 @@
 {
-  "name": "quickmongo-next",
+  "name": "quickmongo",
   "version": "4.0.0",
   "description": "Quick mongodb wrapper for beginners.",
   "main": "lib/index.js",
   "types": "lib",
+  "private":false,
   "scripts": {
     "build": "tsc -p .",
     "docs": "docgen --source lib --custom docs/index.yml --output docs/docs.json"

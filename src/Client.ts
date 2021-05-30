@@ -6,6 +6,7 @@ import Util from './util/util';
 import QuickMongoSchema from './QuickMongoSchema';
 import QuickMongoError from './util/QuickMongoError';
 
+
 /**
  * A quick.db like wrapper for MongoDB.
  */
@@ -38,23 +39,25 @@ class MongoClient extends Base {
     * @returns {any}
     */
     public async set(key: string, value: any): Promise<any> {
-            if (!Util.isKey(key)) throw new QuickMongoError("Invalid Key or No Key Specificed.", "KeyError");
-            if (!Util.isValue(value)) throw new QuickMongoError("Invalid Value or No Value Specificed.", "ValueError");
-    
-            const parsed = Util.parseKey(key);
-            let rawData = await this.schema.findOne({ ID: parsed.key });
+        if (!Util.isKey(key)) throw new QuickMongoError("Invalid Key or No Key Specificed.", "KeyError");
+        if (!Util.isValue(value)) throw new QuickMongoError("Invalid Value or No Value Specificed.", "ValueError");
 
-            if (rawData) {
-                rawData.data = parsed.target ? Util.setData(key, Object.assign({}, rawData.data), value) : value;
-                await rawData.save().catch((e: ExceptionInformation) => this.emit("error", e));
-    
-                return rawData.data;
-            }
-    
-            let data = new this.schema({ ID: parsed.key, data: parsed.target ? Util.setData(key, {}, value) : value });
-            await data.save().catch((e: ExceptionInformation) => this.emit("error", e));
+        const parsed = Util.parseKey(key);
 
-            return data.data;
+        const data = await this.schema.findOneAndUpdate(
+            {
+                ID: { $eq: parsed.key },
+            },
+            {
+                $set: { ID: parsed.key, data: parsed.target ? Util.setData(key, {}, value) : value },
+            },
+            {
+                upsert: true,
+            },
+        );
+
+        if (data == null) return {};
+        return data.data;
     }
 
     /**
@@ -82,6 +85,16 @@ class MongoClient extends Base {
     }
 
     /**
+     * Fetch Multiple Documents
+     * @param keys Array Of Key's To Fetch
+     * @returns {Array<object>}
+     */
+    public async getMultiple(keys: Array<string>) {
+        const data = await this.schema.find({ ID: { $in: keys } });
+        return data;
+    }
+
+    /**
      * Fetches the data from database
      * @param {string} key Key
      * @example db.fetch("foo").then(console.log);
@@ -98,27 +111,36 @@ class MongoClient extends Base {
     * @example db.delete("foo").then(() => console.log("Deleted data"));
     * @returns {Promise<boolean>}
     */
-    public async delete(key: string, value?: any) {
-       if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
+    public async delete(key: string) {
+        if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
 
-       const parsed = Util.parseKey(key);
-       const raw = await this.schema.findOne({ ID: parsed.key });
-       if (!raw) return false;
+        const parsed = Util.parseKey(key);
+        const raw = await this.schema.findOne({ ID: parsed.key });
+        if (!raw) return false;
 
-       if (parsed.target) {
-           let data = Util.unsetData(key, Object.assign({}, raw.data));
-           if (data === raw.data) return false;
+        if (parsed.target) {
+            let data = Util.unsetData(key, Object.assign({}, raw.data));
+            if (data === raw.data) return false;
 
-           raw.data = data;
-           raw.save().catch((e: ExceptionInformation) => this.emit("error", e));
+            await this.schema.findOneAndUpdate({ ID: { $eq: parsed.key } }, { data })
+                .catch((e: ExceptionInformation) => this.emit("error", e));
 
-           return true;
-       }
+            return true;
+        }
 
-        await this.schema.findOneAndDelete({ ID: parsed.key })
+        await this.schema.findOneAndDelete({ ID: { $eq: parsed.key } })
             .catch((e: ExceptionInformation) => this.emit("error", e));
 
         return true;
+    }
+
+   /**
+    * Delete Multiple Documents 
+    * @param keys Key's To Delete
+    */
+   public async deleteMultiple(keys: Array<string>) {
+    await this.schema.deleteMany({ ID: { $in: keys }});
+    return true;
    }
 
     /**
