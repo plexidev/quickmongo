@@ -1,0 +1,26 @@
+[
+    {
+        "ID": "myNumber",
+        "data": 50
+    },
+    {
+        "ID": "myVal",
+        "data": [
+            "val"
+        ]
+    },
+    {
+        "ID": "myObj",
+        "data": {
+            "arr": [
+                "myItem"
+            ]
+        }
+    },
+    {
+        "ID": "userInfo",
+        "data": {
+            "balance": 500
+        }
+    }
+]
