@@ -18,7 +18,7 @@ $ npm i quickmongo
 - Multiple model support
 <h3>-> <a href="https://quickmongo.js.org">Documentation</a></h3>
 <h3>-> <a href="https://github.com/DevSnowflake/quickmongo">Github Repository</a></h3>
-<h3>-> <a href="https://discord.gg/uqB8kxh">Support Server (discord)</a></h3>
+<h3>-> <a href="https://discord.gg/uqB8kxh">Support Server (Discord)</a></h3>
 <br>
 
 # Quick Example
