@@ -1,63 +1,64 @@
 import fs from 'fs';
-import { Connection } from 'mongoose';
+import { Connection, Model, Document, ConnectOptions } from 'mongoose';
 
 import Base from './Base';
 import Util from './util/util';
 import QuickMongoSchema from './QuickMongoSchema';
 import QuickMongoError from './util/QuickMongoError';
 
-
 /**
  * A quick.db like wrapper for MongoDB.
  */
 class MongoClient extends Base {
+    schema: Model<Document<any, any>, {}, {}>;
+
     /**
      * Instantiates QuickMongo
      * @param {string} [mongodbURL] MongoDB Database URI/URL
      * @param {string} [name] Model Name
      * @param {object} [connectionOptions] Mongoose Connection Options
-     * @example 
+     * @example
      * const { Database } = require("quickmongo");
      * const db = new Database("mongodb://localhost/quickmongo");
-     * 
+     *
      * db.set('someKey', "someValue").then(console.log)
      */
-    constructor(mongodbURL: string | any, name: string | null = null, connectionOptions: object={}) {
-        super(mongodbURL || process.env.MONGODB_URL, connectionOptions)
+    constructor(mongodbURL: string, name: string | null = null, connectionOptions: ConnectOptions & { useUnique?: boolean } = {}) {
+        super(mongodbURL ?? process.env.MONGODB_URL!, connectionOptions);
 
         /**
          * @property QuickMongo's Main Schema / Current Model
          * @type {Document}
          */
-        this.schema = QuickMongoSchema(this.connection, this.name)
+        this.schema = QuickMongoSchema(this.connection, name!);
     }
 
     /**
-    * Sets or Updates Existing Data
-    * @param {string} key Key
-    * @example db.set("foo", "bar").then(() => console.log("Updated/Set data"));
-    * @returns {any}
-    */
+     * Sets or Updates Existing Data
+     * @param {string} key Key
+     * @example db.set("foo", "bar").then(() => console.log("Updated/Set data"));
+     * @returns {any}
+     */
     public async set(key: string, value: any): Promise<any> {
-        if (!Util.isKey(key)) throw new QuickMongoError("Invalid Key or No Key Specificed.", "KeyError");
-        if (!Util.isValue(value)) throw new QuickMongoError("Invalid Value or No Value Specificed.", "ValueError");
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid Key or No Key Specificed.', 'KeyError');
+        if (!Util.isValue(value)) throw new QuickMongoError('Invalid Value or No Value Specificed.', 'ValueError');
 
         const parsed = Util.parseKey(key);
 
         const data = await this.schema.findOneAndUpdate(
             {
-                ID: { $eq: parsed.key },
+                ID: { $eq: parsed.key }
             },
             {
-                $set: { ID: parsed.key, data: parsed.target ? Util.setData(key, {}, value) : value },
+                $set: { ID: parsed.key, data: parsed.target ? Util.setData(key, {}, value) : value }
             },
             {
-                upsert: true,
-            },
+                upsert: true
+            }
         );
 
         if (data == null) return {};
-        return data.data;
+        return (data as any).data;
     }
 
     /**
@@ -67,20 +68,19 @@ class MongoClient extends Base {
      * @returns {any}
      */
     public async get(key: string): Promise<any> {
-        if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
         const parsed = Util.parseKey(key);
 
-        let get = await this.schema.findOne({ ID: parsed.key })
-            .catch((e: ExceptionInformation) => this.emit("error", e));
+        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => this.emit('error', e));
 
         if (!get) return null;
-        let item; 
+        let item;
 
         if (parsed.target) {
-            item = Util.getData(key, Object.assign({}, get.data));
-        } 
-        
-        item = get.data;
+            item = Util.getData(key, Object.assign({}, (get as any).data));
+        }
+
+        item = (get as any).data;
         return item !== undefined ? item : null;
     }
 
@@ -105,43 +105,41 @@ class MongoClient extends Base {
     }
 
     /**
-    * Removes/Delete's data from the database.
-    * @param {string} key Key
-    * @param {any} value Value
-    * @example db.delete("foo").then(() => console.log("Deleted data"));
-    * @returns {Promise<boolean>}
-    */
+     * Removes/Delete's data from the database.
+     * @param {string} key Key
+     * @param {any} value Value
+     * @example db.delete("foo").then(() => console.log("Deleted data"));
+     * @returns {Promise<boolean>}
+     */
     public async delete(key: string) {
-        if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
 
         const parsed = Util.parseKey(key);
         const raw = await this.schema.findOne({ ID: parsed.key });
         if (!raw) return false;
 
         if (parsed.target) {
-            let data = Util.unsetData(key, Object.assign({}, raw.data));
-            if (data === raw.data) return false;
+            let data = Util.unsetData(key, Object.assign({}, (raw as any).data));
+            if (data === (raw as any).data) return false;
 
-            await this.schema.findOneAndUpdate({ ID: { $eq: parsed.key } }, { data })
-                .catch((e: ExceptionInformation) => this.emit("error", e));
+            await this.schema.findOneAndUpdate({ ID: { $eq: parsed.key } }, { data }).catch((e: Error) => this.emit('error', e));
 
             return true;
         }
 
-        await this.schema.findOneAndDelete({ ID: { $eq: parsed.key } })
-            .catch((e: ExceptionInformation) => this.emit("error", e));
+        await this.schema.findOneAndDelete({ ID: { $eq: parsed.key } }).catch((e: Error) => this.emit('error', e));
 
         return true;
     }
 
-   /**
-    * Delete Multiple Documents 
-    * @param keys Key's To Delete
-    */
-   public async deleteMultiple(keys: Array<string>) {
-    await this.schema.deleteMany({ ID: { $in: keys }});
-    return true;
-   }
+    /**
+     * Delete Multiple Documents
+     * @param keys Key's To Delete
+     */
+    public async deleteMultiple(keys: Array<string>) {
+        await this.schema.deleteMany({ ID: { $in: keys } });
+        return true;
+    }
 
     /**
      * Checks if there is a data stored with the given key
@@ -150,16 +148,16 @@ class MongoClient extends Base {
      * @returns {Promise<boolean>}
      */
     public async exists(key: string) {
-        if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
-        
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
+
         const parsed = Util.parseKey(key);
-        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: ExceptionInformation) => this.emit("error", e));
+        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => this.emit('error', e));
         if (!get) return false;
 
         let item;
-        if (parsed.target) item = Util.getData(key, Object.assign({}, get.data))
+        if (parsed.target) item = Util.getData(key, Object.assign({}, (get as any).data));
 
-        item = get.data;
+        item = (get as any).data;
         return item === undefined ? false : true;
     }
 
@@ -173,7 +171,7 @@ class MongoClient extends Base {
         return await this.exists(key);
     }
 
-        /**
+    /**
      * @typedef {object} Data
      * @property {string} ID Data id
      * @property {any} data Data
@@ -186,12 +184,12 @@ class MongoClient extends Base {
      * @returns {Promise<Data[]>}
      * @example console.log(`There are total ${data.length} entries.`);
      */
-     async all(limit = 0) {
-        if (typeof limit !== "number" || limit < 1) limit = 0;
-        let data = await this.schema.find().catch((e: ExceptionInformation) => {});
-        if (!!limit) data = data.slice(0, limit);
+    async all(limit = 0) {
+        if (typeof limit !== 'number' || limit < 1) limit = 0;
+        let data = await this.schema.find().catch((e: Error) => {});
+        if (!!limit) data = (data as any[]).slice(0, limit);
 
-        return data.map((m: any) => ({ ID: m.ID, data: m.data }));
+        return (data as any[]).map((m: any) => ({ ID: m.ID, data: m.data }));
     }
 
     /**
@@ -211,12 +209,12 @@ class MongoClient extends Base {
      * @returns {Promise<boolean>}
      */
     async deleteAll() {
-        this.emit("debug", "Deleting everything from the database...");
-        await this.schema.deleteMany().catch((e: ExceptionInformation) => {});
+        this.emit('debug', 'Deleting everything from the database...');
+        await this.schema.deleteMany().catch((e: Error) => {});
         return true;
     }
 
-        /**
+    /**
      * Math calculation
      * @param {string} key Key of the data
      * @param {string} operator One of +, -, *, / or %
@@ -224,93 +222,93 @@ class MongoClient extends Base {
      * @example db.math("items", "+", 200).then(() => console.log("Added 200 items"));
      * @returns {Promise<any>}
      */
-         async math(key: string, operator: string, value: number) {
-            if (!Util.isKey(key)) throw new QuickMongoError("Invalid key specified!", "KeyError");
-            if (!operator) throw new Error("No operator provided!");
-            if (!Util.isValue(value)) throw new QuickMongoError("Invalid value specified!", "ValueError");
-    
-            switch(operator) {
-                case "add":
-                case "+":
-                    let add = await this.get(key);
-                    if (!add) {
-                        return this.set(key, value);
-                    } else {
-                        if (typeof add !== "number") throw new Error(`Expected existing data to be a number, received ${typeof add}!`);
-                        return this.set(key, add + value);
-                    }
-    
-                case "subtract":
-                case "sub":
-                case "-":
-                    let less = await this.get(key);
-                    if (!less) {
-                        return this.set(key, 0 - value);
-                    } else {
-                        if (typeof less !== "number") throw new Error(`Expected existing data to be a number, received ${typeof less}!`);
-                        return this.set(key, less - value);
-                    }
-    
-                case "multiply":
-                case "mul":
-                case "*":
-                    let mul = await this.get(key);
-                    if (!mul) {
-                        return this.set(key, 0 * value);
-                    } else {
-                        if (typeof mul !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mul}!`);
-                        return this.set(key, mul * value);
-                    }
-    
-                case "divide":
-                case "div":
-                case "/":
-                    let div = await this.get(key);
-                    if (!div) {
-                        return this.set(key, 0 / value);
-                    } else {
-                        if (typeof div !== "number") throw new Error(`Expected existing data to be a number, received ${typeof div}!`);
-                        return this.set(key, div / value);
-                    }
-    
-                case "mod":
-                case "%":
-                    let mod = await this.get(key);
-                    if (!mod) {
-                        return this.set(key, 0 % value);
-                    } else {
-                        if (typeof mod !== "number") throw new Error(`Expected existing data to be a number, received ${typeof mod}!`);
-                        return this.set(key, mod % value);
-                    }
-    
-                default:
-                    throw new Error("Unknown operator");
-            }
-        }
-    
-        /**
-         * Add
-         * @param {string} key key
-         * @param {number} value value
-         * @example db.add("items", 200).then(() => console.log("Added 200 items"));
-         * @returns {Promise<any>}
-         */
-        async add(key: string, value: number) {
-            return await this.math(key, "+", value);
-        }
-    
-        /**
-         * Subtract
-         * @param {string} key Key
-         * @param {number} value Value     
-         * @example db.subtract("items", 100).then(() => console.log("Removed 100 items"));
-         * @returns {Promise<any>}
-         */
-        async subtract(key: string, value: number) {
-            return await this.math(key, "-", value);
-        }
+    async math(key: string, operator: string, value: number) {
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
+        if (!operator) throw new Error('No operator provided!');
+        if (!Util.isValue(value)) throw new QuickMongoError('Invalid value specified!', 'ValueError');
 
-            /**
+        switch (operator) {
+            case 'add':
+            case '+':
+                let add = await this.get(key);
+                if (!add) {
+                    return this.set(key, value);
+                } else {
+                    if (typeof add !== 'number') throw new Error(`Expected existing data to be a number, received ${typeof add}!`);
+                    return this.set(key, add + value);
+                }
+
+            case 'subtract':
+            case 'sub':
+            case '-':
+                let less = await this.get(key);
+                if (!less) {
+                    return this.set(key, 0 - value);
+                } else {
+                    if (typeof less !== 'number') throw new Error(`Expected existing data to be a number, received ${typeof less}!`);
+                    return this.set(key, less - value);
+                }
+
+            case 'multiply':
+            case 'mul':
+            case '*':
+                let mul = await this.get(key);
+                if (!mul) {
+                    return this.set(key, 0 * value);
+                } else {
+                    if (typeof mul !== 'number') throw new Error(`Expected existing data to be a number, received ${typeof mul}!`);
+                    return this.set(key, mul * value);
+                }
+
+            case 'divide':
+            case 'div':
+            case '/':
+                let div = await this.get(key);
+                if (!div) {
+                    return this.set(key, 0 / value);
+                } else {
+                    if (typeof div !== 'number') throw new Error(`Expected existing data to be a number, received ${typeof div}!`);
+                    return this.set(key, div / value);
+                }
+
+            case 'mod':
+            case '%':
+                let mod = await this.get(key);
+                if (!mod) {
+                    return this.set(key, 0 % value);
+                } else {
+                    if (typeof mod !== 'number') throw new Error(`Expected existing data to be a number, received ${typeof mod}!`);
+                    return this.set(key, mod % value);
+                }
+
+            default:
+                throw new Error('Unknown operator');
+        }
+    }
+
+    /**
+     * Add
+     * @param {string} key key
+     * @param {number} value value
+     * @example db.add("items", 200).then(() => console.log("Added 200 items"));
+     * @returns {Promise<any>}
+     */
+    async add(key: string, value: number) {
+        return await this.math(key, '+', value);
+    }
+
+    /**
+     * Subtract
+     * @param {string} key Key
+     * @param {number} value Value
+     * @example db.subtract("items", 100).then(() => console.log("Removed 100 items"));
+     * @returns {Promise<any>}
+     */
+    async subtract(key: string, value: number) {
+        return await this.math(key, '-', value);
+    }
+
+    /**
      * Returns database connection uptime
      * @type {number}
      * @example console.log(`Database is up for ${db.uptime} ms.`);
@@ -330,29 +328,31 @@ class MongoClient extends Base {
      *     console.log(`File exported to ${path}`);
      * });
      */
-    export(fileName="database", path="./") {
+    export(fileName = 'database', path = './') {
         return new Promise((resolve, reject) => {
-            this.emit("debug", `Exporting database entries to ${path || ""}${fileName}`);
+            this.emit('debug', `Exporting database entries to ${path || ''}${fileName}`);
 
-            this.all().then((data) => {
-                const strData = JSON.stringify(data);
-                if (fileName) {
-                    fs.writeFileSync(`${path || ""}${fileName}`, strData);
-                    this.emit("debug", `Exported all data!`);
-                    return resolve(`${path || ""}${fileName}`);
-                }
-                return resolve(strData);
-            }).catch(reject);
+            this.all()
+                .then((data) => {
+                    const strData = JSON.stringify(data);
+                    if (fileName) {
+                        fs.writeFileSync(`${path || ''}${fileName}`, strData);
+                        this.emit('debug', `Exported all data!`);
+                        return resolve(`${path || ''}${fileName}`);
+                    }
+                    return resolve(strData);
+                })
+                .catch(reject);
         });
     }
 
     /**
      * <warn>You should set `useUnique` to `true` in order to avoid duplicate documents.</warn>
-     * 
-     * Imports data from other source to quickmongo. 
-     * 
+     *
+     * Imports data from other source to quickmongo.
+     *
      * Data type should be Array containing `ID` and `data` fields.
-     * Example: 
+     * Example:
      * ```js
      * [{ ID: "foo", data: "bar" }, { ID: "hi", data: "hello" }]
      * ```
@@ -366,19 +366,19 @@ class MongoClient extends Base {
      */
     import(data: any[] = [], ops: object | any = { unique: false, validate: false }) {
         return new Promise(async (resolve, reject) => {
-            if (!Array.isArray(data)) return reject(new QuickMongoError(`Data type must be Array, received ${typeof data}!`, "DataTypeError"));
+            if (!Array.isArray(data)) return reject(new QuickMongoError(`Data type must be Array, received ${typeof data}!`, 'DataTypeError'));
             if (data.length < 1) return resolve(false);
 
             if (!ops.unique) {
                 this.schema.insertMany(data, { ordered: !ops.validate }, (error: any) => {
-                    if (error) return reject(new QuickMongoError(`${error}`, "DataImportError"));
+                    if (error) return reject(new QuickMongoError(`${error}`, 'DataImportError'));
                     return resolve(true);
                 });
-            } 
+            }
 
             data.forEach((x: never | any, i: never | any) => {
                 if (!ops.validate && (!x.ID || !x.data)) return;
-                else if (!!ops.validate && (!x.ID || !x.data)) return reject(new QuickMongoError(`Data is missing ${!x.ID ? "ID" : "data"} path!`, "DataImportError"));
+                else if (!!ops.validate && (!x.ID || !x.data)) return reject(new QuickMongoError(`Data is missing ${!x.ID ? 'ID' : 'data'} path!`, 'DataImportError'));
                 setTimeout(() => this.set(x.ID, x.data), 150 * (i + 1));
             });
 
@@ -392,15 +392,15 @@ class MongoClient extends Base {
      * @returns {void}
      */
     disconnect(): void {
-        this.emit("debug", "'database.disconnect()' was called, destroying the process...");
+        this.emit('debug', "'database.disconnect()' was called, destroying the process...");
         return this._destroyDatabase();
     }
 
     /**
      * Creates database connection.
-     * 
+     *
      * You don't need to call this method because it is automatically called by database manager.
-     * 
+     *
      * @param {string} url Database url
      * @returns {void}
      */
@@ -416,7 +416,7 @@ class MongoClient extends Base {
      */
     async _read() {
         let start = Date.now();
-        await this.get("LQ==");
+        await this.get('LQ==');
         return Date.now() - start;
     }
 
@@ -428,7 +428,7 @@ class MongoClient extends Base {
      */
     async _write() {
         let start = Date.now();
-        await this.set("LQ==", Buffer.from(start.toString()).toString("base64"));
+        await this.set('LQ==', Buffer.from(start.toString()).toString('base64'));
         return Date.now() - start;
     }
 
@@ -451,7 +451,7 @@ class MongoClient extends Base {
         let read = await this._read();
         let write = await this._write();
         let average = (read + write) / 2;
-        this.delete("LQ==").catch(e => {});
+        this.delete('LQ==').catch((e) => {});
         return { read, write, average };
     }
 
@@ -475,7 +475,7 @@ class MongoClient extends Base {
      * @returns {Promise<Data[]>}
      */
     async startsWith(key: string, ops: any) {
-        if (!key || typeof key !== "string") throw new QuickMongoError(`Expected key to be a string, received ${typeof key}`);
+        if (!key || typeof key !== 'string') throw new QuickMongoError(`Expected key to be a string, received ${typeof key}`);
         let all = await this.all(ops && ops.limit);
         return Util.sort(key, all, ops);
     }
@@ -487,9 +487,9 @@ class MongoClient extends Base {
      * @returns {Promise<"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function" | "array">}
      */
     async type(key: string) {
-        if (!Util.isKey(key)) throw new QuickMongoError("Invalid Key!", "KeyError");
+        if (!Util.isKey(key)) throw new QuickMongoError('Invalid Key!', 'KeyError');
         let fetched = await this.get(key);
-        if (Array.isArray(fetched)) return "array";
+        if (Array.isArray(fetched)) return 'array';
         return typeof fetched;
     }
 
@@ -550,18 +550,18 @@ class MongoClient extends Base {
         if (data === null) return false;
         if (!Array.isArray(data)) throw new Error(`Expected target type to be Array, received ${typeof data}!`);
         if (Array.isArray(value)) {
-            data = data.filter(i => !value.includes(i));
+            data = data.filter((i) => !value.includes(i));
             return await this.set(key, data);
         }
 
         if (!!multiple) {
-            data = data.filter(i => i !== value);
+            data = data.filter((i) => i !== value);
             return await this.set(key, data);
         }
 
-        const hasItem = data.some(x => x === value);
+        const hasItem = data.some((x) => x === value);
         if (!hasItem) return false;
-        const index = data.findIndex(x => x === value);
+        const index = data.findIndex((x) => x === value);
         data = data.splice(index, 1);
         return await this.set(key, data);
     }
@@ -584,7 +584,7 @@ class MongoClient extends Base {
      * console.log(raw);
      */
     async raw(params: object) {
-        return await this.schema.find(params); 
+        return await this.schema.find(params);
     }
 
     /**
@@ -595,21 +595,21 @@ class MongoClient extends Base {
      * console.log(random);
      */
     async random(n: number = 1) {
-        if (typeof n !== "number" || n < 1) n = 1;
+        if (typeof n !== 'number' || n < 1) n = 1;
         const data = await this.all();
-        if (n > data.length) throw new QuickMongoError("Random value length may not exceed total length.", "RangeError");
+        if (n > data.length) throw new QuickMongoError('Random value length may not exceed total length.', 'RangeError');
         const shuffled = data.sort(() => 0.5 - Math.random());
         return shuffled.slice(0, n);
     }
 
     /**
      * This method acts like `quick.db#table`. It will return new instance of itself.
-     * @param {string} name Model name 
+     * @param {string} name Model name
      * @returns {Database}
      */
-    createModel(name:string) {
-        if (!name || typeof name !== "string") throw new Error("Invalid model name");
-        const CustomModel = new MongoClient(this.dbURL, name, this.options);
+    createModel(name: string) {
+        if (!name || typeof name !== 'string') throw new Error('Invalid model name');
+        const CustomModel = new MongoClient(this.dbURL!, name, this.options);
         return CustomModel;
     }
 
@@ -620,7 +620,7 @@ class MongoClient extends Base {
      * @example const data = await db.exportToQuickDB(quickdb);
      */
     async exportToQuickDB(quickdb: any) {
-        if (!quickdb) throw new Error("Quick.DB Instance Was Not Provided.");
+        if (!quickdb) throw new Error('Quick.DB Instance Was Not Provided.');
 
         const data = await this.all();
         data.forEach((item: any) => quickdb.set(item.ID, item.data));
@@ -640,7 +640,7 @@ class MongoClient extends Base {
 
     /**
      * Updates current model and uses new one
-     * @param {string} name Model Name 
+     * @param {string} name Model Name
      * @returns {MongooseDocument}
      */
     updateModel(name: string) {
@@ -671,7 +671,6 @@ class MongoClient extends Base {
     _eval(code: string) {
         return eval(code);
     }
-
 }
 
 export default MongoClient;

@@ -3,7 +3,7 @@ class QuickMongoError extends Error {
         super();
         Error.captureStackTrace(this, this.constructor);
         this.message = message;
-        this.name = name || "TypeError";
+        this.name = name ?? 'TypeError';
     }
 }
 

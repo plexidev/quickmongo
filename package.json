@@ -3,11 +3,12 @@
   "version": "4.0.0",
   "description": "Quick mongodb wrapper for beginners.",
   "main": "lib/index.js",
-  "types": "lib",
-  "private":false,
+  "types": "lib/index.d.ts",
+  "private": false,
   "scripts": {
     "build": "tsc -p .",
-    "docs": "docgen --source lib --custom docs/index.yml --output docs/docs.json"
+    "docs": "docgen --source lib --custom docs/index.yml --output docs/docs.json",
+    "format": "prettier --write src/*.{js,ts}"
   },
   "repository": {
     "type": "git",
@@ -33,11 +34,14 @@
   },
   "homepage": "https://quickmongo.js.org",
   "devDependencies": {
-    "@types/lodash": "^4.14.168",
-    "typescript": "^4.2.3"
+    "@discordjs/docgen": "discordjs/docgen",
+    "@types/lodash": "^4.14.170",
+    "@types/node": "^15.6.1",
+    "prettier": "^2.3.0",
+    "typescript": "^4.3.2"
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "mongoose": "^5.12.1"
+    "mongoose": "^5.12.12"
   }
 }
