@@ -680,7 +680,7 @@ class MongoClient extends Base {
 
 /**
  * Emitted when database creates connection
- * @event Base#ready
+ * @event MongoClient#ready
  * @example db.on("ready", () => {
  *     console.log("Successfully connected to the database!");
  * });
@@ -688,14 +688,14 @@ class MongoClient extends Base {
 
 /**
  * Emitted when database encounters error
- * @event Base#error
+ * @event MongoClient#error
  * @param {Error} Error Error Message
  * @example db.on("error", console.error);
  */
 
 /**
  * Emitted on debug mode
- * @event Base#debug
+ * @event MongoClient#debug
  * @param {string} Message Debug message
  * @example db.on("debug", console.log);
  */
