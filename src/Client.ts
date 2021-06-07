@@ -1,10 +1,9 @@
-import fs from 'fs';
 import { Connection, Model, Document, ConnectOptions } from 'mongoose';
-
 import Base from './Base';
 import Util from './util/util';
 import QuickMongoSchema from './QuickMongoSchema';
 import QuickMongoError from './util/QuickMongoError';
+import { isEmpty } from 'lodash';
 
 /**
  * A quick.db like wrapper for MongoDB.
@@ -73,16 +72,15 @@ class MongoClient extends Base {
         const parsed = Util.parseKey(key);
 
         let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => this.emit('error', e));
-
-        if (!get) return null;
+        if (!get || !("data" in (get as any))) return null;
         let item;
 
         if (parsed.target) {
             item = Util.getData(key, Object.assign({}, (get as any).data));
         }
 
-        item = (get as any).data;
-        return item !== undefined ? item : null;
+        item = "data" in (get as any) ? (get as any).data : null;
+        return item;
     }
 
     /**
@@ -321,26 +319,17 @@ class MongoClient extends Base {
     }
 
     /**
-     * Exports the data to json file
-     * @param {string} fileName File name.
-     * @param {string} path File path
+     * Exports current document data to json object
      * @returns {Promise<string>}
-     * @example db.export("database.json", "./").then(path => {
-     *     console.log(`File exported to ${path}`);
+     * @example db.export().then(data => {
+     *     console.log(data);
      * });
      */
-    export(fileName = 'database', path = './') {
+    export() {
         return new Promise((resolve, reject) => {
-            this.emit('debug', `Exporting database entries to ${path || ''}${fileName}`);
-
             this.all()
                 .then((data) => {
                     const strData = JSON.stringify(data);
-                    if (fileName) {
-                        fs.writeFileSync(`${path || ''}${fileName}`, strData);
-                        this.emit('debug', `Exported all data!`);
-                        return resolve(`${path || ''}${fileName}`);
-                    }
                     return resolve(strData);
                 })
                 .catch(reject);
@@ -526,7 +515,7 @@ class MongoClient extends Base {
      */
     async push(key: string, value: any | any[]) {
         const data = await this.get(key);
-        if (data == null) {
+        if (data === null || isEmpty(data)) {
             if (!Array.isArray(value)) return await this.set(key, [value]);
             return await this.set(key, value);
         }
