@@ -10,7 +10,8 @@
     "build": "tsc -p .",
     "docs": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml --output docs/docs.json",
     "docs:test": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml",
-    "format": "prettier --write src/*.{js,ts}"
+    "format": "prettier --write src/*.{js,ts}",
+    "test": "node test"
   },
   "repository": {
     "type": "git",

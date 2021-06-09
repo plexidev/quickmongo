@@ -10,7 +10,7 @@ import { isEmpty } from 'lodash';
  * @extends Base
  */
 class MongoClient extends Base {
-    schema: Model<Document<any, any>, {}, {}>;
+    schema: ReturnType<typeof QuickMongoSchema>;
 
     /**
      * Instantiates QuickMongo
@@ -44,21 +44,22 @@ class MongoClient extends Base {
         if (!Util.isValue(value)) throw new QuickMongoError('Invalid Value or No Value Specificed.', 'ValueError');
 
         const parsed = Util.parseKey(key);
+        let data = await this.schema.findOne({
+            ID: parsed.key
+        });
 
-        const data = await this.schema.findOneAndUpdate(
-            {
-                ID: { $eq: parsed.key }
-            },
-            {
-                $set: { ID: parsed.key, data: parsed.target ? Util.setData(key, {}, value) : value }
-            },
-            {
-                upsert: true
-            }
-        );
+        if (!data) {
+            data = await this.schema.create({
+                ID: parsed.key,
+                data: parsed.target ? Util.setData(key, {}, value) : value
+            });
+        } else {
+            data.data = parsed.target ? Util.setData(key, data.data || {}, value) : value;
+            data.markModified('data');
+            await data.save();
+        }
 
-        if (data == null) return {};
-        return (data as any).data;
+        return data.data;
     }
 
     /**
@@ -71,16 +72,21 @@ class MongoClient extends Base {
         if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
         const parsed = Util.parseKey(key);
 
-        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => this.emit('error', e));
+        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => {
+            this.emit('error', e);
+            throw e;
+        });
+
         if (!get || !("data" in (get as any))) return null;
         let item;
 
         if (parsed.target) {
             item = Util.getData(key, Object.assign({}, (get as any).data));
+        } else  {
+            item = get.data;
         }
 
-        item = "data" in (get as any) ? (get as any).data : null;
-        return item;
+        return item || null;
     }
 
     /**

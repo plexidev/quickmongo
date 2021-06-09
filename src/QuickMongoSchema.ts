@@ -1,6 +1,11 @@
 import { Connection, Schema } from 'mongoose';
 
-const Default = new Schema(
+export interface QuickMongoSchemaEntity {
+    ID: string;
+    data: any;
+}
+
+const Default = new Schema<QuickMongoSchemaEntity>(
     {
         ID: {
             type: Schema.Types.String,

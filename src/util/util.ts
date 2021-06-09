@@ -42,15 +42,14 @@ class Util {
      * // -> { key: "myitems", target: "items" }
      * @returns {KEY}
      */
-    static parseKey(key: string): any {
-        if (!key || typeof key !== 'string') return { key: undefined, target: undefined };
-        if (key.includes('.')) {
-            let spl = key.split('.');
-            let parsed = spl.shift();
-            let target = spl.join('.');
-            return { key: parsed, target };
-        }
-        return { key, target: undefined };
+    static parseKey(key: string): {
+        key?: string;
+        target?: string;
+    } {
+        if (typeof key !== 'string') return { key: undefined, target: undefined };
+
+        const [parsed, ...targets] = key.split(".");
+        return { key: parsed, target: targets.length ? targets.join(".") : undefined };
     }
 
     /**
@@ -82,9 +81,12 @@ class Util {
      */
     static setData(key: string, data: any, value: any): any {
         let parsed = this.parseKey(key);
-        if (typeof data === 'object' && parsed.target) {
-            return _.set(data, parsed.target, value);
-        } else if (parsed.target) throw new Error('Cannot target non-object.', 'TargetError');
+ 
+        if (parsed.target) {
+            if (typeof data !== 'object') throw new Error('Cannot target non-object.', 'TargetError');
+            data = _.set(data, parsed.target, value);
+        }
+
         return data;
     }
 
