@@ -45,7 +45,7 @@ class MongoClient extends Base {
 
         const parsed = Util.parseKey(key);
         let data = await this.schema.findOne({
-            ID: parsed.key
+            ID: parsed.key as string
         });
 
         if (!data) {
@@ -72,17 +72,17 @@ class MongoClient extends Base {
         if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
         const parsed = Util.parseKey(key);
 
-        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => {
+        let get = await this.schema.findOne({ ID: parsed.key as string }).catch((e: Error) => {
             this.emit('error', e);
             throw e;
         });
 
-        if (!get || !("data" in (get as any))) return null;
+        if (!get || !('data' in (get as any))) return null;
         let item;
 
         if (parsed.target) {
             item = Util.getData(key, Object.assign({}, (get as any).data));
-        } else  {
+        } else {
             item = get.data;
         }
 
@@ -120,19 +120,19 @@ class MongoClient extends Base {
         if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
 
         const parsed = Util.parseKey(key);
-        const raw = await this.schema.findOne({ ID: parsed.key });
+        const raw = await this.schema.findOne({ ID: parsed.key as string });
         if (!raw) return false;
 
         if (parsed.target) {
             let data = Util.unsetData(key, Object.assign({}, (raw as any).data));
             if (data === (raw as any).data) return false;
 
-            await this.schema.findOneAndUpdate({ ID: { $eq: parsed.key } }, { data }).catch((e: Error) => this.emit('error', e));
+            await this.schema.findOneAndUpdate({ ID: { $eq: parsed.key } as unknown as string }, { data }).catch((e: Error) => this.emit('error', e));
 
             return true;
         }
 
-        await this.schema.findOneAndDelete({ ID: { $eq: parsed.key } }).catch((e: Error) => this.emit('error', e));
+        await this.schema.findOneAndDelete({ ID: { $eq: parsed.key } as unknown as string }).catch((e: Error) => this.emit('error', e));
 
         return true;
     }
@@ -156,7 +156,7 @@ class MongoClient extends Base {
         if (!Util.isKey(key)) throw new QuickMongoError('Invalid key specified!', 'KeyError');
 
         const parsed = Util.parseKey(key);
-        let get = await this.schema.findOne({ ID: parsed.key }).catch((e: Error) => this.emit('error', e));
+        let get = await this.schema.findOne({ ID: parsed.key as string }).catch((e: Error) => this.emit('error', e));
         if (!get) return false;
 
         let item;

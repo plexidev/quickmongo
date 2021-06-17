@@ -43,8 +43,8 @@ class Util {
      * @returns {KEY}
      */
     static parseKey(key: string): {
-        key?: string;
-        target?: string;
+        key: string | undefined;
+        target: string | undefined;
     } {
         if (typeof key !== 'string') return { key: undefined, target: undefined };
 
