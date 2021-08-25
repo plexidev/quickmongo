@@ -66,8 +66,7 @@ class Base extends EventEmitter {
         return mongoose.createConnection(this.dbURL, {
             ...this.options,
             useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true
+            useUnifiedTopology: true
         });
     }
 
