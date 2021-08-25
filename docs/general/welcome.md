@@ -61,25 +61,25 @@ const { Database } = require("quickmongo");
 const db = new Database("mongodb://localhost/quickmongo");
 
 // Setting an object in the database:
-db.set("userInfo", { difficulty: "Easy" }).then(console.log);
+await db.set("userInfo", { difficulty: "Easy" }).then(console.log);
 // -> { difficulty: 'Easy' }
 
-db.push("userInfo.items", "Sword").then(console.log);
+await db.push("userInfo.items", "Sword").then(console.log);
 // -> { difficulty: 'Easy', items: ['Sword'] }
 
-db.add("userInfo.balance", 500).then(console.log);
+await db.add("userInfo.balance", 500).then(console.log);
 // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
 
 // Repeating previous examples:
-db.push("userInfo.items", "Watch").then(console.log);
+await db.push("userInfo.items", "Watch").then(console.log);
 // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
 
-db.add("userInfo.balance", 500).then(console.log);
+await db.add("userInfo.balance", 500).then(console.log);
 // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
 
 // Fetching individual properties
-db.get("userInfo.balance").then(console.log);
+await db.get("userInfo.balance").then(console.log);
 // -> 1000
-db.get("userInfo.items").then(console.log);
+await db.get("userInfo.items").then(console.log);
 // -> ['Sword', 'Watch']
 ```
