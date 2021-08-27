@@ -1,0 +1,19 @@
+{
+    "name": "quickmongo",
+    "version": "4.0.0",
+    "description": "",
+    "main": "./dist/src/index.js",
+    "scripts": {
+        "test:types": "tsc ./test/type --noEmit"
+    },
+    "keywords": [],
+    "author": "SnowflakeDev",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^16.7.2",
+        "typescript": "^4.4.2"
+    },
+    "dependencies": {
+        "mongodb": "^4.1.1"
+    }
+}
