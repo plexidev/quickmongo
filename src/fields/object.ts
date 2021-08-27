@@ -1,15 +1,13 @@
 import { FieldModel, FieldModelOptions, FieldType } from "./";
 
-export type ObjectFieldModel = object & {
-    [s: string]: FieldModel<any>;
+export type ObjectFieldModel = {
+    [s: string]: FieldModel<unknown>;
 };
 
-export class ObjectField<T extends ObjectFieldModel> extends FieldModel<
-    ObjectFieldType<T>
-> {
+export class ObjectField<T extends ObjectFieldModel> extends FieldModel<ObjectFieldType<T>> {
     model: T;
 
-    constructor(model: T, options?: FieldModelOptions<any>) {
+    constructor(model: T, options?: FieldModelOptions<ObjectFieldType<T>>) {
         super(options);
 
         this.model = model;
@@ -19,13 +17,8 @@ export class ObjectField<T extends ObjectFieldModel> extends FieldModel<
         return value;
     }
 
-    override validate(value: any): value is ObjectFieldType<T> {
-        return (
-            typeof value === "object" &&
-            Object.entries(value).every(([key, val]) =>
-                this.model[key as any as keyof T]?.validate(val)
-            )
-        );
+    override validate(value: unknown): value is ObjectFieldType<T> {
+        return typeof value === "object" && Object.entries(value).every(([key, val]) => this.model[key as keyof T]?.validate(val));
     }
 }
 

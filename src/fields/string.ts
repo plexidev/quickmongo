@@ -5,7 +5,7 @@ export class StringField extends FieldModel<string> {
         super(options);
     }
 
-    override validate(value: any): value is string {
+    override validate(value: unknown): value is string {
         return typeof value === "string";
     }
 }

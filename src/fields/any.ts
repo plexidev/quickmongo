@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FieldModel, FieldModelOptions } from "./";
 
 export class AnyField extends FieldModel<any> {

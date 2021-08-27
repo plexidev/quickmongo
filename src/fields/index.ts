@@ -29,13 +29,14 @@ export class FieldModel<T> {
         return value;
     }
 
-    validate(value: any): value is T {
+    validate(value: unknown): value is T {
         throw new Error("Unimplemented");
     }
 }
 
-export type FieldType<M extends FieldModel<any>> = M extends AnyField
-    ? any
+export type FieldType<M extends FieldModel<unknown>> = M extends AnyField
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any
     : M extends ArrayField<infer T>
     ? ArrayFieldType<T>
     : M extends BooleanField

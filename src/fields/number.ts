@@ -5,7 +5,7 @@ export class NumberField extends FieldModel<number> {
         super(options);
     }
 
-    override validate(value: any): value is number {
+    override validate(value: unknown): value is number {
         return typeof value === "number";
     }
 }

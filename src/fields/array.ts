@@ -1,11 +1,9 @@
 import { FieldModel, FieldModelOptions } from "./";
 
-export class ArrayField<T extends FieldModel<any>> extends FieldModel<
-    ArrayFieldType<T>
-> {
+export class ArrayField<T extends FieldModel<unknown>> extends FieldModel<ArrayFieldType<T>> {
     model: T;
 
-    constructor(model: T, options?: FieldModelOptions<any>) {
+    constructor(model: T, options?: FieldModelOptions<ArrayFieldType<T>>) {
         super(options);
 
         this.model = model;
@@ -15,16 +13,9 @@ export class ArrayField<T extends FieldModel<any>> extends FieldModel<
         return value;
     }
 
-    override validate(value: any): value is ArrayFieldType<T> {
-        return (
-            Array.isArray(value) &&
-            value.every((val) => this.model.validate(val))
-        );
+    override validate(value: unknown): value is ArrayFieldType<T> {
+        return Array.isArray(value) && value.every((val) => this.model.validate(val));
     }
 }
 
-export type ArrayFieldType<M extends FieldModel<any>> = M extends FieldModel<
-    infer T
->
-    ? T[]
-    : never;
+export type ArrayFieldType<M extends FieldModel<unknown>> = M extends FieldModel<infer T> ? T[] : never;

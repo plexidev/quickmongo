@@ -5,7 +5,7 @@ export class BooleanField extends FieldModel<boolean> {
         super(options);
     }
 
-    override validate(value: any): value is boolean {
+    override validate(value: unknown): value is boolean {
         return typeof value === "boolean";
     }
 }
