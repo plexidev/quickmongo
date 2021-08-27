@@ -1,12 +1,4 @@
-import {
-    AnyField,
-    ArrayField,
-    BooleanField,
-    NullableField,
-    NumberField,
-    ObjectField,
-    StringField,
-} from "../src/fields";
+import { AnyField, ArrayField, BooleanField, NullableField, NumberField, ObjectField, StringField } from "../src/fields";
 
 const any = new AnyField();
 any.create(undefined);
@@ -16,7 +8,7 @@ const array = new ArrayField(new StringField());
 array.create(["a"]);
 
 // @ts-expect-error
-array.create([null]);
+array.create([1]);
 
 // @ts-expect-error
 array.create(1);
@@ -44,17 +36,17 @@ number.create(false);
 
 const object = new ObjectField({
     a: new BooleanField(),
-    b: new NumberField(),
+    b: new NumberField()
 });
 
 object.create({
     a: true,
-    b: 1,
+    b: 1
 });
 
 object.create({
     // @ts-expect-error
-    c: "foo",
+    c: "foo"
 });
 
 const string = new StringField();

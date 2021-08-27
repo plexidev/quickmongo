@@ -1,18 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "ES6",
         "module": "commonjs",
-        "rootDir": "./",
+        "moduleResolution": "node",
+        "declaration": true,
         "outDir": "./dist",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
         "strict": true,
-        "strictNullChecks": true,
-        "noUnusedLocals": true,
-        "noImplicitReturns": true,
-        "noUncheckedIndexedAccess": true,
-        "noImplicitOverride": true,
-        "skipLibCheck": true
+        "strictNullChecks": false,
+        "resolveJsonModule": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true
     },
-    "include": ["./src/**/*", "./test/**/*"]
+    "include": ["./src/**/*", "./__tests__/**/*"]
 }

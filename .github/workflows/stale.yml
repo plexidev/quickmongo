@@ -1,0 +1,19 @@
+name: Stale
+on:
+    schedule:
+        - cron: "0 0 * * *"
+
+jobs:
+    stale:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/stale@v4
+              with:
+                  stale-issue-message: "This issue is stale because it has been open 20 days with no activity. Remove stale label or comment or this will be closed in 3 days"
+                  days-before-stale: 20
+                  days-before-close: 3
+                  exempt-issue-labels: "bug,enhancement"
+                  exempt-issue-assignees: true
+                  exempt-pr-assignees: true
+                  stale-issue-label: "stale"
+                  stale-pr-label: "stale"
