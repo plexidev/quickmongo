@@ -22,7 +22,7 @@ export class ObjectField<T extends ObjectFieldModel> extends FieldModel<ObjectFi
     }
 
     override validate(value: unknown): value is ObjectFieldType<T> {
-        return typeof value === "object" && Object.entries(value).every(([key, val]) => this.model[key as keyof T]?.validate(val));
+        return value !== null && typeof value === "object" && Object.entries(value).every(([key, val]) => this.model[key as keyof T]?.validate(val));
     }
 }
 

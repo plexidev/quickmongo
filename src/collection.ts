@@ -13,7 +13,7 @@ export class Collection<T extends FieldModel<unknown>> {
         });
 
         if (!this.model.validate(value)) {
-            throw new TypeError();
+            throw new TypeError(`Value "${value}" could not be validated by ${this.model.constructor.name}`);
         }
 
         if (path) {

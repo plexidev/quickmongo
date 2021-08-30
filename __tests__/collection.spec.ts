@@ -1,14 +1,13 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Collection as MongoCollection } from "mongodb";
 import { Collection, Fields } from "../src";
 
 describe("test collection", () => {
-    let mongo: MongoClient;
-
-    beforeAll(async () => {
-        mongo = await MongoClient.connect(global.__MONGO_URI__);
-    });
-
-    const collection = mongo.db(global.__MONGO_DB_NAME__).collection("test");
+    let mongo: MongoClient = null, collection: MongoCollection = null, db: Collection<Fields.ObjectField<{
+        name: Fields.StringField;
+        age: Fields.NumberField;
+        isHuman: Fields.BooleanField;
+        isJobless: Fields.NullableField<Fields.BooleanField>;
+    }>>;
 
     const schema = new Fields.ObjectField({
         name: new Fields.StringField(),
@@ -17,7 +16,18 @@ describe("test collection", () => {
         isJobless: new Fields.NullableField(new Fields.BooleanField()),
     });
 
-    const db = new Collection(collection, schema);
+    beforeAll(async () => {
+        mongo = await MongoClient.connect(global.__MONGO_URI__);
+        return mongo;
+    }, 10_000);
+
+    it("define mongo", () => {
+        collection = mongo.db(global.__MONGO_DB_NAME__).collection("test");
+        db = new Collection(collection, schema);
+
+        expect(mongo).not.toBeNull();
+        expect(collection).not.toBeNull();
+    });
 
     it("get (non-exist)", async () => {
         const val = await db.get("user");

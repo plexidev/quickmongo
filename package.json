@@ -50,6 +50,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@favware/rollup-type-bundler": "^1.0.3",
     "@shelf/jest-mongodb": "^2.0.3",
+    "@types/dot-prop": "^5.0.1",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.4.13",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
