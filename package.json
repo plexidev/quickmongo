@@ -20,6 +20,7 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.{ts,js,json,yaml,yml}",
     "prepublishOnly": "rollup-type-bundler -e stream",
+    "prepare": "husky install",
     "test": "jest"
   },
   "repository": {
