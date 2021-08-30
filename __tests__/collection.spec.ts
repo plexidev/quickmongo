@@ -13,16 +13,10 @@ describe("test collection", () => {
 
     beforeAll(async () => {
         mongo = await MongoClient.connect(global.__MONGO_URI__);
-        return mongo;
-    }, 10_000);
-
-    it("define mongo", () => {
         collection = mongo.db(global.__MONGO_DB_NAME__).collection("test");
         db = new Collection(collection, schema);
-
-        expect(mongo).not.toBeNull();
-        expect(collection).not.toBeNull();
-    });
+        return mongo;
+    }, 10_000);
 
     it("get (non-exist)", async () => {
         const val = await db.get("user");
