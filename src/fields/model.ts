@@ -26,19 +26,19 @@ export class FieldModel<T> {
     }
 }
 
-export type FieldType<M extends FieldModel<unknown>> = M extends AnyField
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any
-    : M extends ArrayField<infer T>
+export type FieldType<M extends FieldModel<unknown>> = M extends ArrayField<infer T>
     ? ArrayFieldType<T>
     : M extends BooleanField
     ? boolean
     : M extends NullableField<infer T>
-    ? T
+    ? T | null
     : M extends NumberField
     ? number
     : M extends ObjectField<infer T>
     ? ObjectFieldType<T>
     : M extends StringField
     ? string
+    : M extends AnyField
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any
     : never;

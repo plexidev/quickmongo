@@ -54,12 +54,12 @@ export class Collection<T extends FieldModel<unknown>> {
         if (path) {
             const value = await this.get(key);
             if (value) {
-                dots.delete(value, path);
+                dots.set(value, path, null);
                 await this.set(key, value);
                 deleted = true;
             }
         } else {
-           const result = await this.collection.deleteOne({
+            const result = await this.collection.deleteOne({
                 key: key
             });
             deleted = result.deletedCount === 1;

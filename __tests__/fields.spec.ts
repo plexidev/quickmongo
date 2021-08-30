@@ -1,4 +1,4 @@
-import { Fields } from "../src/index";
+import { Fields } from "../src";
 
 describe("test fields", () => {
     test("model field", () => {
