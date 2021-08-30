@@ -12,11 +12,12 @@ describe("Fields Type Check", () => {
 
         expect(array.create(["a"])).toBe(["a"]);
 
-        // @ts-expect-error Must be an array of strings
-        expect(array.create([1])).toThrowError();
+        // TODO: add multiple test case
+        // // @ts-expect-error Must be an array of strings
+        // expect(array.create([1])).toThrowError();
 
-        // @ts-expect-error Must be an array of strings
-        expect(array.create(1)).toThrowError();
+        // // @ts-expect-error Must be an array of strings
+        // expect(array.create(1)).toThrowError();
     });
 });
 
