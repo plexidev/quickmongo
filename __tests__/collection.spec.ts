@@ -2,19 +2,14 @@ import { MongoClient, Collection as MongoCollection } from "mongodb";
 import { Collection, Fields } from "../src";
 
 describe("test collection", () => {
-    let mongo: MongoClient = null, collection: MongoCollection = null, db: Collection<Fields.ObjectField<{
-        name: Fields.StringField;
-        age: Fields.NumberField;
-        isHuman: Fields.BooleanField;
-        isJobless: Fields.NullableField<Fields.BooleanField>;
-    }>>;
-
     const schema = new Fields.ObjectField({
         name: new Fields.StringField(),
         age: new Fields.NumberField(),
         isHuman: new Fields.BooleanField(),
         isJobless: new Fields.NullableField(new Fields.BooleanField()),
     });
+
+    let mongo: MongoClient = null, collection: MongoCollection = null, db: Collection<typeof schema>;
 
     beforeAll(async () => {
         mongo = await MongoClient.connect(global.__MONGO_URI__);
