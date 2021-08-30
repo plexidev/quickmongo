@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FieldModel, FieldModelOptions } from ".";
+import { FieldModel, FieldModelOptions } from "./model";
 
 export class AnyField extends FieldModel<any> {
     constructor(options?: FieldModelOptions<any>) {

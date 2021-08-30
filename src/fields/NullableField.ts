@@ -1,4 +1,4 @@
-import { FieldModel, FieldModelOptions } from "./";
+import { FieldModel, FieldModelOptions } from "./model";
 
 export class NullableField<T extends FieldModel<unknown>> extends FieldModel<NullableFieldType<T>> {
     model: T;

@@ -1,4 +1,4 @@
-import { FieldModel, FieldModelOptions } from "./";
+import { FieldModel, FieldModelOptions } from "./model";
 
 export class BooleanField extends FieldModel<boolean> {
     constructor(options?: FieldModelOptions<boolean>) {

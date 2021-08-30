@@ -1,4 +1,4 @@
-import { FieldModel, FieldModelOptions } from "./";
+import { FieldModel, FieldModelOptions } from "./model";
 
 export class StringField extends FieldModel<string> {
     constructor(options?: FieldModelOptions<string>) {

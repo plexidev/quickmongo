@@ -1,4 +1,4 @@
-import { FieldModel, FieldModelOptions } from "./";
+import { FieldModel, FieldModelOptions } from "./model";
 
 export class ArrayField<T extends FieldModel<unknown>> extends FieldModel<ArrayFieldType<T>> {
     model: T;
@@ -10,6 +10,10 @@ export class ArrayField<T extends FieldModel<unknown>> extends FieldModel<ArrayF
     }
 
     override create(value: ArrayFieldType<T>): ArrayFieldType<T> {
+        if (!this.validate(value)) {
+            throw new TypeError();
+        }
+
         return value;
     }
 

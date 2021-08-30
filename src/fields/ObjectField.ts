@@ -1,4 +1,4 @@
-import { FieldModel, FieldModelOptions, FieldType } from "./";
+import { FieldModel, FieldModelOptions, FieldType } from "./model";
 
 export type ObjectFieldModel = {
     [s: string]: FieldModel<unknown>;
@@ -14,6 +14,10 @@ export class ObjectField<T extends ObjectFieldModel> extends FieldModel<ObjectFi
     }
 
     override create(value: ObjectFieldType<T>): ObjectFieldType<T> {
+        if (!this.validate(value)) {
+            throw new TypeError();
+        }
+
         return value;
     }
 
