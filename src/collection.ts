@@ -33,7 +33,7 @@ export class Collection<T extends FieldModel<unknown>> {
         }
 
         if (!this.model.validate(nVal)) {
-            throw new TypeError();
+            throw new TypeError(`Value "${value}" could not be validated by ${this.model.constructor.name}`);
         }
 
         await this.collection.updateOne(
