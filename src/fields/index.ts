@@ -1,29 +1,25 @@
-import { AnyField } from "./any";
-import { ArrayField, ArrayFieldType } from "./array";
-import { BooleanField } from "./boolean";
-import { NullableField } from "./nullable";
-import { NumberField } from "./number";
-import { ObjectField, ObjectFieldType } from "./object";
-import { StringField } from "./string";
+import { AnyField } from "./AnyField";
+import { ArrayField, ArrayFieldType } from "./ArrayField";
+import { BooleanField } from "./BooleanField";
+import { NullableField } from "./NullableField";
+import { NumberField } from "./NumberField";
+import { ObjectField, ObjectFieldType } from "./ObjectField";
+import { StringField } from "./StringField";
 
-export * from "./any";
-export * from "./array";
-export * from "./boolean";
-export * from "./nullable";
-export * from "./number";
-export * from "./object";
-export * from "./string";
+export * from "./AnyField";
+export * from "./ArrayField";
+export * from "./BooleanField";
+export * from "./NullableField";
+export * from "./NumberField";
+export * from "./ObjectField";
+export * from "./StringField";
 
 export interface FieldModelOptions<T> {
     defaultValue?: T;
 }
 
 export class FieldModel<T> {
-    options?: FieldModelOptions<T>;
-
-    constructor(options?: FieldModelOptions<T>) {
-        this.options = options;
-    }
+    constructor(public readonly options?: FieldModelOptions<T>) {}
 
     create(value: T): T {
         return value;

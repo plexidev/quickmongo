@@ -2,13 +2,7 @@ import type { Collection as MongoCollection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
 
 export class Collection<T extends FieldModel<unknown>> {
-    collection: MongoCollection;
-    model: T;
-
-    constructor(collection: MongoCollection, model: T) {
-        this.collection = collection;
-        this.model = model;
-    }
+    constructor(public collection: MongoCollection, public model: T) {}
 
     async get(key: string): Promise<FieldType<T> | undefined> {
         // TODO: dot notations
