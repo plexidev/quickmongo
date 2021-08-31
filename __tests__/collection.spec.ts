@@ -18,12 +18,12 @@ describe("test collection", () => {
         return mongo;
     }, 10_000);
 
-    it("get (non-exist)", async () => {
+    test("get (non-exist)", async () => {
         const val = await db.get("user");
         expect(val).toBe(undefined);
     });
 
-    it("delete (non-exist)", async () => {
+    test("delete (non-exist)", async () => {
         const val = await db.delete("user");
         expect(val).toBe(false);
     });
@@ -36,48 +36,48 @@ describe("test collection", () => {
         isJobless: true,
     };
 
-    it("set (new)", async () => {
+    test("set (new)", async () => {
         const val = await db.set("user", user);
         expect(val).toBe(undefined);
     });
 
-    it("get (exist)", async () => {
+    test("get (exist)", async () => {
         const val = await db.get("user");
         expect(val).toStrictEqual(user);
     });
 
-    it("set (dot-notation)", async () => {
+    test("set (dot-notation)", async () => {
         user.name = "Monkey";
         const val = await db.set<string>("user", user.name, "name");
         expect(val).toBe(undefined);
     });
 
-    it("get (dot-notation)", async () => {
+    test("get (dot-notation)", async () => {
         const val = await db.get<string>("user", "name");
         expect(val).toBe(user.name);
     });
 
-    it("get (exist)", async () => {
+    test("get (exist)", async () => {
         const val = await db.get("user");
         expect(val).toStrictEqual(user);
     });
 
-    it("delete (dot-notation)", async () => {
+    test("delete (dot-notation)", async () => {
         const val = await db.delete("user", "isJobless");
         expect(val).toBe(true);
     });
 
-    it("get (dot-notation)", async () => {
+    test("get (dot-notation)", async () => {
         const val = await db.get<boolean | null>("user", "isJobless");
         expect(val).toBe(null);
     });
 
-    it("delete (exist)", async () => {
+    test("delete (exist)", async () => {
         const val = await db.delete("user");
         expect(val).toBe(true);
     });
 
-    it("get (non-exist)", async () => {
+    test("get (non-exist)", async () => {
         const val = await db.get("user");
         expect(val).toBe(undefined);
     });
