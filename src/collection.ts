@@ -13,9 +13,10 @@ export class Collection<T extends FieldModel<unknown>> {
     async get(key: string): Promise<FieldType<T> | undefined>;
     async get<P = unknown>(key: string, path: string): Promise<P | undefined>;
     async get<P>(key: string, path?: string) {
-        const { value } = await this.collection.findOne({
-            key: key
-        }) || {};
+        const { value } =
+            (await this.collection.findOne({
+                key: key
+            })) || {};
 
         if (value) {
             this.model.validate(value);

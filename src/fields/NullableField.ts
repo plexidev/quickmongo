@@ -13,7 +13,7 @@ export class NullableField<T extends FieldModel<unknown>> extends FieldModel<Nul
         if (value) {
             return this.model.validate(value);
         }
-        
+
         if (![null, undefined].includes(value)) {
             throw new TypeError("'value' otherwise must be 'null' or 'undefined'");
         }
