@@ -14,14 +14,12 @@ export class FieldModel<T> {
     constructor(public readonly options?: FieldModelOptions<T>) {}
 
     create(value: T): T {
-        if (!this.validate(value)) {
-            throw new TypeError();
-        }
-
+        this.validate(value);
         return value;
     }
 
-    validate(value: unknown): value is T {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    validate(value: unknown): true | never {
         throw new Error("Unimplemented");
     }
 }

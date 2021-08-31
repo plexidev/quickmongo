@@ -6,7 +6,7 @@ export class AnyField extends FieldModel<any> {
         super(options);
     }
 
-    override validate(value: any): value is any {
+    override validate(): true | never {
         return true;
     }
 }

@@ -5,7 +5,11 @@ export class NumberField extends FieldModel<number> {
         super(options);
     }
 
-    override validate(value: unknown): value is number {
-        return typeof value === "number";
+    override validate(value: unknown): true | never {
+        if (typeof value !== "number") {
+            throw new TypeError("'value' must be a 'number'");
+        }
+
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-export { Collection } from "./collection";
+export * from "./collection";
 export * as Fields from "./fields";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

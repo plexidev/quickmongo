@@ -5,7 +5,11 @@ export class StringField extends FieldModel<string> {
         super(options);
     }
 
-    override validate(value: unknown): value is string {
-        return typeof value === "string";
+    override validate(value: unknown): true | never {
+        if (typeof value !== "string") {
+            throw new TypeError("'value' must be an 'string'");
+        }
+
+        return true;
     }
 }

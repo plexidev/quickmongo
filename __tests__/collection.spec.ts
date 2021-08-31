@@ -1,5 +1,5 @@
 import { MongoClient, Collection as MongoCollection } from "mongodb";
-import { Collection, Fields } from "../src";
+import { Collection, Fields, FieldToDocumentScheme } from "../src";
 
 describe("test collection", () => {
     const schema = new Fields.ObjectField({
@@ -9,14 +9,20 @@ describe("test collection", () => {
         isJobless: new Fields.NullableField(new Fields.BooleanField()),
     });
 
-    let mongo: MongoClient = null, collection: MongoCollection = null, db: Collection<typeof schema>;
+    let mongo: MongoClient = null,
+        collection: MongoCollection<FieldToDocumentScheme<typeof schema>> = null,
+        db: Collection<typeof schema>;
 
     beforeAll(async () => {
         mongo = await MongoClient.connect(global.__MONGO_URI__);
         collection = mongo.db(global.__MONGO_DB_NAME__).collection("test");
         db = new Collection(collection, schema);
         return mongo;
-    }, 10_000);
+    }, 10000);
+
+    afterAll(async () => {
+        await mongo.close();
+    }, 10000);
 
     test("get (non-exist)", async () => {
         const val = await db.get("user");
@@ -35,6 +41,15 @@ describe("test collection", () => {
         isHuman: false,
         isJobless: true,
     };
+
+    test("set (fails)", async () => {
+        const val = {
+            ...user,
+            age: `${user.age}`,
+        };
+        expect.assertions(1);
+        expect(db.set.call(db, "user", val)).rejects.toThrow(TypeError);
+    });
 
     test("set (new)", async () => {
         const val = await db.set("user", user);

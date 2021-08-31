@@ -9,8 +9,14 @@ export class NullableField<T extends FieldModel<unknown>> extends FieldModel<Nul
         this.model = model;
     }
 
-    override validate(value: unknown): value is NullableFieldType<T> {
-        return this.model.validate(value) || [null, undefined].includes(value);
+    override validate(value: unknown): true | never {
+        if (value) {
+            return this.model.validate(value);
+        }
+        
+        if (![null, undefined].includes(value)) {
+            throw new TypeError("'value' otherwise must be 'null' or 'undefined'");
+        }
     }
 }
 

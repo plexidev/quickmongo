@@ -9,16 +9,16 @@ export class ArrayField<T extends FieldModel<unknown>> extends FieldModel<ArrayF
         this.model = model;
     }
 
-    override create(value: ArrayFieldType<T>): ArrayFieldType<T> {
-        if (!this.validate(value)) {
-            throw new TypeError();
+    override validate(value: unknown): true | never {
+        if (!Array.isArray(value)) {
+            throw new TypeError("'value' must be an 'array'");
         }
 
-        return value;
-    }
+        value.forEach((val) => {
+            this.model.validate(val);
+        });
 
-    override validate(value: unknown): value is ArrayFieldType<T> {
-        return Array.isArray(value) && value.every((val) => this.model.validate(val));
+        return true;
     }
 }
 

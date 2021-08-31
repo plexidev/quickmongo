@@ -2,25 +2,34 @@ import dots from "dot-prop";
 import type { Collection as MongoCollection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
 
+export type FieldToDocumentScheme<T extends FieldModel<unknown>> = {
+    key: string;
+    value: FieldType<T>;
+};
+
 export class Collection<T extends FieldModel<unknown>> {
-    constructor(public collection: MongoCollection, public model: T) {}
+    constructor(public collection: MongoCollection<FieldToDocumentScheme<T>>, public model: T) {}
 
     async get(key: string): Promise<FieldType<T> | undefined>;
     async get<P = unknown>(key: string, path: string): Promise<P | undefined>;
     async get<P>(key: string, path?: string) {
-        const value = await this.collection.findOne({
+        const { value } = await this.collection.findOne({
             key: key
-        });
+        }) || {};
 
-        if (!this.model.validate(value)) {
-            throw new TypeError(`Value "${value}" could not be validated by ${this.model.constructor.name}`);
+        if (value) {
+            this.model.validate(value);
+
+            if (path) {
+                if (typeof value !== "object") {
+                    throw new Error("Received value must be an 'object'");
+                }
+
+                return dots.get<P>(value, path);
+            }
         }
 
-        if (path) {
-            return dots.get<P>(value, path);
-        }
-
-        return value ? (value as FieldType<T>) : undefined;
+        return value || undefined;
     }
 
     async set(key: string, value: FieldType<T>): Promise<void>;
@@ -28,20 +37,27 @@ export class Collection<T extends FieldModel<unknown>> {
     async set<P>(key: string, value: FieldType<T> | P, path?: string) {
         const nVal: FieldType<T> = path ? await this.get(key) : <FieldType<T>>value;
 
-        if (path) {
-            dots.set<P>(nVal, path, value);
+        if (path && nVal) {
+            if (typeof nVal !== "object") {
+                throw new Error("Received value must be an 'object'");
+            }
+
+            dots.set(nVal, path, value);
         }
 
-        if (!this.model.validate(nVal)) {
-            throw new TypeError(`Value "${value}" could not be validated by ${this.model.constructor.name}`);
-        }
+        this.model.validate(nVal);
 
         await this.collection.updateOne(
             {
                 key: key
             },
             {
-                value: nVal
+                $set: {
+                    value: nVal
+                }
+            },
+            {
+                upsert: true
             }
         );
     }
@@ -54,6 +70,10 @@ export class Collection<T extends FieldModel<unknown>> {
         if (path) {
             const value = await this.get(key);
             if (value) {
+                if (typeof value !== "object") {
+                    throw new Error("Received value must be an 'object'");
+                }
+
                 dots.set(value, path, null);
                 await this.set(key, value);
                 deleted = true;
