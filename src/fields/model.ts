@@ -64,6 +64,10 @@ export class FieldModel<T> {
     }
 }
 
+/**
+ * The field type
+ * @typedef {ArrayField|BooleanField|NullableField|NumberField|ObjectField|StringField} FieldType
+ */
 export type FieldType<M extends FieldModel<unknown>> = M extends ArrayField<infer T>
     ? ArrayFieldType<T>
     : M extends BooleanField
