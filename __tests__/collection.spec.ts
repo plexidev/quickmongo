@@ -214,5 +214,13 @@ describe("test collection", () => {
         expect(typeof latency).toBe("number");
         expect(latency).toBeGreaterThanOrEqual(0);
     });
+
+    test("has (existing)", async () => {
+        expect(await db.has("simon")).toBe(true);
+    });
+
+    test("has (non-existing)", async () => {
+        expect(await db.has("samrid")).toBe(false);
+    });
 });
 
