@@ -96,4 +96,35 @@ describe("test collection", () => {
         const val = await db.get("user");
         expect(val).toBe(undefined);
     });
+
+    test("all (non-empty)", async () => {
+        for (let i = 0; i < 10; i++) {
+            const user = {
+                name: `Mongoose_${i}`,
+                age: i+1,
+                isHuman: i % 2 === 0,
+                isJobless: null
+            };
+
+            await db.set(`target_${i}`, user);
+        }
+
+        const everything = await db.all();
+        expect(everything.length).toBe(10);
+    });
+
+    test("drop collection (existing)", async () => {
+        const success = await db.drop();
+        expect(success).toBe(true);
+    });
+
+    test("all (empty)", async () => {
+        const everything = await db.all();
+        expect(everything.length).toBe(0);
+    });
+
+    test("drop collection (non-existing)", async () => {
+        const success = await db.drop();
+        expect(success).toBe(false);
+    });
 });

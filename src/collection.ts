@@ -1,11 +1,27 @@
 import dots from "dot-prop";
-import type { Collection as MongoCollection } from "mongodb";
+import type { Collection as MongoCollection, SortDirection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
 
 export type FieldToDocumentScheme<T extends FieldModel<unknown>> = {
     key: string;
     value: FieldType<T>;
 };
+
+export enum CollectionSortType {
+    ASCENDING = 1,
+    DESCENDING = -1,
+    DEFAULT = 0
+}
+
+export interface CollectionSortOptions {
+    by?: CollectionSortType | SortDirection;
+    target?: string[];
+}
+
+export interface AllCollectionDocumentOptions {
+    max?: number;
+    sort?: CollectionSortOptions;
+}
 
 export class Collection<T extends FieldModel<unknown>> {
     constructor(public collection: MongoCollection<FieldToDocumentScheme<T>>, public model: T) {}
@@ -87,5 +103,23 @@ export class Collection<T extends FieldModel<unknown>> {
         }
 
         return deleted;
+    }
+
+    async drop(): Promise<boolean> {
+        try {
+            return await this.collection.drop();
+        } catch {
+            return false;
+        }
+    }
+
+    async all(options: AllCollectionDocumentOptions = {}): Promise<FieldToDocumentScheme<T>[]> {
+        const data = await this.collection
+            .find()
+            .limit(options.max || 0)
+            .sort(options.sort?.target, (options.sort?.by as SortDirection) || undefined)
+            .toArray();
+
+        return data;
     }
 }

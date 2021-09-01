@@ -15,7 +15,7 @@ export class NullableField<T extends FieldModel<unknown>> extends FieldModel<Nul
         }
 
         if (![null, undefined].includes(value)) {
-            throw new TypeError("'value' otherwise must be 'null' or 'undefined'");
+            throw new TypeError(`value '${value}' is not 'null' or 'undefined'`);
         }
     }
 }
