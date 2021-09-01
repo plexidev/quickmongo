@@ -187,9 +187,26 @@ describe("test collection", () => {
         expect(newFri.friends.length).toBe(1);
         expect(newFri.friends).toStrictEqual(["Kyle"]);
 
-        await db.push("simon", ["Samrid", "Baun"], "friends");
+        await db.push("simon", ["Samrid", "Baun", "Santosh"], "friends");
 
-        expect((await db.get<string[]>("simon", "friends"))).toStrictEqual(["Kyle", "Samrid", "Baun"]);
+        expect((await db.get<string[]>("simon", "friends"))).toStrictEqual(["Kyle", "Samrid", "Baun", "Santosh"]);
+    });
+
+    test("pull (existing)", async () => {
+        await db.pull("simon", "Kyle", "friends");
+        
+        const data = await db.get("simon");
+        
+        expect(data.friends).toStrictEqual(["Samrid", "Baun", "Santosh"]);
+    });
+
+    test("pull (multiple/existing)", async () => {
+        await db.pull("simon", ["Baun", "Santosh"], "friends");
+        expect((await db.get<string[]>("simon", "friends"))).toStrictEqual(["Samrid"]);
+    });
+
+    test("pull (non-existing)", async () => {
+        expect(db.pull("samrid", "test", "friends")).rejects.toThrow(TypeError);
     });
 });
 

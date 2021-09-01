@@ -162,17 +162,35 @@ export class Collection<T extends FieldModel<unknown>> {
     /**
      * Pushes to the array inside a field
      * @param {string} key The key
-     * @param {any} value The value to push
+     * @param {any|any[]} value The value to push
      * @param {string} path The path where it should push
-     * @returns {Promise<void>}
+     * @returns {Promise<FieldType|undefined>}
      */
-    async push<P = unknown>(key: string, value: P, path?: string): Promise<P | undefined> {
+    async push<P = unknown>(key: string, value: P, path?: string): Promise<FieldType<T> | undefined> {
         if (typeof value === "undefined") throw new Error("cannot push undefined");
-        const data = (await this.get(key, path)) as P;
+        const data = await this.get(key, path);
         if (!Array.isArray(data)) throw new TypeError(`Cannot call push because target "${key}${path ? `.${path}` : ""}" is not array`);
         !Array.isArray(value) ? data.push(value) : data.push(...value);
+
         const rData = await this.set(key, data, path);
 
-        return typeof rData !== "undefined" ? data : undefined;
+        return rData;
+    }
+
+    /**
+     * Pulls from the array inside a field
+     * @param {string} key The key
+     * @param {any|any[]} value The value to pull
+     * @param {string} path The path where it should push
+     * @returns {Promise<FieldType|undefined>}
+     */
+    async pull<P = unknown>(key: string, value: P, path?: string): Promise<FieldType<T> | undefined> {
+        if (typeof value === "undefined") throw new Error("cannot pull undefined");
+        const data = await this.get(key, path);
+        if (!Array.isArray(data)) throw new TypeError(`Cannot call pull because target "${key}${path ? `.${path}` : ""}" is not array`);
+        const newData = !Array.isArray(value) ? data.filter((x) => x !== value) : data.filter((x) => !value.includes(x));
+        const rData = await this.set(key, newData, path);
+
+        return rData;
     }
 }
