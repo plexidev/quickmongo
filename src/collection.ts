@@ -2,31 +2,16 @@ import dots from "dot-prop";
 import type { Collection as MongoCollection, SortDirection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
 
-/**
- * @typedef {object} FieldToDocumentScheme
- * @property {string} key The key
- * @property {FieldType} value The value
- */
 export type FieldToDocumentScheme<T extends FieldModel<unknown>> = {
     key: string;
     value: FieldType<T>;
 };
 
-/**
- * @typedef {object} CollectionSortOptions
- * @property {ascending|asc|descending|desc|1|-1} [by] Sort direction
- * @property {string|string[]} [target] The sort target
- */
 export interface CollectionSortOptions {
     by?: SortDirection;
     target?: string | string[];
 }
 
-/**
- * @typedef {object} AllCollectionDocumentOptions
- * @property {number} [max] The max value
- * @property {CollectionSortOptions} [sort={}] Sort options
- */
 export interface AllCollectionDocumentOptions {
     max?: number;
     sort?: CollectionSortOptions;

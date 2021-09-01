@@ -7,6 +7,21 @@ import type { ObjectField, ObjectFieldType } from "./ObjectField";
 import type { StringField } from "./StringField";
 
 /**
+ * @typedef {object} AllCollectionDocumentOptions
+ * @property {number} [max] The max value
+ * @property {CollectionSortOptions} [sort={}] Sort options
+ */
+/**
+ * @typedef {object} FieldToDocumentScheme
+ * @property {string} key The key
+ * @property {FieldType} value The value
+ */
+/**
+ * @typedef {object} CollectionSortOptions
+ * @property {ascending|asc|descending|desc} [by] Sort direction
+ * @property {string|string[]} [target] The sort target
+ */
+/**
  * @typedef {object} FieldModelOptions
  * @property {any} [defaultValue] The default value
  */
