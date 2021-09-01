@@ -52,14 +52,15 @@ function doStuff() {
     db.push("userInfo", "Sword", "items").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword'], balance: 0 }
 
-    db.add("userInfo", 500, "balance").then(console.log);
+    db.set("userInfo", 500, "balance").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
 
     // Repeating previous examples:
     db.push("userInfo", "Watch", "items").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
 
-    db.add("userInfo", 500, "balance").then(console.log);
+    const previousBalance = await db.get("userInfo", "balance");
+    db.set("userInfo", previousBalance + 500, "balance").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
 
     // Fetching individual properties
