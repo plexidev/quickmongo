@@ -219,4 +219,18 @@ export class Collection<T extends FieldModel<unknown>> {
         await this.all({ max: 1 });
         return Date.now() - start;
     }
+
+    /**
+     * Exports this collection to a json object
+     * @returns {Promise<CollectionExport>}
+     */
+    async export() {
+        const everything = await this.all();
+        return {
+            db: this.collection.dbName,
+            name: this.collection.collectionName,
+            namespace: this.collection.namespace,
+            data: everything.map((m) => ({ ID: m.ID, data: m.data })) // remove _id
+        };
+    }
 }

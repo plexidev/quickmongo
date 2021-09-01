@@ -6,6 +6,22 @@ import type { NumberField } from "./NumberField";
 import type { ObjectField, ObjectFieldType } from "./ObjectField";
 import type { StringField } from "./StringField";
 
+/**{
+    db: string;
+    name: string;
+    namespace: string;
+    data: {
+        ID: string;
+        data: FieldType<T>;
+    }[];
+} */
+/**
+ * @typedef {object} CollectionExport
+ * @property {string} db The database name
+ * @property {string} name The collection name
+ * @property {string} namespace The collection namespace
+ * @property {FieldToDocumentScheme[]} data The data
+ */
 /**
  * @typedef {object} AllCollectionDocumentOptions
  * @property {number} [max] The max value
@@ -13,8 +29,8 @@ import type { StringField } from "./StringField";
  */
 /**
  * @typedef {object} FieldToDocumentScheme
- * @property {string} key The key
- * @property {FieldType} value The value
+ * @property {string} ID The key
+ * @property {FieldType} data The value
  */
 /**
  * @typedef {object} CollectionSortOptions
