@@ -41,35 +41,35 @@ mongo.connect()
         doStuff();
     });
 
-async function doStuff() {
+function doStuff() {
     const mongoCollection = mongo.db().collection("JSON");
 
     const db = new Collection(mongoCollection, schema);
     
-    await db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
+    db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
     // -> { difficulty: 'Easy', items: [], balance: 0 }
 
-    await db.push("userInfo", "Sword", "items").then(console.log);
+    db.push("userInfo", "Sword", "items").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword'], balance: 0 }
 
-    await db.add("userInfo", 500, "balance").then(console.log);
+    db.add("userInfo", 500, "balance").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
 
     // Repeating previous examples:
-    await db.push("userInfo", "Watch", "items").then(console.log);
+    db.push("userInfo", "Watch", "items").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
 
-    await db.add("userInfo", 500, "balance").then(console.log);
+    db.add("userInfo", 500, "balance").then(console.log);
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
 
     // Fetching individual properties
-    await db.get("userInfo", "balance").then(console.log);
+    db.get("userInfo", "balance").then(console.log);
     // -> 1000
-    await db.get("userInfo", "items").then(console.log);
+    db.get("userInfo", "items").then(console.log);
     // -> ['Sword', 'Watch']
 
     // remove item
-    await db.pull("userInfo", "Sword", "items").then(console.log);
+    db.pull("userInfo", "Sword", "items").then(console.log);
     // -> { difficulty: 'Easy', items: ['Watch'], balance: 1000 }
 }
 ```
