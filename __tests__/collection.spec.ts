@@ -7,6 +7,7 @@ describe("test collection", () => {
         age: new Fields.NumberField(),
         isHuman: new Fields.BooleanField(),
         isJobless: new Fields.NullableField(new Fields.BooleanField()),
+        friends: new Fields.ArrayField(new Fields.StringField())
     });
 
     let mongo: MongoClient = null,
@@ -21,6 +22,7 @@ describe("test collection", () => {
     }, 10000);
 
     afterAll(async () => {
+        await db.drop();
         await mongo.close();
     }, 10000);
 
@@ -40,6 +42,7 @@ describe("test collection", () => {
         age: 69,
         isHuman: false,
         isJobless: true,
+        friends: []
     };
 
     test("set (fails)", async () => {
@@ -53,7 +56,7 @@ describe("test collection", () => {
 
     test("set (new)", async () => {
         const val = await db.set("user", user);
-        expect(val).toBe(undefined);
+        expect(val).toBe(user);
     });
 
     test("get (exist)", async () => {
@@ -64,7 +67,7 @@ describe("test collection", () => {
     test("set (dot-notation)", async () => {
         user.name = "Monkey";
         const val = await db.set<string>("user", user.name, "name");
-        expect(val).toBe(undefined);
+        expect(val.name).toBe(user.name);
     });
 
     test("get (dot-notation)", async () => {
@@ -103,7 +106,8 @@ describe("test collection", () => {
                 name: `Mongoose_${i}`,
                 age: 5 * (i + 1), // 5-50
                 isHuman: i % 2 === 0,
-                isJobless: null
+                isJobless: null,
+                friends: []
             };
 
             await db.set(`target_${i}`, user);
@@ -157,4 +161,35 @@ describe("test collection", () => {
         const success = await db.drop();
         expect(success).toBe(false);
     });
+
+    test("push (non-existing/non-array)", async () => {
+        expect(db.push("Simon", "Kyle", "friends")).rejects.toThrow(TypeError);
+    });
+
+    test("push (existing/array)", async () => {
+        const simon = {
+            name: "Simon",
+            age: 21,
+            isHuman: true,
+            isJobless: null,
+            friends: []
+        };
+
+        await db.set("simon", simon);
+
+        const dat = await db.get("simon");
+        expect(dat.friends.length).toBe(0);
+
+        await db.push("simon", "Kyle", "friends");
+
+        const newFri = await db.get("simon");
+
+        expect(newFri.friends.length).toBe(1);
+        expect(newFri.friends).toStrictEqual(["Kyle"]);
+
+        await db.push("simon", ["Samrid", "Baun"], "friends");
+
+        expect((await db.get<string[]>("simon", "friends"))).toStrictEqual(["Kyle", "Samrid", "Baun"]);
+    });
 });
+

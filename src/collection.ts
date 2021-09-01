@@ -66,11 +66,11 @@ export class Collection<T extends FieldModel<unknown>> {
      * @param {string} key The key to retrieve data
      * @param {FieldType} value The data to save
      * @param {string} [path] The path to save data
-     * @returns {Promise<void>}
+     * @returns {Promise<FieldType>}
      */
-    async set(key: string, value: FieldType<T>): Promise<void>;
-    async set<P = unknown>(key: string, value: P, path: string): Promise<void>;
-    async set<P>(key: string, value: FieldType<T> | P, path?: string) {
+    async set(key: string, value: FieldType<T>): Promise<FieldType<T>>;
+    async set<P = unknown>(key: string, value: P, path: string): Promise<FieldType<T>>;
+    async set<P>(key: string, value: FieldType<T> | P, path?: string): Promise<FieldType<T>> {
         const nVal: FieldType<T> = path ? await this.get(key) : <FieldType<T>>value;
 
         if (path && nVal) {
@@ -83,7 +83,7 @@ export class Collection<T extends FieldModel<unknown>> {
 
         this.model.validate(nVal);
 
-        await this.collection.updateOne(
+        const data = await this.collection.updateOne(
             {
                 key: key
             },
@@ -96,6 +96,8 @@ export class Collection<T extends FieldModel<unknown>> {
                 upsert: true
             }
         );
+
+        if (data.modifiedCount > 0 || data.upsertedCount > 0) return nVal;
     }
 
     /**
@@ -155,5 +157,22 @@ export class Collection<T extends FieldModel<unknown>> {
             .toArray();
 
         return data;
+    }
+
+    /**
+     * Pushes to the array inside a field
+     * @param {string} key The key
+     * @param {any} value The value to push
+     * @param {string} path The path where it should push
+     * @returns {Promise<void>}
+     */
+    async push<P = unknown>(key: string, value: P, path?: string): Promise<P | undefined> {
+        if (typeof value === "undefined") throw new Error("cannot push undefined");
+        const data = (await this.get(key, path)) as P;
+        if (!Array.isArray(data)) throw new TypeError(`Cannot call push because target "${key}${path ? `.${path}` : ""}" is not array`);
+        !Array.isArray(value) ? data.push(value) : data.push(...value);
+        const rData = await this.set(key, data, path);
+
+        return typeof rData !== "undefined" ? data : undefined;
     }
 }
