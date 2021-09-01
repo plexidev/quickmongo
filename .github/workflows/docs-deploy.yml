@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - '*'
-      - '!webpack'
       - '!docs'
     tags:
       - '*'
@@ -15,10 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Install Node v12
+      - name: Install Node v16
         uses: actions/setup-node@master
         with:
-          node-version: 12
+          node-version: 16
 
       - name: Install dependencies
         run: npm install

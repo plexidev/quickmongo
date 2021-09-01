@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.github/
+docs/
+test/
+coverage/
+
+*.d.ts

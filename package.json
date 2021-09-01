@@ -1,57 +1,82 @@
 {
   "name": "quickmongo",
-  "version": "3.0.2",
-  "description": "Quick mongodb wrapper for beginners.",
-  "main": "index.js",
-  "types": "typings/index.d.ts",
+  "version": "4.0.0",
+  "description": "Quick Mongodb wrapper for beginners that provides key-value based interface.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": [
-      {
-        "require": "./index.js",
-        "import": "./esm/index.mjs"
-      },
-      "./index.js"
-    ],
-    "./esm": "./esm/index.mjs"
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "docs": "docgen --source src --custom docs/index.yml --output docs/docs.json",
-    "docs:test": "docgen --source src --custom docs/index.yml",
-    "test": "cd test && node test.js"
+    "docs": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml --output docs/docs.json",
+    "docs:test": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml",
+    "dev": "cd test && ts-node demo.ts",
+    "build": "rimraf dist && tsc && npm run build:esm",
+    "build:check": "tsc --noEmit --incremental false",
+    "build:esm": "gen-esm-wrapper ./dist/index.js ./dist/index.mjs",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src/**/*.{ts,js,json,yaml,yml}",
+    "prepublishOnly": "rollup-type-bundler -e stream",
+    "prepare": "husky install",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DevSnowflake/quickmongo.git"
   },
-  "author": "Snowflake107",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/DevSnowflake/quickmongo/issues"
-  },
-  "homepage": "https://quickmongo.js.org",
-  "funding": "https://www.paypal.me/devsnowflake",
   "keywords": [
-    "db",
     "quickmongo",
     "mongodb",
     "mongoose",
+    "schema",
+    "api",
+    "database",
     "quick.db",
     "enmap",
-    "josh",
-    "keyv",
-    "mongo",
-    "easy-mongodb",
     "endb"
   ],
-  "dependencies": {
-    "lodash": "^4.17.21",
-    "mongoose": "5.11.15"
+  "author": "DevAndromeda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DevSnowflake/quickmongo/issues"
   },
+  "homepage": "https://github.com/DevSnowflake/quickmongo#readme",
+  "contributors": [
+    "DevAndromeda <devsnowflake107@gmail.com>",
+    "Zyrouge <zyrouge@hotmail.com>",
+    "DevSynth <synth@snowflakedev.org>"
+  ],
   "devDependencies": {
-    "discord.js-docgen": "github:discordjs/docgen"
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
+    "@devsnowflake/docgen": "devsnowflake/docgen#ts-patch",
+    "@favware/rollup-type-bundler": "^1.0.3",
+    "@shelf/jest-mongodb": "^2.0.3",
+    "@types/dot-prop": "^5.0.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.10",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "gen-esm-wrapper": "^1.1.2",
+    "husky": "^7.0.2",
+    "jest": "^27.1.0",
+    "jsdoc-babel": "^0.5.0",
+    "mongodb": "^4.1.1",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
   },
-  "directories": {
-    "doc": "docs",
-    "test": "test"
+  "dependencies": {
+    "dot-prop": "^6.0.1"
   }
 }

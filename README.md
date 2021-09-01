@@ -1,85 +1,78 @@
 # QuickMongo
-Quick mongodb wrapper for beginners.
 
-![QuickMongo](https://nodei.co/npm/quickmongo.png)
+Quick Mongodb wrapper for beginners that provides key-value based interface.
+
+![](https://camo.githubusercontent.com/ee0b303561b8c04223d4f469633e2088968cf514f0f6901c729331c462a32f10/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3739333638393539323431343939343436362f3833323039343438363834353834393631302f6c6f676f2e37393539646231325f35302e706e67)
+
+# Installing
+
+```bash
+$ npm install --save mongodb # required
+$ npm install --save quickmongo
+```
 
 # Documentation
-**[QuickMongo](https://quickmongo.js.org)**
+**[https://quickmongo.js.org](https://quickmongo.js.org)**
 
 # Features
 - Beginner friendly
-- Easy to use
-- Very similar to **[quick.db](https://npmjs.com/package/quick.db)**
-- Dot notation support
-- Import & export support
-- Key value based
-- Simple
+- Strongly typed
 - Asynchronous
-- Multiple model support
-
-# Quick Example
-
-```js
-const { Database } = require("quickmongo");
-const db = new Database("mongodb://localhost/quickmongo");
-
-db.on("ready", () => {
-    console.log("Database connected!");
-});
-
-db.set("foo", "bar");
-
-db.get("foo").then(console.log);
-```
-
-# Importing data from quick.db
-
-```js
-const db = require("quick.db");
-const { Database } = require("quickmongo");
-const mongo = new Database("mongodb://localhost/quickmongo");
-
-function importData() {
-    const data = db.all();
-    mongo.import(data).then(() => {
-        console.log("Done!");
-    });    
-}
-
-mongo.on("ready", () => importData());
-```
-
-# Links
-- **[Discord Support Server](https://discord.gg/2SUybzb)**
-- **[Documentation](https://quickmongo.js.org)**
-- **[GitHub](https://github.com/DevSnowflake/quickmongo)**
+- Dot notation support
+- Key-Value like interface
+- Easy to use
 
 # Example
 
 ```js
-const { Database } = require("quickmongo");
-const db = new Database("mongodb://localhost/quickmongo");
+const { Collection: MongoCollection, MongoClient } = require("mongodb");
+const { Collection, Fields } = require("quickmongo");
 
-// Setting an object in the database:
-db.set("userInfo", { difficulty: "Easy" }).then(console.log);
-// -> { difficulty: 'Easy' }
+const mongo = new MongoClient("mongodb://localhost/quickmongo");
+const schema = new Fields.ObjectField({
+    difficulty: new Fields.StringField(),
+    items: new Fields.ArrayField(new Fields.StringField()),
+    balance: new Fields.NumberField()
+});
 
-db.push("userInfo.items", "Sword").then(console.log);
-// -> { difficulty: 'Easy', items: ['Sword'] }
+mongo.connect()
+    .then(() => {
+        console.log("Connected to the database!");
+        doStuff();
+    });
 
-db.add("userInfo.balance", 500).then(console.log);
-// -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
+async function doStuff() {
+    const mongoCollection = mongo.db().collection("JSON");
 
-// Repeating previous examples:
-db.push("userInfo.items", "Watch").then(console.log);
-// -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
+    const db = new Collection(mongoCollection, schema);
+    
+    await db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
+    // -> { difficulty: 'Easy', items: [], balance: 0 }
 
-db.add("userInfo.balance", 500).then(console.log);
-// -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
+    await db.push("userInfo", "Sword", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword'], balance: 0 }
 
-// Fetching individual properties
-db.get("userInfo.balance").then(console.log);
-// -> 1000
-db.get("userInfo.items").then(console.log);
-// -> ['Sword', 'Watch']
+    await db.add("userInfo", 500, "balance").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
+
+    // Repeating previous examples:
+    await db.push("userInfo", "Watch", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
+
+    await db.add("userInfo", 500, "balance").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
+
+    // Fetching individual properties
+    await db.get("userInfo", "balance").then(console.log);
+    // -> 1000
+    await db.get("userInfo", "items").then(console.log);
+    // -> ['Sword', 'Watch']
+
+    // remove item
+    await db.pull("userInfo", "Sword", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Watch'], balance: 1000 }
+}
 ```
+
+# Discord Support
+**[SnowflakeDev Community ❄️](https://snowflakedev.org/discord)**

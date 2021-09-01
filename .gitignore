@@ -1,4 +1,7 @@
 node_modules/
+coverage/
+dist/
+test/
+.vscode/
 yarn.lock
-
-test
+package-lock.json
