@@ -4,15 +4,28 @@ export type ObjectFieldModel = {
     [s: string]: FieldModel<unknown>;
 };
 
+/**
+ * @extends FieldModel
+ */
 export class ObjectField<T extends ObjectFieldModel> extends FieldModel<ObjectFieldType<T>> {
     model: T;
 
+    /**
+     * The object field model
+     * @param {FieldModel} model the model
+     * @param {FieldModelOptions} [options] The field model options
+     */
     constructor(model: T, options?: FieldModelOptions<ObjectFieldType<T>>) {
         super(options);
 
         this.model = model;
     }
 
+    /**
+     * Validates the data
+     * @param {any} value The value to validate
+     * @returns {boolean}
+     */
     override validate(value: unknown): true | never {
         if (value === null) {
             throw new TypeError("'value' must not be 'null'");

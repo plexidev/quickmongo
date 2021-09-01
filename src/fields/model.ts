@@ -6,18 +6,43 @@ import type { NumberField } from "./NumberField";
 import type { ObjectField, ObjectFieldType } from "./ObjectField";
 import type { StringField } from "./StringField";
 
+/**
+ * @typedef {object} FieldModelOptions
+ * @property {any} [defaultValue] The default value
+ */
 export interface FieldModelOptions<T> {
     defaultValue?: T;
 }
 
 export class FieldModel<T> {
-    constructor(public readonly options?: FieldModelOptions<T>) {}
+    /**
+     * The field model
+     * @param {FieldModelOptions} [options] Field model options
+     */
+    constructor(public readonly options?: FieldModelOptions<T>) {
+        /**
+         * The field model options
+         * @name FieldModel#options
+         * @readonly
+         * @type {FieldModelOptions}
+         */
+    }
 
+    /**
+     * Creates value
+     * @param {any} value The value
+     * @returns {any}
+     */
     create(value: T): T {
         this.validate(value);
         return value;
     }
 
+    /**
+     * Validates the data
+     * @param {any} value The value to validate
+     * @returns {boolean}
+     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validate(value: unknown): true | never {
         throw new Error("Unimplemented");

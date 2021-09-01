@@ -13,6 +13,8 @@
     "dist"
   ],
   "scripts": {
+    "docs": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml --output docs/docs.json",
+    "docs:test": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml",
     "build": "rimraf dist && tsc && npm run build:esm",
     "build:check": "tsc --noEmit --incremental false",
     "build:esm": "gen-esm-wrapper ./dist/index.js ./dist/index.mjs",
@@ -44,10 +46,17 @@
     "url": "https://github.com/DevSnowflake/quickmongo/issues"
   },
   "homepage": "https://github.com/DevSnowflake/quickmongo#readme",
+  "contributors": [
+    "DevAndromeda <devsnowflake107@gmail.com>",
+    "Zyrouge <zyrouge@hotmail.com>",
+    "DevSynth <synth@snowflakedev.org>"
+  ],
   "devDependencies": {
+    "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
+    "@devsnowflake/docgen": "devsnowflake/docgen#ts-patch",
     "@favware/rollup-type-bundler": "^1.0.3",
     "@shelf/jest-mongodb": "^2.0.3",
     "@types/dot-prop": "^5.0.1",
@@ -59,6 +68,7 @@
     "gen-esm-wrapper": "^1.1.2",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
+    "jsdoc-babel": "^0.5.0",
     "mongodb": "^4.1.1",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
