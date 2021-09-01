@@ -15,7 +15,7 @@ export enum CollectionSortType {
 
 export interface CollectionSortOptions {
     by?: CollectionSortType | SortDirection;
-    target?: string[];
+    target?: string | string[];
 }
 
 export interface AllCollectionDocumentOptions {

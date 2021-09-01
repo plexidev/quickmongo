@@ -101,7 +101,7 @@ describe("test collection", () => {
         for (let i = 0; i < 10; i++) {
             const user = {
                 name: `Mongoose_${i}`,
-                age: i+1,
+                age: 5 * (i + 1), // 5-50
                 isHuman: i % 2 === 0,
                 isJobless: null
             };
@@ -111,6 +111,36 @@ describe("test collection", () => {
 
         const everything = await db.all();
         expect(everything.length).toBe(10);
+    });
+
+    test("all (ascending)", async () => {
+        const everything = await db.all({
+            sort: {
+                by: "ascending",
+                target: "value.age"
+            }
+        });
+
+        expect(everything[everything.length - 1].value.age).toBe(50);
+    });
+
+    test("all (descending)", async () => {
+        const everything = await db.all({
+            sort: {
+                by: "descending",
+                target: "value.age"
+            }
+        });
+
+        expect(everything[everything.length - 1].value.age).toBe(5);
+    });
+
+    test("all (limit)", async () => {
+        const everything = await db.all({
+            max: 5
+        });
+
+        expect(everything.length).toBe(5);
     });
 
     test("drop collection (existing)", async () => {
