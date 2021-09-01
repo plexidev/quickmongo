@@ -33,6 +33,22 @@ export class Collection<T extends FieldModel<unknown>> {
     constructor(public collection: MongoCollection<FieldToDocumentScheme<T>>, public model: T) {}
 
     /**
+     * Returns if the collection has data with the specified key.
+     * <warn>This method only checks if the data is **NOT** undefined.</warn>
+     * @param {string} key The key
+     * @param {string} path The path
+     * @returns {Promise<boolean>}
+     */
+    async has(key: string, path?: string): Promise<boolean> {
+        try {
+            const data = await this.get(key, path);
+            return typeof data !== "undefined";
+        } catch {
+            return false;
+        }
+    }
+
+    /**
      * Get data from the collection
      * @param {string} key The key to retrieve data
      * @param {string} [path] The path to pick from the data
@@ -192,5 +208,15 @@ export class Collection<T extends FieldModel<unknown>> {
         const rData = await this.set(key, newData, path);
 
         return rData;
+    }
+
+    /**
+     * Returns the db latency in ms
+     * @returns {Promise<number>}
+     */
+    async latency(): Promise<number> {
+        const start = Date.now();
+        await this.all({ max: 1 });
+        return Date.now() - start;
     }
 }

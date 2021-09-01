@@ -208,5 +208,11 @@ describe("test collection", () => {
     test("pull (non-existing)", async () => {
         expect(db.pull("samrid", "test", "friends")).rejects.toThrow(TypeError);
     });
+
+    test("latency", async () => {
+        const latency = await db.latency();
+        expect(typeof latency).toBe("number");
+        expect(latency).toBeGreaterThanOrEqual(0);
+    });
 });
 
