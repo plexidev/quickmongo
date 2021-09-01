@@ -15,6 +15,7 @@
   "scripts": {
     "docs": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml --output docs/docs.json",
     "docs:test": "docgen --jsdoc jsdoc.json --source src/*.ts src/**/*.ts --custom docs/index.yml",
+    "dev": "cd test && ts-node demo.ts",
     "build": "rimraf dist && tsc && npm run build:esm",
     "build:check": "tsc --noEmit --incremental false",
     "build:esm": "gen-esm-wrapper ./dist/index.js ./dist/index.mjs",

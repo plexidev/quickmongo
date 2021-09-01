@@ -125,7 +125,7 @@ describe("test collection", () => {
             }
         });
 
-        expect(everything[everything.length - 1].value.age).toBe(50);
+        expect(everything[everything.length - 1].data.age).toBe(50);
     });
 
     test("all (descending)", async () => {
@@ -136,7 +136,7 @@ describe("test collection", () => {
             }
         });
 
-        expect(everything[everything.length - 1].value.age).toBe(5);
+        expect(everything[0].data.age).toBe(5);
     });
 
     test("all (limit)", async () => {

@@ -73,7 +73,7 @@ export type FieldType<M extends FieldModel<unknown>> = M extends ArrayField<infe
     : M extends BooleanField
     ? boolean
     : M extends NullableField<infer T>
-    ? T | null
+    ? T | null | undefined
     : M extends NumberField
     ? number
     : M extends ObjectField<infer T>

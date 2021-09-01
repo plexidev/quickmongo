@@ -3,8 +3,8 @@ import type { Collection as MongoCollection, SortDirection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
 
 export type FieldToDocumentScheme<T extends FieldModel<unknown>> = {
-    key: string;
-    value: FieldType<T>;
+    ID: string;
+    data: FieldType<T>;
 };
 
 export interface CollectionSortOptions {
@@ -57,24 +57,24 @@ export class Collection<T extends FieldModel<unknown>> {
     async get(key: string): Promise<FieldType<T> | undefined>;
     async get<P = unknown>(key: string, path: string): Promise<P | undefined>;
     async get<P>(key: string, path?: string) {
-        const { value } =
+        const { data } =
             (await this.collection.findOne({
-                key: key
+                ID: key
             })) || {};
 
-        if (value) {
-            this.model.validate(value);
+        if (data) {
+            this.model.validate(data);
 
             if (path) {
-                if (typeof value !== "object") {
+                if (typeof data !== "object") {
                     throw new Error("Received value must be an 'object'");
                 }
 
-                return dots.get<P>(value, path);
+                return dots.get<P>(data, path);
             }
         }
 
-        return value || undefined;
+        return data || undefined;
     }
 
     /**
@@ -101,11 +101,11 @@ export class Collection<T extends FieldModel<unknown>> {
 
         const data = await this.collection.updateOne(
             {
-                key: key
+                ID: key
             },
             {
                 $set: {
-                    value: nVal
+                    data: nVal
                 }
             },
             {
@@ -140,7 +140,7 @@ export class Collection<T extends FieldModel<unknown>> {
             }
         } else {
             const result = await this.collection.deleteOne({
-                key: key
+                ID: key
             });
             deleted = result.deletedCount === 1;
         }

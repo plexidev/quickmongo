@@ -7,6 +7,7 @@ Quick Mongodb wrapper for beginners.
 # Installing
 
 ```bash
+$ npm install --save mongodb # required
 $ npm install --save quickmongo
 ```
 
@@ -24,39 +25,53 @@ $ npm install --save quickmongo
 # Example
 
 ```js
-const MongoDB = require("mongodb");
-const { Fields, Collection } = require("quickmongo");
+const { Collection: MongoCollection, MongoClient } = require("mongodb");
+const { Collection, Fields } = require("quickmongo");
 
-const mongo = await MongoDB.MongoClient.connect("mongodb://127.0.0.1:61582");
-const collection = mongo.db("quickmongo").collection("demo");
+const mongo = new MongoClient("mongodb://localhost/quickmongo");
 const schema = new Fields.ObjectField({
-    name: new Fields.StringField(),
-    age: new Fields.NumberField(),
-    isHuman: new Fields.BooleanField()
-});
-const db = new Collection(collection, schema);
-
-// set data
-await db.set("Josh", {
-    name: "Josh",
-    age: 24,
-    isHuman: true
+    difficulty: new Fields.StringField(),
+    items: new Fields.ArrayField(new Fields.StringField()),
+    balance: new Fields.NumberField()
 });
 
-// get data
-await db.get("Josh"); // { name: "Josh", age: 24, isHuman: true }
+mongo.connect()
+    .then(() => {
+        console.log("Connected to the database!");
+        doStuff();
+    });
 
-// get age
-await db.get("Josh", "age"); // 24
+async function doStuff() {
+    const mongoCollection = mongo.db().collection("JSON");
 
-// set age to 23
-await db.set("Josh", 23, "age");
+    const db = new Collection(mongoCollection, schema);
+    
+    await db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
+    // -> { difficulty: 'Easy', items: [], balance: 0 }
 
-// get all data
-await db.all(); // [{ key: "Josh", value: { name: "Josh", age: 23, isHuman: true } }]
+    await db.push("userInfo", "Sword", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword'], balance: 0 }
 
-// delete
-await db.delete("Josh");
+    await db.add("userInfo", 500, "balance").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
+
+    // Repeating previous examples:
+    await db.push("userInfo", "Watch", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
+
+    await db.add("userInfo", 500, "balance").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
+
+    // Fetching individual properties
+    await db.get("userInfo", "balance").then(console.log);
+    // -> 1000
+    await db.get("userInfo", "items").then(console.log);
+    // -> ['Sword', 'Watch']
+
+    // remove item
+    await db.pull("userInfo", "Sword", "items").then(console.log);
+    // -> { difficulty: 'Easy', items: ['Watch'], balance: 1000 }
+}
 ```
 
 # Discord Support
