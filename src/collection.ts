@@ -41,8 +41,7 @@ export class Collection<T extends FieldModel<unknown>> {
      */
     async has(key: string, path?: string): Promise<boolean> {
         try {
-            const data = await this.get(key, path);
-            return typeof data !== "undefined";
+            return typeof (await this.get(key, path)) !== "undefined";
         } catch {
             return false;
         }
@@ -57,24 +56,17 @@ export class Collection<T extends FieldModel<unknown>> {
     async get(key: string): Promise<FieldType<T> | undefined>;
     async get<P = unknown>(key: string, path: string): Promise<P | undefined>;
     async get<P>(key: string, path?: string) {
-        const { data } =
-            (await this.collection.findOne({
-                ID: key
-            })) || {};
+        const { data } = (await this.collection.findOne({ ID: key })) || {};
 
         if (data) {
             this.model.validate(data);
-
             if (path) {
-                if (typeof data !== "object") {
-                    throw new Error("Received value must be an 'object'");
-                }
-
+                if (typeof data !== "object") throw new Error("Received value must be an 'object'");
                 return dots.get<P>(data, path);
             }
-        }
 
-        return data || undefined;
+            return data;
+        } else return null;
     }
 
     /**
@@ -90,27 +82,15 @@ export class Collection<T extends FieldModel<unknown>> {
         const nVal: FieldType<T> = path ? await this.get(key) : <FieldType<T>>value;
 
         if (path && nVal) {
-            if (typeof nVal !== "object") {
-                throw new Error("Received value must be an 'object'");
-            }
-
+            if (typeof nVal !== "object") throw new Error("Received value must be an 'object'");
             dots.set(nVal, path, value);
         }
 
         this.model.validate(nVal);
-
         const data = await this.collection.updateOne(
-            {
-                ID: key
-            },
-            {
-                $set: {
-                    data: nVal
-                }
-            },
-            {
-                upsert: true
-            }
+            { ID: key },
+            { $set: { data: nVal } },
+            { upsert: true }
         );
 
         if (data.modifiedCount > 0 || data.upsertedCount > 0) return nVal;
@@ -125,39 +105,26 @@ export class Collection<T extends FieldModel<unknown>> {
     async delete(key: string): Promise<boolean>;
     async delete(key: string, path: string): Promise<boolean>;
     async delete(key: string, path?: string) {
-        let deleted = false;
-
         if (path) {
             const value = await this.get(key);
             if (value) {
-                if (typeof value !== "object") {
-                    throw new Error("Received value must be an 'object'");
-                }
-
+                if (typeof value !== "object") throw new Error("Received value must be an 'object'");
                 dots.set(value, path, null);
                 await this.set(key, value);
-                deleted = true;
+                return true;
             }
         } else {
-            const result = await this.collection.deleteOne({
-                ID: key
-            });
-            deleted = result.deletedCount === 1;
+            const result = await this.collection.deleteOne({ ID: key });
+            return result.deletedCount === 1;
         }
-
-        return deleted;
     }
 
     /**
      * Drops this collection
      * @returns {Promise<boolean>}
      */
-    async drop(): Promise<boolean> {
-        try {
-            return await this.collection.drop();
-        } catch {
-            return false;
-        }
+    drop(): Promise<boolean> {
+        return this.collection.drop().catch(() => false);
     }
 
     /**
@@ -186,11 +153,10 @@ export class Collection<T extends FieldModel<unknown>> {
         if (typeof value === "undefined") throw new Error("cannot push undefined");
         const data = await this.get(key, path);
         if (!Array.isArray(data)) throw new TypeError(`Cannot call push because target "${key}${path ? `.${path}` : ""}" is not array`);
-        !Array.isArray(value) ? data.push(value) : data.push(...value);
+        if (Array.isArray(value)) data.push(...value);
+        else data.push(value);
 
-        const rData = await this.set(key, data, path);
-
-        return rData;
+        return this.set(key, data, path);
     }
 
     /**
@@ -204,10 +170,8 @@ export class Collection<T extends FieldModel<unknown>> {
         if (typeof value === "undefined") throw new Error("cannot pull undefined");
         const data = await this.get(key, path);
         if (!Array.isArray(data)) throw new TypeError(`Cannot call pull because target "${key}${path ? `.${path}` : ""}" is not array`);
-        const newData = !Array.isArray(value) ? data.filter((x) => x !== value) : data.filter((x) => !value.includes(x));
-        const rData = await this.set(key, newData, path);
-
-        return rData;
+        const newData = data.filter(Array.isArray(value) ? (x) => !value.includes(x) : (x) => x !== value);
+        return this.set(key, newData, path);
     }
 
     /**
@@ -230,7 +194,7 @@ export class Collection<T extends FieldModel<unknown>> {
             db: this.collection.dbName,
             name: this.collection.collectionName,
             namespace: this.collection.namespace,
-            data: everything.map((m) => ({ ID: m.ID, data: m.data })) // remove _id
+            data: everything.map((m) => ({ ID: m.ID, data: m.data })) // Mapping is done here to exclude `__id` field.
         };
     }
 }
