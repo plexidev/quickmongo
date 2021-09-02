@@ -87,11 +87,7 @@ export class Collection<T extends FieldModel<unknown>> {
         }
 
         this.model.validate(nVal);
-        const data = await this.collection.updateOne(
-            { ID: key },
-            { $set: { data: nVal } },
-            { upsert: true }
-        );
+        const data = await this.collection.updateOne({ ID: key }, { $set: { data: nVal } }, { upsert: true });
 
         if (data.modifiedCount > 0 || data.upsertedCount > 0) return nVal;
     }
