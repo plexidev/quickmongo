@@ -18,10 +18,7 @@ export class StringField extends FieldModel<string> {
      * @returns {boolean}
      */
     override validate(value: unknown): true | never {
-        if (typeof value !== "string") {
-            throw new TypeError("'value' must be an 'string'");
-        }
-
+        if (typeof value !== "string") throw new TypeError("'value' must be an 'string'");
         return true;
     }
 }

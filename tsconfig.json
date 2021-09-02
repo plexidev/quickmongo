@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "ES6",
         "module": "commonjs",
+        "lib": ["ES2016"],
         "moduleResolution": "node",
         "declaration": true,
         "outDir": "./dist",

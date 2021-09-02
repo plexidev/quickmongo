@@ -18,10 +18,7 @@ export class BooleanField extends FieldModel<boolean> {
      * @returns {boolean}
      */
     override validate(value: unknown): true | never {
-        if (typeof value !== "boolean") {
-            throw new TypeError("'value' must be a 'boolean'");
-        }
-
+        if (typeof value !== "boolean") throw new TypeError("'value' must be a 'boolean'");
         return true;
     }
 }

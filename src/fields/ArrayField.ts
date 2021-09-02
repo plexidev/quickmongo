@@ -22,14 +22,8 @@ export class ArrayField<T extends FieldModel<unknown>> extends FieldModel<ArrayF
      * @returns {boolean}
      */
     override validate(value: unknown): true | never {
-        if (!Array.isArray(value)) {
-            throw new TypeError("'value' must be an 'array'");
-        }
-
-        value.forEach((val) => {
-            this.model.validate(val);
-        });
-
+        if (!Array.isArray(value)) throw new TypeError("'value' must be an 'array'");
+        value.forEach(this.model.validate);
         return true;
     }
 }

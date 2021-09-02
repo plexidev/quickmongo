@@ -18,10 +18,7 @@ export class NumberField extends FieldModel<number> {
      * @returns {boolean}
      */
     override validate(value: unknown): true | never {
-        if (typeof value !== "number") {
-            throw new TypeError("'value' must be a 'number'");
-        }
-
+        if (typeof value !== "number") throw new TypeError("'value' must be a 'number'");
         return true;
     }
 }
