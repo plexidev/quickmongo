@@ -23,7 +23,7 @@ export class NullableField<T extends FieldModel<unknown>> extends FieldModel<Nul
      */
     override validate(value: unknown): true | never {
         if (value) return this.model.validate(value);
-        if (value != null) throw new TypeError(`value '${value}' is not 'null' or 'undefined'`);
+        if (value !== null) throw new TypeError(`value '${value}' is not 'null' or 'undefined'`);
         return true;
     }
 }
