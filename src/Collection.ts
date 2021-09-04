@@ -66,7 +66,7 @@ export class Collection<T extends FieldModel<unknown>> {
             }
 
             return data;
-        } else return null;
+        }
     }
 
     /**
