@@ -26,14 +26,9 @@ $ npm install --save quickmongo
 
 ```js
 const { Collection: MongoCollection, MongoClient } = require("mongodb");
-const { Collection, Fields } = require("quickmongo");
+const { Collection } = require("quickmongo");
 
 const mongo = new MongoClient("mongodb://localhost/quickmongo");
-const schema = new Fields.Object({
-    difficulty: new Fields.String(),
-    items: new Fields.Array(new Fields.String()),
-    balance: new Fields.Number()
-});
 
 mongo.connect()
     .then(() => {
@@ -44,7 +39,11 @@ mongo.connect()
 function doStuff() {
     const mongoCollection = mongo.db().collection("JSON");
 
-    const db = new Collection(mongoCollection, schema);
+    const db = new Collection(mongoCollection, {
+        difficulty: String,
+        items: [String],
+        balance: Number
+    });
     
     db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
     // -> { difficulty: 'Easy', items: [], balance: 0 }

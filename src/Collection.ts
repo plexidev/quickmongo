@@ -1,6 +1,7 @@
 import dots from "dot-prop";
 import type { Collection as MongoCollection, SortDirection } from "mongodb";
 import { FieldModel, FieldType } from "./fields";
+import { resolveField } from "./fields/util";
 
 export type FieldToDocumentScheme<T extends FieldModel<unknown>> = {
     ID: string;
@@ -21,6 +22,14 @@ export interface AllCollectionDocumentOptions {
  * The QuickMongo collection
  */
 export class Collection<T extends FieldModel<unknown>> {
+
+    /**
+     * @property model
+     * @type {FieldModel} 
+     * Field model
+     */
+    public model: T;
+
     /**
      * Create new quickmongo collection instance
      * @param {MongoCollection} collection The MongoDB collection
@@ -30,7 +39,9 @@ export class Collection<T extends FieldModel<unknown>> {
      * const schema = new QuickMongo.Fields.ObjectField({...});
      * const db = new QuickMongo.Collection(collection, schema);
      */
-    constructor(public collection: MongoCollection<FieldToDocumentScheme<T>>, public model: T) {}
+    constructor(public collection: MongoCollection<FieldToDocumentScheme<T>>, model: T) {
+        this.model = resolveField(model) as T;
+    }
 
     /**
      * Returns if the collection has data with the specified key.

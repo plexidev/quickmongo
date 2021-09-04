@@ -1,4 +1,5 @@
 import { FieldModel, FieldModelOptions, FieldType } from "./model";
+import { resolveField } from "./util";
 
 export type ObjectFieldModel = {
     [s: string]: FieldModel<unknown>;
@@ -39,7 +40,7 @@ export class ObjectField<T extends ObjectFieldModel> extends FieldModel<ObjectFi
         const testedKeys: string[] = [];
 
         modelKeys.forEach((key) => {
-            this.model[key].validate((<ObjectFieldType<T>>value)[key]);
+            resolveField(this.model[key]).validate((<ObjectFieldType<T>>value)[key]);
             testedKeys.push(key);
         });
 
