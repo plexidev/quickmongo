@@ -29,10 +29,10 @@ const { Collection: MongoCollection, MongoClient } = require("mongodb");
 const { Collection, Fields } = require("quickmongo");
 
 const mongo = new MongoClient("mongodb://localhost/quickmongo");
-const schema = new Fields.ObjectField({
-    difficulty: new Fields.StringField(),
-    items: new Fields.ArrayField(new Fields.StringField()),
-    balance: new Fields.NumberField()
+const schema = new Fields.Object({
+    difficulty: new Fields.String(),
+    items: new Fields.Array(new Fields.String()),
+    balance: new Fields.Number()
 });
 
 mongo.connect()
