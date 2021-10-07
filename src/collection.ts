@@ -185,6 +185,7 @@ export class Collection<T extends FieldModel<unknown>> {
     async push<P = unknown>(key: string, value: P, path?: string): Promise<FieldType<T> | undefined> {
         if (typeof value === "undefined") throw new Error("cannot push undefined");
         const data = await this.get(key, path);
+        if (typeof data === "undefined") data = [];
         if (!Array.isArray(data)) throw new TypeError(`Cannot call push because target "${key}${path ? `.${path}` : ""}" is not array`);
         !Array.isArray(value) ? data.push(value) : data.push(...value);
 
