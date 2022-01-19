@@ -5,3 +5,4 @@ test/
 .vscode/
 yarn.lock
 package-lock.json
+globalConfig.json
