@@ -266,6 +266,16 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
+     * The database latency in ms
+     * @returns {number}
+     */
+    public async ping() {
+        const initial = Date.now();
+        await this.get("SOME_RANDOM_KEY");
+        return Date.now() - initial;
+    }
+
+    /**
      * Create a child database (similar to quick.db table)
      * @param {?string} collection The collection name (defaults to `JSON`)
      * @param {?string} url The database url (not needed if the child needs to share connection from parent)
