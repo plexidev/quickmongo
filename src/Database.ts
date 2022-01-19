@@ -279,9 +279,11 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
      * Create a child database (similar to quick.db table)
      * @param {?string} collection The collection name (defaults to `JSON`)
      * @param {?string} url The database url (not needed if the child needs to share connection from parent)
-     * @returns {Database}
+     * @returns {Promise<Database>}
+     * @example const child = await db.instantiateChild("NewCollection");
+     * console.log(child.all());
      */
-    public instantiateChild<K = unknown>(collection?: string, url?: string): Database<K> {
+    public async instantiateChild<K = unknown>(collection?: string, url?: string): Promise<Database<K>> {
         const childDb = new Database<K, T>(url || this.url, {
             ...this.options,
             child: true,
@@ -290,7 +292,8 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             shareConnectionFromParent: !!url || true
         });
 
-        return childDb;
+        const ndb = await childDb.connect();
+        return ndb;
     }
 
     /**
@@ -397,8 +400,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
      */
     public connect() {
         return new Promise<Database<T>>((resolve, reject) => {
-            if ("__child__" in this && this.__child__ === true) return reject("CANNOT_CONNECT_FROM_CHILD");
-            if (typeof this.url !== "string" || !this.url) throw new Error("MISSING_MONGODB_URL");
+            if (typeof this.url !== "string" || !this.url) return reject(new Error("MISSING_MONGODB_URL"));
 
             this.__child__ = Boolean(this.options.child);
             this.parent = (this.options.parent as Database<PAR>) || null;
@@ -411,10 +413,10 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             delete this.options["shareConnectionFromParent"];
 
             if (shareConnectionFromParent && this.__child__ && this.parent) {
-                if (!this.parent.connection) throw new Error("PARENT_HAS_NO_CONNECTION");
+                if (!this.parent.connection) return reject(new Error("PARENT_HAS_NO_CONNECTION"));
                 this.connection = this.parent.connection;
                 this.model = modelSchema<T>(this.connection, Util.v(collectionName, "string", "JSON"));
-                return;
+                return resolve(this);
             }
 
             mongoose.createConnection(this.url, this.options, (err, connection) => {
