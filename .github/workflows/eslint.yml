@@ -20,10 +20,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run ESLint
-        run: npm run lint
-
-      - name: Run TSC
-        run: npm run build:check
+        run: yarn lint
