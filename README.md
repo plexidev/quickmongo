@@ -7,7 +7,6 @@ Quick Mongodb wrapper for beginners that provides key-value based interface.
 # Installing
 
 ```bash
-$ npm install --save mongodb # required
 $ npm install --save quickmongo
 ```
 
@@ -16,7 +15,6 @@ $ npm install --save quickmongo
 
 # Features
 - Beginner friendly
-- Strongly typed
 - Asynchronous
 - Dot notation support
 - Key-Value like interface
@@ -25,49 +23,39 @@ $ npm install --save quickmongo
 # Example
 
 ```js
-const { Collection: MongoCollection, MongoClient } = require("mongodb");
-const { Collection, Fields } = require("quickmongo");
+const { Database } = require("quickmongo");
 
-const mongo = new MongoClient("mongodb://localhost/quickmongo");
-const schema = new Fields.ObjectField({
-    difficulty: new Fields.StringField(),
-    items: new Fields.ArrayField(new Fields.StringField()),
-    balance: new Fields.NumberField()
+const db = new Database("mongodb://localhost/quickmongo");
+
+db.on("ready", () => {
+    console.log("Connected to the database");
+    doStuff();
 });
 
-mongo.connect()
-    .then(() => {
-        console.log("Connected to the database!");
-        doStuff();
-    });
+db.connect();
 
 function doStuff() {
-    const mongoCollection = mongo.db().collection("JSON");
+    // Setting an object in the database:
+    await db.set("userInfo", { difficulty: "Easy" });
+    // -> { difficulty: 'Easy' }
 
-    const db = new Collection(mongoCollection, schema);
-    
-    db.set("userInfo", { difficulty: "Easy", items: [], balance: 0 }).then(console.log);
-    // -> { difficulty: 'Easy', items: [], balance: 0 }
+    // Pushing an element to an array (that doesn't exist yet) in an object:
+    await db.push("userInfo.items", "Sword");
+    // -> { difficulty: 'Easy', items: ['Sword'] }
 
-    db.push("userInfo", "Sword", "items").then(console.log);
-    // -> { difficulty: 'Easy', items: ['Sword'], balance: 0 }
-
-    db.set("userInfo", 500, "balance").then(console.log);
+    // Adding to a number (that doesn't exist yet) in an object:
+    await db.add("userInfo.balance", 500);
     // -> { difficulty: 'Easy', items: ['Sword'], balance: 500 }
 
     // Repeating previous examples:
-    db.push("userInfo", "Watch", "items").then(console.log);
+    await db.push("userInfo.items", "Watch");
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 500 }
-
-    const previousBalance = await db.get("userInfo", "balance");
-    db.set("userInfo", previousBalance + 500, "balance").then(console.log);
+    await db.add("userInfo.balance", 500);
     // -> { difficulty: 'Easy', items: ['Sword', 'Watch'], balance: 1000 }
 
     // Fetching individual properties
-    db.get("userInfo", "balance").then(console.log);
-    // -> 1000
-    db.get("userInfo", "items").then(console.log);
-    // -> ['Sword', 'Watch']
+    await db.get("userInfo.balance"); // -> 1000
+    await db.get("userInfo.items"); // -> ['Sword', 'Watch']
 
     // remove item
     db.pull("userInfo", "Sword", "items").then(console.log);
@@ -75,5 +63,7 @@ function doStuff() {
 }
 ```
 
+**Created and maintained by CesiumLabs**
+
 # Discord Support
-**[SnowflakeDev Community ❄️](https://snowflakedev.org/discord)**
+**[CesiumLabs](https://discord.gg/uqB8kxh)**
