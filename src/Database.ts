@@ -461,6 +461,29 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
+     * The db metadata
+     * @type {?Object}
+     */
+    public get metadata() {
+        if (!this.model) return null;
+        return {
+            name: this.model.collection.name,
+            db: this.model.collection.dbName,
+            namespace: this.model.collection.namespace
+        };
+    }
+
+    /**
+     * Returns database statistics
+     * @returns {Promise<CollStats>}
+     */
+    public async stats() {
+        this.__readyCheck();
+        const stats = await this.model.collection.stats();
+        return stats;
+    }
+
+    /**
      * Close the database connection
      * @param {?boolean} [force=false] Close forcefully
      * @returns {Promise<void>}

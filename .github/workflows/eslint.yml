@@ -8,16 +8,16 @@ on:
       - '*'
 jobs:
   test:
-    name: ESLint (Node v16)
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Node v16
+      - name: Install Node v17
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 17
 
       - name: Install dependencies
         run: yarn install
