@@ -23,18 +23,20 @@ $ npm install --save quickmongo
 # Example
 
 ```js
-const { Database } = require("quickmongo");
+import { Database } from 'quickmongo';
 
-const db = new Database("mongodb://localhost/quickmongo");
+const db = new Database("mongodb://localhost:27017/quickmongo");
 
 db.on("ready", () => {
     console.log("Connected to the database");
     doStuff();
 });
 
-db.connect();
+// top-level awaits
+await db.connect(); 
+await doStuff(); 
 
-function doStuff() {
+async function doStuff() {
     // Setting an object in the database:
     await db.set("userInfo", { difficulty: "Easy" });
     // -> { difficulty: 'Easy' }
