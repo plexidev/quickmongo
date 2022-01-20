@@ -23,7 +23,7 @@ $ npm install --save quickmongo
 # Example
 
 ```js
-import { Database } from 'quickmongo';
+import { Database } from "quickmongo";
 
 const db = new Database("mongodb://localhost:27017/quickmongo");
 
@@ -34,7 +34,6 @@ db.on("ready", () => {
 
 // top-level awaits
 await db.connect(); 
-await doStuff(); 
 
 async function doStuff() {
     // Setting an object in the database:
@@ -60,7 +59,7 @@ async function doStuff() {
     await db.get("userInfo.items"); // -> ['Sword', 'Watch']
 
     // remove item
-    db.pull("userInfo", "Sword", "items").then(console.log);
+    await db.pull("userInfo.items", "Sword");
     // -> { difficulty: 'Easy', items: ['Watch'], balance: 1000 }
 }
 ```

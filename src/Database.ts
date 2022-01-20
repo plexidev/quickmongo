@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { NativeError } from "mongoose";
 import modelSchema, { CollectionInterface } from "./collection";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { Util } from "./Util";
@@ -29,7 +29,7 @@ export interface QuickMongoOptions extends mongoose.ConnectOptions {
 export interface AllQueryOptions<T = unknown> {
     limit?: number;
     sort?: string;
-    filter?: (data: T, idx: number) => boolean;
+    filter?: (data: AllData<T>, idx: number) => boolean;
 }
 
 /**
@@ -55,6 +55,18 @@ export type DocType<T = unknown> = mongoose.Document<any, any, CollectionInterfa
 
 interface QmEvents<V = unknown> {
     ready: (db: Database<V>) => unknown;
+    connecting: () => unknown;
+    connected: () => unknown;
+    open: () => unknown;
+    disconnecting: () => unknown;
+    disconnected: () => unknown;
+    close: () => unknown;
+    reconnected: () => unknown;
+    error: (error: NativeError) => unknown;
+    fullsetup: () => unknown;
+    all: () => unknown;
+    reconnectFailed: () => unknown;
+    reconnectTries: () => unknown;
 }
 
 /**
@@ -161,6 +173,15 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         const res = await this.getRaw(key);
         const formatted = this.__formatData(res);
         return Util.pick(formatted, key) as unknown as V;
+    }
+
+    /**
+     * Get item from the database
+     * @param {string} key The key
+     * @returns {Promise<any>}
+     */
+    public async fetch<V = T>(key: string): Promise<V> {
+        return await this.get(key);
     }
 
     /**
@@ -310,7 +331,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
                 data: this.__formatData(m)
             }))
             .filter((doc, idx) => {
-                if (options?.filter) return options.filter(doc.data, idx);
+                if (options?.filter) return options.filter({ ID: doc.ID, data: doc.data }, idx);
                 return true;
             }) as AllData<T>[];
 
@@ -321,6 +342,15 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         }
 
         return typeof options?.limit === "number" && options.limit > 0 ? arb.slice(0, options.limit) : arb;
+    }
+
+    /**
+     * Drops this database
+     * @returns {Promise<boolean>}
+     */
+    public async drop() {
+        this.__readyCheck();
+        return await this.model.collection.drop();
     }
 
     /**
@@ -424,6 +454,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
                 this.connection = connection;
                 this.model = modelSchema<T>(this.connection, Util.v(collectionName, "string", "JSON"));
                 this.emit("ready", this);
+                this.__applyEventsBinding();
                 resolve(this);
             });
         });
@@ -436,6 +467,18 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
      */
     public async close(force = false) {
         return await this.connection.close(force);
+    }
+
+    private __applyEventsBinding() {
+        this.__readyCheck();
+        const events = ["connecting", "connected", "open", "disconnecting", "disconnected", "close", "reconnected", "error", "fullsetup", "all", "reconnectFailed", "reconnectTries"];
+
+        for (const event of events) {
+            this.connection.prependListener(event, (...args) => {
+                // @ts-expect-error event forwarder
+                this.emit(event, ...args);
+            });
+        }
     }
 
     /**
@@ -461,4 +504,60 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
  * Emitted once the database is ready
  * @event Database#ready
  * @param {Database} db The database
+ */
+
+/**
+ * Emitted when Mongoose starts making its initial connection to the MongoDB server
+ * @event Database#connecting
+ */
+
+/**
+ * Emitted when QuickMongo successfully makes its initial connection to the MongoDB server, or when QuickMongo reconnects after losing connectivity. May be emitted multiple times if QuickMongo loses connectivity.
+ * @event Database#connected
+ */
+
+/**
+ * Emitted after `'connected'` and onOpen is executed on all of this connection's models.
+ * @event Database#open
+ */
+
+/**
+ * Emitted when called `db.close()` to disconnect from MongoDB
+ * @event Database#disconnecting
+ */
+
+/**
+ * Emitted when QuickMongo lost connection to the MongoDB server. This event may be due to your code explicitly closing the connection, the database server crashing, or network connectivity issues.
+ * @event Database#disconnected
+ */
+
+/**
+ * Emitted after `db.close()` successfully closes the connection. If you call `db.close()`, you'll get both a `'disconnected'` event and a `'close'` event.
+ * @event Database#close
+ */
+
+/**
+ * Emitted if QuickMongo lost connectivity to MongoDB and successfully reconnected. QuickMongo attempts to automatically reconnect when it loses connection to the database.
+ * @event Database#reconnected
+ */
+
+/**
+ * Emitted if an error occurs on a connection, like a parseError due to malformed data or a payload larger than `16MB`.
+ * @event Database#error
+ * @param {Error} error The error
+ */
+
+/**
+ * Emitted when you're connecting to a replica set and QuickMongo has successfully connected to the primary and at least one secondary.
+ * @event Database#fullsetup
+ */
+
+/**
+ * Emitted when you're connecting to a replica set and Mongoose has successfully connected to all servers specified in your connection string.
+ * @event Database#all
+ */
+
+/**
+ * Emitted when you're connected to a standalone server and Mongoose has run out of `reconnectTries`. The MongoDB driver will no longer attempt to reconnect after this event is emitted. This event will never be emitted if you're connected to a replica set.
+ * @event Database#reconnectFailed
  */
