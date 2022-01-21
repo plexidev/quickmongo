@@ -1,6 +1,6 @@
 {
   "name": "quickmongo",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "Quick Mongodb wrapper for beginners that provides key-value based interface.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

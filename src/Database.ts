@@ -66,7 +66,6 @@ interface QmEvents<V = unknown> {
     fullsetup: () => unknown;
     all: () => unknown;
     reconnectFailed: () => unknown;
-    reconnectTries: () => unknown;
 }
 
 /**
@@ -297,7 +296,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
-     * Create a child database (similar to quick.db table)
+     * Create a child database, either from new connection or current connection (similar to quick.db table)
      * @param {?string} collection The collection name (defaults to `JSON`)
      * @param {?string} url The database url (not needed if the child needs to share connection from parent)
      * @returns {Promise<Database>}
@@ -315,6 +314,45 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
         const ndb = await childDb.connect();
         return ndb;
+    }
+
+    /**
+     * Identical to quick.db table
+     * @type {Database}
+     * @example const table = new db.table("table");
+     * table.set("foo", "Bar");
+     */
+    public get table() {
+        return new Proxy(
+            function () {
+                /* noop */
+            } as unknown as TableConstructor,
+            {
+                construct: (_, args) => {
+                    const name = args[0];
+                    if (!name || typeof name !== "string") throw new TypeError("ERR_TABLE_NAME");
+                    const db = new Database(this.url, this.options);
+
+                    db.connection = this.connection;
+                    db.model = modelSchema(this.connection, name);
+                    db.connect = () => Promise.resolve(db);
+
+                    Object.defineProperty(db, "table", {
+                        get() {
+                            return;
+                        },
+                        set() {
+                            return;
+                        }
+                    });
+
+                    return db;
+                },
+                apply: () => {
+                    throw new Error("TABLE_IS_NOT_A_FUNCTION");
+                }
+            }
+        );
     }
 
     /**
@@ -521,6 +559,10 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     private __readyCheck() {
         if (!this.model) throw new Error("DATABASE_NOT_READY");
     }
+}
+
+export interface TableConstructor<V = unknown> {
+    new (name: string): Database<V>;
 }
 
 /**
