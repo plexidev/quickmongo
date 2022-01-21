@@ -5,6 +5,7 @@ export interface CollectionInterface<T = unknown> {
     data: T;
     createdAt: Date;
     updatedAt: Date;
+    expireAt?: Date;
 }
 
 export const docSchema = new mongoose.Schema<CollectionInterface>(
@@ -17,6 +18,11 @@ export const docSchema = new mongoose.Schema<CollectionInterface>(
         data: {
             type: mongoose.SchemaTypes.Mixed,
             required: false
+        },
+        expireAt: {
+            type: mongoose.SchemaTypes.Date,
+            required: false,
+            default: null
         }
     },
     {
@@ -26,5 +32,6 @@ export const docSchema = new mongoose.Schema<CollectionInterface>(
 
 export default function modelSchema<T = unknown>(connection: mongoose.Connection, modelName = "JSON") {
     const model = connection.model<CollectionInterface<T>>(modelName, docSchema);
+    model.collection.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).catch(() => null);
     return model;
 }

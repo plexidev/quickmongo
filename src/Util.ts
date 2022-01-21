@@ -61,6 +61,23 @@ export class Util extends null {
             target: child.join(".")
         };
     }
+
+    /**
+     * Utility to validate duration
+     * @param {number} dur The duration
+     * @returns {boolean}
+     */
+    public static shouldExpire(dur: number) {
+        if (typeof dur !== "number") return false;
+        if (dur > Infinity || dur <= 0 || Number.isNaN(dur)) return false;
+        return true;
+    }
+
+    public static createDuration(dur: number) {
+        if (!Util.shouldExpire(dur)) return null;
+        const duration = new Date(Number(BigInt(Date.now()) + 1000n));
+        return duration;
+    }
 }
 
 /**

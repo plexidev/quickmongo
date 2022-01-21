@@ -158,9 +158,19 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
      */
     public async getRaw(key: string): Promise<DocType<T>> {
         this.__readyCheck();
-        return await this.model.findOne({
+        const doc = await this.model.findOne({
             ID: Util.getKey(key)
         });
+
+        // return null if the doc has expired
+        // mongodb task runs every 60 seconds therefore expired docs may exist during that timeout
+        // this check fixes that issue and returns null if the doc has expired
+        // letting mongodb take care of data deletion in the background
+        if (!doc || (doc.expireAt && doc.expireAt.getTime() - Date.now() <= 0)) {
+            return null;
+        }
+
+        return doc;
     }
 
     /**
@@ -187,16 +197,33 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
      * Set item in the database
      * @param {string} key The key
      * @param {any} value The value
+     * @param {?number} [expireAfterSeconds=-1] if specified, quickmongo deletes this data after specified seconds.
+     * Leave it blank or set it to `-1` to make it permanent.
+     * <warn>Data may still persist for a minute even after the data is supposed to be expired!</warn>
+     * Data may persist for a minute even after expiration due to the nature of mongodb. QuickMongo makes sure to never return expired
+     * documents even if it's not deleted.
      * @returns {Promise<any>}
+     * @example // permanent
+     * await db.set("foo", "bar");
+     *
+     * // delete the record after 1 minute
+     * await db.set("foo", "bar", 60); // time in seconds (60 seconds = 1 minute)
      */
-    public async set(key: string, value: T | unknown): Promise<T> {
+    public async set(key: string, value: T | unknown, expireAfterSeconds = -1): Promise<T> {
         this.__readyCheck();
         if (!key.includes(".")) {
             await this.model.findOneAndUpdate(
                 {
                     ID: key
                 },
-                { $set: { data: value } },
+                {
+                    $set: Util.shouldExpire(expireAfterSeconds)
+                        ? {
+                              data: value,
+                              expireAt: Util.createDuration(expireAfterSeconds * 1000)
+                          }
+                        : { data: value }
+                },
                 { upsert: true }
             );
 
@@ -205,10 +232,18 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             const keyMetadata = Util.getKeyMetadata(key);
             const existing = await this.model.findOne({ ID: keyMetadata.master });
             if (!existing) {
-                await this.model.create({
-                    ID: keyMetadata.master,
-                    data: _.set({}, keyMetadata.target, value)
-                });
+                await this.model.create(
+                    Util.shouldExpire(expireAfterSeconds)
+                        ? {
+                              ID: keyMetadata.master,
+                              data: _.set({}, keyMetadata.target, value),
+                              expireAt: Util.createDuration(expireAfterSeconds * 1000)
+                          }
+                        : {
+                              ID: keyMetadata.master,
+                              data: _.set({}, keyMetadata.target, value)
+                          }
+                );
 
                 return await this.get(key);
             }
@@ -219,9 +254,14 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             const newData = _.set(prev, keyMetadata.target, value);
 
             await existing.updateOne({
-                $set: {
-                    data: newData
-                }
+                $set: Util.shouldExpire(expireAfterSeconds)
+                    ? {
+                          data: newData,
+                          expireAt: Util.createDuration(expireAfterSeconds * 1000)
+                      }
+                    : {
+                          data: newData
+                      }
             });
 
             return await this.get(keyMetadata.master);
@@ -364,12 +404,13 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         this.__readyCheck();
         const everything = await this.model.find();
         let arb = everything
+            .filter((x) => !(x.expireAt && x.expireAt.getTime() - Date.now() <= 0))
             .map((m) => ({
                 ID: m.ID,
                 data: this.__formatData(m)
             }))
             .filter((doc, idx) => {
-                if (options?.filter) return options.filter({ ID: doc.ID, data: doc.data }, idx);
+                if (options?.filter) return options.filter(doc, idx);
                 return true;
             }) as AllData<T>[];
 

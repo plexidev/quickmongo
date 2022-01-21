@@ -19,6 +19,7 @@ $ npm install --save quickmongo
 - Dot notation support
 - Key-Value like interface
 - Easy to use
+- TTL (temporary storage) supported
 
 # Example
 
@@ -61,6 +62,14 @@ async function doStuff() {
     // remove item
     await db.pull("userInfo.items", "Sword");
     // -> { difficulty: 'Easy', items: ['Watch'], balance: 1000 }
+
+    // set the data and automatically delete it after 1 minute
+    await db.set("foo", "bar", 60); // 60 seconds = 1 minute
+
+    // fetch the temporary data after a minute
+    setTimeout(async () => {
+        await db.get("foo"); // null
+    }, 60_000);
 }
 ```
 
