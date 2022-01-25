@@ -75,7 +75,7 @@ export class Util extends null {
 
     public static createDuration(dur: number) {
         if (!Util.shouldExpire(dur)) return null;
-        const duration = new Date(Number(BigInt(Date.now()) + 1000n));
+        const duration = new Date(Date.now() + dur);
         return duration;
     }
 }
