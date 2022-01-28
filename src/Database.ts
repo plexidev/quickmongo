@@ -463,16 +463,16 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         if (data == null) return false;
         if (!Array.isArray(data)) throw new Error("TARGET_EXPECTED_ARRAY");
         if (Array.isArray(value)) {
-            data = data.filter((i) => !value.includes(i));
+            data = data.filter((i: any, index) => !value.includes(i) || (typeof value[index] === "object") ? !(value[index] instanceof i) : false);
             return await this.set(key, data);
         } else {
             if (multiple) {
-                data = data.filter((i) => i !== value);
+                data = data.filter((i: any) => i !== value || (typeof value === "object") ? value instanceof i : false);
                 return await this.set(key, data);
             } else {
-                const hasItem = data.some((x) => x === value);
+                const hasItem = data.some((x: any) => x === value || (typeof value === "object") ? value instanceof x : false);
                 if (!hasItem) return false;
-                const index = data.findIndex((x) => x === value);
+                const index = data.findIndex((x: any) => x === value || (typeof value === "object") ? value instanceof x : false);
                 data = data.splice(index, 1);
                 return await this.set(key, data);
             }
