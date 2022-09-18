@@ -6,8 +6,8 @@ export default defineConfig({
     entryPoints: ["src/index.ts"],
     outDir: "dist",
     format: ["esm", "cjs"],
-    minify: true,
+    minify: false,
     skipNodeModulesBundle: true,
     sourcemap: false,
-    target: "ES2020"
+    target: "ES2015"
 });

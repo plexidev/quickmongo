@@ -5,7 +5,7 @@ describe("test database", () => {
         difficulty: string;
         items: string[];
         balance: number;
-    }>("mongodb://127.0.0.1:27017/quickmongo");
+    }>("mongodb://localhost/quickmongo");
 
     beforeAll(async () => {
         await db.connect();

@@ -1,51 +1,57 @@
-import mongoose, { NativeError } from "mongoose";
+import mongoose from "mongoose";
 import modelSchema, { CollectionInterface } from "./collection";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { Util } from "./Util";
 import _ from "lodash";
 
-/**
- * This object also accepts mongodb options
- * @typedef {Object} QuickMongoOptions
- * @property {?string} [collectionName="JSON"] The collection name
- * @property {?boolean} [child=false] Instantiate as a child
- * @property {?Database} [parent=false] Parent db
- * @property {?boolean} [shareConnectionFromParent=false] Share db connection
- */
-
 export interface QuickMongoOptions extends mongoose.ConnectOptions {
+    /**
+     * Collection name to use
+     */
     collectionName?: string;
+    /**
+     * If it should be created as a child db
+     */
     child?: boolean;
+    /**
+     * Parent db
+     */
     parent?: Database;
+    /**
+     * If it should share connection from parent db
+     */
     shareConnectionFromParent?: boolean;
+    /**
+     * If it should connect automatically
+     */
+    autoConnect?: boolean;
 }
 
-/**
- * @typedef {Object} AllQueryOptions
- * @property {?number} [limit=0] The retrieval limit (0 for infinity)
- * @property {?string} [sort] The target to sort by
- * @property {?Function} [filter] The filter: `((data, index) => boolean)`
- */
 export interface AllQueryOptions<T = unknown> {
+    /**
+     * The query limit
+     */
     limit?: number;
+    /**
+     * Sort by
+     */
     sort?: string;
-    filter?: (data: AllData<T>, idx: number) => boolean;
+    /**
+     * Query filter
+     */
+    filter?: (data: AllData<T>) => boolean;
 }
 
-/**
- * @typedef {Object} AllData
- * @property {string} ID The id/key
- * @property {any} data The data
- */
 export interface AllData<T = unknown> {
+    /**
+     * The id
+     */
     ID: string;
+    /**
+     * The data associated with a particular ID
+     */
     data: T;
 }
-
-/**
- * Document Type, mongoose document
- * @typedef {Object} DocType
- */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DocType<T = unknown> = mongoose.Document<any, any, CollectionInterface<T>> &
@@ -53,18 +59,54 @@ export type DocType<T = unknown> = mongoose.Document<any, any, CollectionInterfa
         _id: mongoose.Types.ObjectId;
     };
 
-interface QmEvents<V = unknown> {
+export interface QmEvents<V = unknown> {
+    /**
+     * The `ready` event
+     */
     ready: (db: Database<V>) => unknown;
+    /**
+     * The `connecting` event
+     */
     connecting: () => unknown;
+    /**
+     * The `connected` event
+     */
     connected: () => unknown;
+    /**
+     * The `open` event
+     */
     open: () => unknown;
+    /**
+     * The `disconnecting` event
+     */
     disconnecting: () => unknown;
+    /**
+     * The `disconnected` event
+     */
     disconnected: () => unknown;
+    /**
+     * The `close` event
+     */
     close: () => unknown;
+    /**
+     * The `reconnected` event
+     */
     reconnected: () => unknown;
-    error: (error: NativeError) => unknown;
+    /**
+     * The `error` event
+     */
+    error: (error: Error) => unknown;
+    /**
+     * The `fullsetup` event
+     */
     fullsetup: () => unknown;
+    /**
+     * The `all` event
+     */
     all: () => unknown;
+    /**
+     * The `reconnectFailed` event
+     */
     reconnectFailed: () => unknown;
 }
 
@@ -81,8 +123,8 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Creates new quickmongo instance
-     * @param {string} url The database url
-     * @param {QuickMongoOptions} [options={}] The database options
+     * @param url The database url
+     * @param options The database options
      */
     public constructor(public url: string, public options: QuickMongoOptions = {}) {
         super();
@@ -93,34 +135,11 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             configurable: true
         });
 
-        /**
-         * The model
-         * @name Database#model
-         * @type {?Model}
-         */
-
-        /**
-         * The connection
-         * @name Database#connection
-         * @type {?Connection}
-         */
-
-        /**
-         * The database url
-         * @name Database#url
-         * @type {string}
-         */
-
-        /**
-         * The options
-         * @name Database#options
-         * @type {?QuickMongoOptions}
-         */
+        if (this.options.autoConnect) this.connect();
     }
 
     /**
      * If this is a child database
-     * @returns {boolean}
      */
     public isChild() {
         return !this.isParent();
@@ -128,7 +147,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * If this is a parent database
-     * @returns {boolean}
      */
     public isParent() {
         return !this.__child__;
@@ -136,7 +154,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * If the database is ready
-     * @type {boolean}
      */
     public get ready() {
         return this.model && this.connection ? true : false;
@@ -144,7 +161,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Database ready state
-     * @type {number}
      */
     public get readyState() {
         return this.connection?.readyState ?? 0;
@@ -152,9 +168,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Get raw document
-     * @param {string} key The key
-     * @returns {Promise<DocType>}
-     * @private
+     * @param key The key
      */
     public async getRaw(key: string): Promise<DocType<T>> {
         this.__readyCheck();
@@ -175,8 +189,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Get item from the database
-     * @param {string} key The key
-     * @returns {Promise<any>}
+     * @param key The key
      */
     public async get<V = T>(key: string): Promise<V> {
         const res = await this.getRaw(key);
@@ -186,8 +199,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Get item from the database
-     * @param {string} key The key
-     * @returns {Promise<any>}
+     * @param key The key
      */
     public async fetch<V = T>(key: string): Promise<V> {
         return await this.get(key);
@@ -195,14 +207,13 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Set item in the database
-     * @param {string} key The key
-     * @param {any} value The value
-     * @param {?number} [expireAfterSeconds=-1] if specified, quickmongo deletes this data after specified seconds.
+     * @param key The key
+     * @param value The value
+     * @param [expireAfterSeconds=-1] if specified, quickmongo deletes this data after specified seconds.
      * Leave it blank or set it to `-1` to make it permanent.
      * <warn>Data may still persist for a minute even after the data is supposed to be expired!</warn>
      * Data may persist for a minute even after expiration due to the nature of mongodb. QuickMongo makes sure to never return expired
      * documents even if it's not deleted.
-     * @returns {Promise<any>}
      * @example // permanent
      * await db.set("foo", "bar");
      *
@@ -270,8 +281,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Returns false if the value is nullish, else true
-     * @param {string} key The key
-     * @returns {Promise<boolean>}
+     * @param key The key
      */
     public async has(key: string) {
         const data = await this.get(key);
@@ -281,8 +291,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Deletes item from the database
-     * @param {string} key The key
-     * @returns {Promise<boolean>}
+     * @param key The key
      */
     public async delete(key: string) {
         this.__readyCheck();
@@ -310,7 +319,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Delete all data from this database
-     * @returns {Promise<boolean>}
      */
     public async deleteAll() {
         const res = await this.model.deleteMany();
@@ -319,7 +327,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Get the document count in this database
-     * @returns {Promise<number>}
      */
     public async count() {
         return await this.model.estimatedDocumentCount();
@@ -327,19 +334,24 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * The database latency in ms
-     * @returns {number}
      */
     public async ping() {
-        const initial = Date.now();
-        await this.get("SOME_RANDOM_KEY");
-        return Date.now() - initial;
+        if (!this.model) return NaN;
+        if (typeof performance !== "undefined") {
+            const initial = performance.now();
+            await this.get("SOME_RANDOM_KEY");
+            return performance.now() - initial;
+        } else {
+            const initial = Date.now();
+            await this.get("SOME_RANDOM_KEY");
+            return Date.now() - initial;
+        }
     }
 
     /**
      * Create a child database, either from new connection or current connection (similar to quick.db table)
-     * @param {?string} collection The collection name (defaults to `JSON`)
-     * @param {?string} url The database url (not needed if the child needs to share connection from parent)
-     * @returns {Promise<Database>}
+     * @param collection The collection name (defaults to `JSON`)
+     * @param url The database url (not needed if the child needs to share connection from parent)
      * @example const child = await db.instantiateChild("NewCollection");
      * console.log(child.all());
      */
@@ -347,6 +359,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         const childDb = new Database<K, T>(url || this.url, {
             ...this.options,
             child: true,
+            // @ts-expect-error assign parent
             parent: this,
             collectionName: collection,
             shareConnectionFromParent: !!url || true
@@ -357,8 +370,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
-     * Identical to quick.db table
-     * @type {Database}
+     * Identical to quick.db table constructor
      * @example const table = new db.table("table");
      * table.set("foo", "Bar");
      */
@@ -369,50 +381,49 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             } as unknown as TableConstructor,
             {
                 construct: (_, args) => {
-                    const name = args[0];
-                    if (!name || typeof name !== "string") throw new TypeError("ERR_TABLE_NAME");
-                    const db = new Database(this.url, this.options);
-
-                    db.connection = this.connection;
-                    db.model = modelSchema(this.connection, name);
-                    db.connect = () => Promise.resolve(db);
-
-                    Object.defineProperty(db, "table", {
-                        get() {
-                            return;
-                        },
-                        set() {
-                            return;
-                        }
-                    });
-
-                    return db;
+                    return this.useCollection(args[0]);
                 },
-                apply: () => {
-                    throw new Error("TABLE_IS_NOT_A_FUNCTION");
+                apply: (_, _thisArg, args) => {
+                    return this.useCollection(args[0]);
                 }
             }
         );
     }
 
     /**
+     * Use specified collection. Alias of `db.table`
+     * @param name The collection name
+     */
+    public useCollection(name: string) {
+        if (!name || typeof name !== "string") throw new TypeError("Invalid collection name");
+        const db = new Database(this.url, this.options);
+
+        db.connection = this.connection;
+        // @ts-expect-error assign collection
+        db.model = modelSchema(this.connection, name);
+        db.connect = () => Promise.resolve(db);
+
+        return db;
+    }
+
+    /**
      * Returns everything from the database
-     * @param {?AllQueryOptions} options The request options
-     * @returns {Promise<AllData>}
+     * @param options The request options
      */
     public async all(options?: AllQueryOptions) {
         this.__readyCheck();
-        const everything = await this.model.find();
+        const everything = await this.model.find({
+            $where: function () {
+                const expiredCheck = !(this.expireAt && this.expireAt.getTime() - Date.now() <= 0);
+                return expiredCheck;
+            }
+        });
         let arb = everything
-            .filter((x) => !(x.expireAt && x.expireAt.getTime() - Date.now() <= 0))
+            .filter((v) => options?.filter?.({ ID: v.ID, data: v.data }) ?? true)
             .map((m) => ({
                 ID: m.ID,
                 data: this.__formatData(m)
-            }))
-            .filter((doc, idx) => {
-                if (options?.filter) return options.filter(doc, idx);
-                return true;
-            }) as AllData<T>[];
+            })) as AllData<T>[];
 
         if (typeof options?.sort === "string") {
             if (options.sort.startsWith(".")) options.sort = options.sort.slice(1);
@@ -425,7 +436,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Drops this database
-     * @returns {Promise<boolean>}
      */
     public async drop() {
         this.__readyCheck();
@@ -434,9 +444,8 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Identical to quick.db push
-     * @param {string} key The key
-     * @param {any|any[]} value The value or array of values
-     * @returns {Promise<any>}
+     * @param key The key
+     * @param value The value or array of values
      */
     public async push(key: string, value: unknown | unknown[]) {
         const data = await this.get(key);
@@ -453,16 +462,19 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Opposite of push, used to remove item
-     * @param {string} key The key
-     * @param {any|any[]} value The value or array of values
-     * @returns {Promise<any>}
+     * @param key The key
+     * @param value The value or array of values
      */
-    public async pull(key: string, value: unknown | unknown[], multiple = true): Promise<false | T> {
+    public async pull(key: string, value: unknown | unknown[] | ((data: unknown) => boolean), multiple = true): Promise<false | T> {
         let data = (await this.get(key)) as T[];
         // eslint-disable-next-line eqeqeq, no-eq-null
         if (data == null) return false;
         if (!Array.isArray(data)) throw new Error("TARGET_EXPECTED_ARRAY");
-        if (Array.isArray(value)) {
+        if (typeof value === "function") {
+            // @ts-expect-error apply fn
+            data = data.filter(value);
+            return await this.set(key, data);
+        } else if (Array.isArray(value)) {
             data = data.filter((i) => !value.includes(i));
             return await this.set(key, data);
         } else {
@@ -480,10 +492,66 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
+     * Identical to quick.db unshift
+     * @param key The key
+     * @param value The value
+     */
+    public async unshift(key: string, value: unknown | unknown[]) {
+        let arr = await this.getArray(key);
+        Array.isArray(value) ? (arr = value.concat(arr)) : arr.unshift(value as T);
+        return await this.set(key, arr);
+    }
+
+    /**
+     * Identical to quick.db shift
+     * @param key The key
+     */
+    public async shift(key: string) {
+        const arr = await this.getArray(key);
+        const removed = arr.shift();
+        await this.set(key, arr);
+        return removed;
+    }
+
+    /**
+     * Identical to quick.db pop
+     * @param key The key
+     */
+    public async pop(key: string) {
+        const arr = await this.getArray(key);
+        const removed = arr.pop();
+        await this.set(key, arr);
+        return removed;
+    }
+
+    /**
+     * Identical to quick.db startsWith
+     * @param query The query
+     */
+    public async startsWith(query: string) {
+        return this.all({
+            filter(data) {
+                return data.ID.startsWith(query);
+            }
+        });
+    }
+
+    /**
+     * Identical to startsWith but checks the ending
+     * @param query The query
+     */
+    public async endsWith(query: string) {
+        return this.all({
+            filter(data) {
+                return data.ID.endsWith(query);
+            }
+        });
+    }
+
+    /**
      * Identical to quick.db add
-     * @param {string} key The key
-     * @param {number} value The value
-     * @returns {any}
+     * @param key The key
+     * @param value The value
      */
     public async add(key: string, value: number) {
         if (typeof value !== "number") throw new TypeError("VALUE_MUST_BE_NUMBER");
@@ -493,9 +561,8 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Identical to quick.db subtract
-     * @param {string} key The key
-     * @param {number} value The value
-     * @returns {any}
+     * @param key The key
+     * @param value The value
      */
     public async subtract(key: string, value: number) {
         if (typeof value !== "number") throw new TypeError("VALUE_MUST_BE_NUMBER");
@@ -504,10 +571,42 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
-     * Connects to the database.
-     * @returns {Promise<Database>}
+     * Identical to quick.db sub
+     * @param key The key
+     * @param value The value
      */
-    public connect() {
+    public async sub(key: string, value: number) {
+        return this.subtract(key, value);
+    }
+
+    /**
+     * Identical to quick.db addSubtract
+     * @param key The key
+     * @param value The value
+     * @param [sub=false] If the operation should be subtraction
+     */
+    public async addSubtract(key: string, value: number, sub = false) {
+        if (sub) return this.subtract(key, value);
+        return this.add(key, value);
+    }
+
+    /**
+     * Identical to quick.db getArray
+     * @param key The key
+     */
+    public async getArray<Rt = T>(key: string): Promise<Rt[]> {
+        const data = await this.get(key);
+        if (!Array.isArray(data)) {
+            throw new TypeError(`Data type of key "${key}" is not array`);
+        }
+
+        return data;
+    }
+
+    /**
+     * Connects to the database.
+     */
+    public connect(): Promise<Database<T>> {
         return new Promise<Database<T>>((resolve, reject) => {
             if (typeof this.url !== "string" || !this.url) return reject(new Error("MISSING_MONGODB_URL"));
 
@@ -520,10 +619,12 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             delete this.options["child"];
             delete this.options["parent"];
             delete this.options["shareConnectionFromParent"];
+            delete this.options["autoConnect"];
 
             if (shareConnectionFromParent && this.__child__ && this.parent) {
                 if (!this.parent.connection) return reject(new Error("PARENT_HAS_NO_CONNECTION"));
                 this.connection = this.parent.connection;
+                // @ts-expect-error assign model
                 this.model = modelSchema<T>(this.connection, Util.v(collectionName, "string", "JSON"));
                 return resolve(this);
             }
@@ -531,6 +632,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
             mongoose.createConnection(this.url, this.options, (err, connection) => {
                 if (err) return reject(err);
                 this.connection = connection;
+                // @ts-expect-error assign model
                 this.model = modelSchema<T>(this.connection, Util.v(collectionName, "string", "JSON"));
                 this.emit("ready", this);
                 this.__applyEventsBinding();
@@ -540,8 +642,16 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
     }
 
     /**
+     * Watch collection changes
+     */
+    public watch() {
+        this.__readyCheck();
+        const stream = this.model.watch();
+        return stream;
+    }
+
+    /**
      * The db metadata
-     * @type {?Object}
      */
     public get metadata() {
         if (!this.model) return null;
@@ -554,7 +664,6 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Returns database statistics
-     * @returns {Promise<CollStats>}
      */
     public async stats() {
         this.__readyCheck();
@@ -564,8 +673,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Close the database connection
-     * @param {?boolean} [force=false] Close forcefully
-     * @returns {Promise<void>}
+     * @param force Close forcefully
      */
     public async close(force = false) {
         return await this.connection.close(force);
@@ -576,7 +684,7 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         const events = ["connecting", "connected", "open", "disconnecting", "disconnected", "close", "reconnected", "error", "fullsetup", "all", "reconnectFailed", "reconnectTries"];
 
         for (const event of events) {
-            this.connection.prependListener(event, (...args) => {
+            this.connection.on(event, (...args) => {
                 // @ts-expect-error event forwarder
                 this.emit(event, ...args);
             });
@@ -585,85 +693,20 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
 
     /**
      * Formats document data
-     * @param {Document} doc The document
-     * @returns {any}
-     * @private
+     * @param doc The document
      */
     private __formatData(doc: DocType<T>) {
-        return doc?.data ? doc.data : null;
+        return doc?.data ?? null;
     }
 
     /**
      * Checks if the database is ready
-     * @private
      */
     private __readyCheck() {
-        if (!this.model) throw new Error("DATABASE_NOT_READY");
+        if (!this.model) throw new Error("[DATABASE_NOT_READY] Use db.connect()");
     }
 }
 
 export interface TableConstructor<V = unknown> {
     new (name: string): Database<V>;
 }
-
-/**
- * Emitted once the database is ready
- * @event Database#ready
- * @param {Database} db The database
- */
-
-/**
- * Emitted when Mongoose starts making its initial connection to the MongoDB server
- * @event Database#connecting
- */
-
-/**
- * Emitted when QuickMongo successfully makes its initial connection to the MongoDB server, or when QuickMongo reconnects after losing connectivity. May be emitted multiple times if QuickMongo loses connectivity.
- * @event Database#connected
- */
-
-/**
- * Emitted after `'connected'` and onOpen is executed on all of this connection's models.
- * @event Database#open
- */
-
-/**
- * Emitted when called `db.close()` to disconnect from MongoDB
- * @event Database#disconnecting
- */
-
-/**
- * Emitted when QuickMongo lost connection to the MongoDB server. This event may be due to your code explicitly closing the connection, the database server crashing, or network connectivity issues.
- * @event Database#disconnected
- */
-
-/**
- * Emitted after `db.close()` successfully closes the connection. If you call `db.close()`, you'll get both a `'disconnected'` event and a `'close'` event.
- * @event Database#close
- */
-
-/**
- * Emitted if QuickMongo lost connectivity to MongoDB and successfully reconnected. QuickMongo attempts to automatically reconnect when it loses connection to the database.
- * @event Database#reconnected
- */
-
-/**
- * Emitted if an error occurs on a connection, like a parseError due to malformed data or a payload larger than `16MB`.
- * @event Database#error
- * @param {Error} error The error
- */
-
-/**
- * Emitted when you're connecting to a replica set and QuickMongo has successfully connected to the primary and at least one secondary.
- * @event Database#fullsetup
- */
-
-/**
- * Emitted when you're connecting to a replica set and Mongoose has successfully connected to all servers specified in your connection string.
- * @event Database#all
- */
-
-/**
- * Emitted when you're connected to a standalone server and Mongoose has run out of `reconnectTries`. The MongoDB driver will no longer attempt to reconnect after this event is emitted. This event will never be emitted if you're connected to a replica set.
- * @event Database#reconnectFailed
- */

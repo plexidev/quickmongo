@@ -31,7 +31,10 @@ export const docSchema = new mongoose.Schema<CollectionInterface>(
 );
 
 export default function modelSchema<T = unknown>(connection: mongoose.Connection, modelName = "JSON") {
+    // @ts-expect-error docSchema
     const model = connection.model<CollectionInterface<T>>(modelName, docSchema);
-    model.collection.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).catch(() => null);
+    model.collection.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {
+        /* void */
+    });
     return model;
 }

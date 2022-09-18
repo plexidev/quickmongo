@@ -6,3 +6,5 @@ test/
 yarn.lock
 package-lock.json
 globalConfig.json
+docs/typedoc.json
+docs/docs.json
