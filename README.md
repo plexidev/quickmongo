@@ -138,3 +138,5 @@ async function init() {
 
 # Discord Support
 **[Plexi Development](https://discord.gg/plexidev)**
+
+**Acquired from Archaeopteryx on 10/02/2022**
