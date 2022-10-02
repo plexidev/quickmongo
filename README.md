@@ -8,6 +8,9 @@ Quick Mongodb wrapper for beginners that provides key-value based interface.
 
 ```bash
 $ npm install --save quickmongo
+
+OR
+$ yarn add quickmongo
 ```
 
 # Documentation
@@ -131,7 +134,7 @@ async function init() {
 }
 ```
 
-**Created and maintained by Archaeopteryx1**
+**Maintained by Plexi Development**
 
 # Discord Support
-**[CesiumLabs](https://discord.gg/uqB8kxh)**
+**[Plexi Development](https://discord.gg/plexidev)**
