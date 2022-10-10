@@ -1,7 +1,6 @@
-# QuickMongo
+## ![QuickMongo Logo](https://www.plexidev.org/quickmongo.png)
 
-Quick Mongodb wrapper for beginners that provides key-value based interface.
-![](https://camo.githubusercontent.com/ee0b303561b8c04223d4f469633e2088968cf514f0f6901c729331c462a32f10/68747470733a2f2f63646e2e646973636f72646170702e636f6d2f6174746163686d656e74732f3739333638393539323431343939343436362f3833323039343438363834353834393631302f6c6f676f2e37393539646231325f35302e706e67)
+QuickMongo is a beginner-friendly and feature-rich wrapper for MongoDB that allows you to use Quick.db's Key-Value based syntax.
 
 # Installing
 
