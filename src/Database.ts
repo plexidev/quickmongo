@@ -414,7 +414,8 @@ export class Database<T = unknown, PAR = unknown> extends TypedEmitter<QmEvents<
         this.__readyCheck();
         const everything = await this.model.find({});
         let arb = everything
-            .filter((v) => (options?.filter?.({ ID: v.ID, data: v.data }) ?? true) || !(this.expireAt && this.expireAt.getTime() - Date.now() <= 0))
+.filter((v) => !(this.expireAt && this.expireAt.getTime() - Date.now() <= 0))
+.filter((v) => options?.filter?.({ ID: v.ID, data: v.data }) ?? true);
             .map((m) => ({
                 ID: m.ID,
                 data: this.__formatData(m)
