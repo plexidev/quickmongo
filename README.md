@@ -6,8 +6,9 @@ QuickMongo is a beginner-friendly and feature-rich wrapper for MongoDB that allo
 
 ```bash
 $ npm install --save quickmongo
-
+```
 OR
+```bash
 $ yarn add quickmongo
 ```
 
